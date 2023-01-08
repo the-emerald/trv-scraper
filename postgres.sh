@@ -1,0 +1,1 @@
+docker run --name trv-scraper-db -p 6969:5432 -e POSTGRES_PASSWORD=postgres postgres
