@@ -1,14 +1,14 @@
-pub fn add(left: usize, right: usize) -> usize {
-    left + right
-}
+use serde::{Deserialize, Serialize};
 
-#[cfg(test)]
-mod tests {
-    use super::*;
+pub mod fighter;
+pub mod tournament;
+pub mod tournament_detail;
 
-    #[test]
-    fn it_works() {
-        let result = add(2, 2);
-        assert_eq!(result, 4);
-    }
+#[derive(Clone, Copy, Debug, Serialize, Deserialize)]
+pub struct Pagination {
+    pub total_count: u64,
+    pub total_pages: u64,
+    pub has_next_page: bool,
+    pub current_page: u64,
+    pub item_count: u64,
 }

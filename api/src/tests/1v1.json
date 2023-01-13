@@ -1,0 +1,292 @@
+{
+	"total_count": 2384,
+	"total_pages": 2384,
+	"has_next_page": true,
+	"current_page": 12,
+	"item_count": 1,
+	"items": [
+		{
+			"service_id": 0,
+			"tournament_id": 12,
+			"configs": {
+				"creator": "0x8beb91ac2b0ba5d1459f7bee13dc67a9708c645f",
+				"size": 2,
+				"currency": "0x7ceb23fd6bc0add59e62ac25578270cff1b9f619",
+				"status": 2,
+				"fee_percentage": 0,
+				"start_at": 1656574200,
+				"buy_in": "0",
+				"top_up": "0",
+				"data": "0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000005000000000000000000000000000000000000000000000000016345785d8a0000000000000000000000000000000000000000000000000000016345785d8a00000000000000000000000000000000000000000000000000000000000062bd479800000000000000000000000000000000000000000000000000000000000000c000000000000000000000000000000000000000000000000000000000000000206235373365663237393861313735383032653366336330653435633038363131"
+			},
+			"key": "8dd99b5a150a526aad1951b1262f7b18",
+			"level": {
+				"nav_key": "blood_theatre_day",
+				"description": "Blood Theatre Day Location",
+				"title": "Blood Theatre Day",
+				"key": "b573ef2798a175802e3f3c0e45c08611"
+			},
+			"modified": "2022-06-30T07:31:03.553Z",
+			"restrictions": {
+				"elo_min": 0,
+				"elo_max": 0,
+				"win_rate_percent_min": 0,
+				"win_rate_percent_max": 0,
+				"win_rate_base_divider": 1000,
+				"whitelist": [
+					4053,
+					240
+				],
+				"blacklist": [],
+				"character_classes": [],
+				"data": "0x"
+			},
+			"solo_optionals": {
+				"bet_nft": false,
+				"round": 5,
+				"challenger_stake": "100000000000000000",
+				"opponent_stake": "100000000000000000",
+				"expire_time": "2022-06-30 06:50"
+			},
+			"start_time": "2022-06-30 07:30",
+			"status": "COMPLETE_SUCCEED",
+			"warriors": [
+				{
+					"account": "0x8beb91ac2b0ba5d1459f7bee13dc67a9708c645f",
+					"win_position": 2,
+					"id": 4053,
+					"stance": 4,
+					"data": "0x",
+					"career": {
+						"first_wins": 274,
+						"second_wins": 222,
+						"total_fought": 1689
+					},
+					"barrack": {
+						"cover": null,
+						"description": "",
+						"inappropriate_description": false,
+						"inappropriate_name": false,
+						"key": "211a74f51f2c87a54bc5ca9cfc80b253",
+						"name": "Catch Me Fightin' Dirty",
+						"nav_key": "catch_me_fightin_dirty",
+						"wallet_address": "0x9880bbc73403dc74a6460b84dd16e4f04910a696",
+						"solo_career": {
+							"total_first_win": 121,
+							"total_fought": 228,
+							"total_second_win": 107
+						},
+						"tournament_career": {
+							"total_buy_in": {
+								"$numberDecimal": "34874641000000000000"
+							},
+							"total_first_win": 2732,
+							"total_first_winnings": {
+								"$numberDecimal": "29562519984245400000.00000000000000"
+							},
+							"total_fought": 18085,
+							"total_fourth_win": 8437,
+							"total_second_win": 2444,
+							"total_second_winnings": {
+								"$numberDecimal": "10410103688769000000.00000000000000"
+							},
+							"total_third_win": 4472
+						}
+					},
+					"joiner_barrack": {
+						"cover": null,
+						"description": "",
+						"inappropriate_description": false,
+						"inappropriate_name": false,
+						"key": "bb4d070f36bd8f97ed9b3d6982be6b44",
+						"name": "Catch Me Fightin' Dirty CMFD",
+						"nav_key": "catch_me_fightin_dirty_cmfd",
+						"wallet_address": "0x8beb91ac2b0ba5d1459f7bee13dc67a9708c645f",
+						"solo_career": {
+							"total_first_win": 15,
+							"total_fought": 41,
+							"total_second_win": 26
+						},
+						"tournament_career": {
+							"total_buy_in": {
+								"$numberDecimal": "14913614500000000000"
+							},
+							"total_first_win": 809,
+							"total_first_winnings": {
+								"$numberDecimal": "12022222056000000000.00000000000000"
+							},
+							"total_fought": 6044,
+							"total_fourth_win": 2924,
+							"total_second_win": 783,
+							"total_second_winnings": {
+								"$numberDecimal": "4697984772000000000.000000000000000"
+							},
+							"total_third_win": 1528
+						}
+					}
+				},
+				{
+					"account": "0x5dc8d7a9bb9b607e9148689ec0e03ff1a23d55a4",
+					"win_position": 1,
+					"id": 240,
+					"stance": 3,
+					"data": "0x",
+					"career": {
+						"first_wins": 120,
+						"second_wins": 84,
+						"total_fought": 560
+					},
+					"barrack": {
+						"description": "",
+						"inappropriate_description": false,
+						"inappropriate_name": false,
+						"key": "b03d60ed60931d77ef476cad60e8edbc",
+						"name": "Doofy's Dungeon",
+						"tournament_career": {
+							"total_buy_in": {
+								"$numberDecimal": "4405744400000000000"
+							},
+							"total_first_win": 699,
+							"total_first_winnings": {
+								"$numberDecimal": "3346527678000000000.000000000000000"
+							},
+							"total_fought": 5231,
+							"total_fourth_win": 2558,
+							"total_second_win": 688,
+							"total_second_winnings": {
+								"$numberDecimal": "1090218378000000000.000000000000000"
+							},
+							"total_third_win": 1286
+						},
+						"wallet_address": "0x5dc8d7a9bb9b607e9148689ec0e03ff1a23d55a4",
+						"solo_career": {
+							"total_first_win": 61,
+							"total_fought": 109,
+							"total_second_win": 48
+						},
+						"nav_key": "doofys_dungeon",
+						"discord": {
+							"name_flex": "Doofy.eth#0001"
+						}
+					},
+					"joiner_barrack": {
+						"description": "",
+						"inappropriate_description": false,
+						"inappropriate_name": false,
+						"key": "b03d60ed60931d77ef476cad60e8edbc",
+						"name": "Doofy's Dungeon",
+						"tournament_career": {
+							"total_buy_in": {
+								"$numberDecimal": "4405744400000000000"
+							},
+							"total_first_win": 699,
+							"total_first_winnings": {
+								"$numberDecimal": "3346527678000000000.000000000000000"
+							},
+							"total_fought": 5231,
+							"total_fourth_win": 2558,
+							"total_second_win": 688,
+							"total_second_winnings": {
+								"$numberDecimal": "1090218378000000000.000000000000000"
+							},
+							"total_third_win": 1286
+						},
+						"wallet_address": "0x5dc8d7a9bb9b607e9148689ec0e03ff1a23d55a4",
+						"solo_career": {
+							"total_first_win": 61,
+							"total_fought": 109,
+							"total_second_win": 48
+						},
+						"nav_key": "doofys_dungeon",
+						"discord": {
+							"name_flex": "Doofy.eth#0001"
+						}
+					}
+				}
+			],
+			"eth_price": 1057,
+			"solo_warriors": [
+				{
+					"id": 4053,
+					"career": {
+						"first_wins": 274,
+						"second_wins": 222,
+						"total_fought": 1689
+					},
+					"barrack": {
+						"cover": null,
+						"description": "",
+						"inappropriate_description": false,
+						"inappropriate_name": false,
+						"key": "211a74f51f2c87a54bc5ca9cfc80b253",
+						"name": "Catch Me Fightin' Dirty",
+						"nav_key": "catch_me_fightin_dirty",
+						"wallet_address": "0x9880bbc73403dc74a6460b84dd16e4f04910a696",
+						"solo_career": {
+							"total_first_win": 121,
+							"total_fought": 228,
+							"total_second_win": 107
+						},
+						"tournament_career": {
+							"total_buy_in": {
+								"$numberDecimal": "34874641000000000000"
+							},
+							"total_first_win": 2732,
+							"total_first_winnings": {
+								"$numberDecimal": "29562519984245400000.00000000000000"
+							},
+							"total_fought": 18085,
+							"total_fourth_win": 8437,
+							"total_second_win": 2444,
+							"total_second_winnings": {
+								"$numberDecimal": "10410103688769000000.00000000000000"
+							},
+							"total_third_win": 4472
+						}
+					}
+				},
+				{
+					"id": 240,
+					"career": {
+						"first_wins": 120,
+						"second_wins": 84,
+						"total_fought": 560
+					},
+					"barrack": {
+						"description": "",
+						"inappropriate_description": false,
+						"inappropriate_name": false,
+						"key": "b03d60ed60931d77ef476cad60e8edbc",
+						"name": "Doofy's Dungeon",
+						"tournament_career": {
+							"total_buy_in": {
+								"$numberDecimal": "4405744400000000000"
+							},
+							"total_first_win": 699,
+							"total_first_winnings": {
+								"$numberDecimal": "3346527678000000000.000000000000000"
+							},
+							"total_fought": 5231,
+							"total_fourth_win": 2558,
+							"total_second_win": 688,
+							"total_second_winnings": {
+								"$numberDecimal": "1090218378000000000.000000000000000"
+							},
+							"total_third_win": 1286
+						},
+						"wallet_address": "0x5dc8d7a9bb9b607e9148689ec0e03ff1a23d55a4",
+						"solo_career": {
+							"total_first_win": 61,
+							"total_fought": 109,
+							"total_second_win": 48
+						},
+						"nav_key": "doofys_dungeon",
+						"discord": {
+							"name_flex": "Doofy.eth#0001"
+						}
+					}
+				}
+			]
+		}
+	]
+}

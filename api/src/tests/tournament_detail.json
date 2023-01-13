@@ -1,0 +1,1113 @@
+{
+	"match": {
+		"champions": [
+			{
+				"token_id": 3071,
+				"first_wins": 62,
+				"second_wins": 64,
+				"total_fought": 436,
+				"stance": 1,
+				"barrack": {
+					"name": "Permacope",
+					"description": ""
+				}
+			},
+			{
+				"token_id": 3929,
+				"first_wins": 1,
+				"second_wins": 2,
+				"total_fought": 26,
+				"stance": 4,
+				"barrack": {
+					"name": "",
+					"description": ""
+				}
+			},
+			{
+				"token_id": 4233,
+				"first_wins": 43,
+				"second_wins": 56,
+				"total_fought": 403,
+				"stance": 4,
+				"barrack": {
+					"name": "Blood Mountain 🌋",
+					"description": "Many will enter none will survive."
+				}
+			},
+			{
+				"token_id": 4783,
+				"first_wins": 30,
+				"second_wins": 28,
+				"total_fought": 232,
+				"stance": 3,
+				"barrack": {
+					"name": "City By The Bay Barracks",
+					"description": "Barbarians and Wizards"
+				}
+			},
+			{
+				"token_id": 5276,
+				"first_wins": 11,
+				"second_wins": 9,
+				"total_fought": 96,
+				"stance": 1,
+				"barrack": {
+					"name": "💧 Bloo Fella Barracks💧",
+					"description": ""
+				}
+			},
+			{
+				"token_id": 7667,
+				"first_wins": 9,
+				"second_wins": 8,
+				"total_fought": 83,
+				"stance": 3,
+				"barrack": {
+					"name": "City By The Bay Barracks",
+					"description": "Barbarians and Wizards"
+				}
+			},
+			{
+				"token_id": 8333,
+				"first_wins": 2,
+				"second_wins": 3,
+				"total_fought": 23,
+				"stance": 1,
+				"barrack": {
+					"name": "",
+					"description": ""
+				}
+			},
+			{
+				"token_id": 8399,
+				"first_wins": 21,
+				"second_wins": 17,
+				"total_fought": 163,
+				"stance": 3,
+				"barrack": {
+					"name": "𝕋𝕣𝕠𝕥𝕆𝕟 𝔾𝕒𝕞𝕚𝕟𝕘🗡️",
+					"description": "Checkout myvillagers.io/ - Data, analytics and more for The Red Villlage"
+				}
+			}
+		],
+		"battles": [
+			{
+				"engagement": {
+					"round": 1,
+					"champions": [
+						{
+							"id": "5276",
+							"attack": [
+								{
+									"special_attack": false,
+									"special_defend": false,
+									"missed_hit": false,
+									"damage": 150,
+									"order": 1
+								},
+								{
+									"special_attack": false,
+									"special_defend": true,
+									"missed_hit": false,
+									"damage": 51,
+									"order": 3
+								},
+								{
+									"special_attack": false,
+									"special_defend": false,
+									"missed_hit": false,
+									"damage": 83,
+									"order": 5
+								},
+								{
+									"special_attack": false,
+									"special_defend": false,
+									"missed_hit": false,
+									"damage": 146,
+									"order": 7
+								},
+								{
+									"special_attack": false,
+									"special_defend": false,
+									"missed_hit": false,
+									"damage": 93,
+									"order": 9
+								},
+								{
+									"special_attack": false,
+									"special_defend": false,
+									"missed_hit": false,
+									"damage": 134,
+									"order": 11
+								},
+								{
+									"special_attack": false,
+									"special_defend": false,
+									"missed_hit": false,
+									"damage": 93,
+									"order": 13
+								},
+								{
+									"special_attack": false,
+									"special_defend": false,
+									"missed_hit": false,
+									"damage": 0,
+									"order": 15
+								}
+							]
+						},
+						{
+							"id": "8399",
+							"attack": [
+								{
+									"special_attack": false,
+									"special_defend": false,
+									"missed_hit": false,
+									"damage": 77,
+									"order": 0
+								},
+								{
+									"special_attack": false,
+									"special_defend": false,
+									"missed_hit": false,
+									"damage": 196,
+									"order": 2
+								},
+								{
+									"special_attack": false,
+									"special_defend": false,
+									"missed_hit": false,
+									"damage": 137,
+									"order": 4
+								},
+								{
+									"special_attack": false,
+									"special_defend": false,
+									"missed_hit": false,
+									"damage": 0,
+									"order": 6
+								},
+								{
+									"special_attack": false,
+									"special_defend": false,
+									"missed_hit": false,
+									"damage": 195,
+									"order": 8
+								},
+								{
+									"special_attack": false,
+									"special_defend": false,
+									"missed_hit": false,
+									"damage": 114,
+									"order": 10
+								},
+								{
+									"special_attack": false,
+									"special_defend": false,
+									"missed_hit": false,
+									"damage": 94,
+									"order": 12
+								},
+								{
+									"special_attack": false,
+									"special_defend": false,
+									"missed_hit": false,
+									"damage": 166,
+									"order": 14
+								},
+								{
+									"special_attack": false,
+									"special_defend": false,
+									"missed_hit": false,
+									"damage": 162,
+									"order": 16
+								}
+							]
+						}
+					]
+				}
+			},
+			{
+				"engagement": {
+					"round": 1,
+					"champions": [
+						{
+							"id": "3929",
+							"attack": [
+								{
+									"special_attack": false,
+									"special_defend": false,
+									"missed_hit": false,
+									"damage": 94,
+									"order": 0
+								},
+								{
+									"special_attack": false,
+									"special_defend": false,
+									"missed_hit": false,
+									"damage": 103,
+									"order": 2
+								},
+								{
+									"special_attack": false,
+									"special_defend": true,
+									"missed_hit": false,
+									"damage": 19,
+									"order": 4
+								},
+								{
+									"special_attack": false,
+									"special_defend": false,
+									"missed_hit": false,
+									"damage": 155,
+									"order": 6
+								},
+								{
+									"special_attack": false,
+									"special_defend": false,
+									"missed_hit": false,
+									"damage": 167,
+									"order": 8
+								},
+								{
+									"special_attack": false,
+									"special_defend": false,
+									"missed_hit": false,
+									"damage": 122,
+									"order": 10
+								},
+								{
+									"special_attack": false,
+									"special_defend": false,
+									"missed_hit": false,
+									"damage": 182,
+									"order": 12
+								}
+							]
+						},
+						{
+							"id": "8333",
+							"attack": [
+								{
+									"special_attack": false,
+									"special_defend": false,
+									"missed_hit": false,
+									"damage": 135,
+									"order": 1
+								},
+								{
+									"special_attack": false,
+									"special_defend": false,
+									"missed_hit": false,
+									"damage": 97,
+									"order": 3
+								},
+								{
+									"special_attack": false,
+									"special_defend": false,
+									"missed_hit": false,
+									"damage": 148,
+									"order": 5
+								},
+								{
+									"special_attack": true,
+									"special_defend": false,
+									"missed_hit": false,
+									"damage": 308,
+									"order": 7
+								},
+								{
+									"special_attack": false,
+									"special_defend": false,
+									"missed_hit": false,
+									"damage": 149,
+									"order": 9
+								},
+								{
+									"special_attack": false,
+									"special_defend": false,
+									"missed_hit": false,
+									"damage": 127,
+									"order": 11
+								},
+								{
+									"special_attack": false,
+									"special_defend": false,
+									"missed_hit": false,
+									"damage": 108,
+									"order": 13
+								}
+							]
+						}
+					]
+				}
+			},
+			{
+				"engagement": {
+					"round": 1,
+					"champions": [
+						{
+							"id": "4233",
+							"attack": [
+								{
+									"special_attack": false,
+									"special_defend": false,
+									"missed_hit": false,
+									"damage": 88,
+									"order": 0
+								},
+								{
+									"special_attack": false,
+									"special_defend": true,
+									"missed_hit": false,
+									"damage": 10,
+									"order": 2
+								},
+								{
+									"special_attack": false,
+									"special_defend": true,
+									"missed_hit": false,
+									"damage": 31,
+									"order": 4
+								},
+								{
+									"special_attack": false,
+									"special_defend": false,
+									"missed_hit": false,
+									"damage": 148,
+									"order": 6
+								},
+								{
+									"special_attack": false,
+									"special_defend": false,
+									"missed_hit": false,
+									"damage": 146,
+									"order": 8
+								},
+								{
+									"special_attack": false,
+									"special_defend": true,
+									"missed_hit": false,
+									"damage": 42,
+									"order": 10
+								},
+								{
+									"special_attack": false,
+									"special_defend": true,
+									"missed_hit": false,
+									"damage": 8,
+									"order": 12
+								},
+								{
+									"special_attack": false,
+									"special_defend": false,
+									"missed_hit": false,
+									"damage": 102,
+									"order": 14
+								},
+								{
+									"special_attack": false,
+									"special_defend": false,
+									"missed_hit": false,
+									"damage": 0,
+									"order": 16
+								},
+								{
+									"special_attack": false,
+									"special_defend": false,
+									"missed_hit": false,
+									"damage": 149,
+									"order": 18
+								},
+								{
+									"special_attack": false,
+									"special_defend": false,
+									"missed_hit": false,
+									"damage": 129,
+									"order": 20
+								},
+								{
+									"special_attack": false,
+									"special_defend": false,
+									"missed_hit": false,
+									"damage": 153,
+									"order": 22
+								}
+							]
+						},
+						{
+							"id": "4783",
+							"attack": [
+								{
+									"special_attack": false,
+									"special_defend": false,
+									"missed_hit": false,
+									"damage": 108,
+									"order": 1
+								},
+								{
+									"special_attack": false,
+									"special_defend": false,
+									"missed_hit": false,
+									"damage": 177,
+									"order": 3
+								},
+								{
+									"special_attack": false,
+									"special_defend": false,
+									"missed_hit": false,
+									"damage": 182,
+									"order": 5
+								},
+								{
+									"special_attack": false,
+									"special_defend": false,
+									"missed_hit": false,
+									"damage": 0,
+									"order": 7
+								},
+								{
+									"special_attack": false,
+									"special_defend": true,
+									"missed_hit": false,
+									"damage": 51,
+									"order": 9
+								},
+								{
+									"special_attack": false,
+									"special_defend": false,
+									"missed_hit": false,
+									"damage": 158,
+									"order": 11
+								},
+								{
+									"special_attack": false,
+									"special_defend": false,
+									"missed_hit": false,
+									"damage": 0,
+									"order": 13
+								},
+								{
+									"special_attack": false,
+									"special_defend": false,
+									"missed_hit": false,
+									"damage": 0,
+									"order": 15
+								},
+								{
+									"special_attack": false,
+									"special_defend": false,
+									"missed_hit": false,
+									"damage": 120,
+									"order": 17
+								},
+								{
+									"special_attack": false,
+									"special_defend": false,
+									"missed_hit": false,
+									"damage": 0,
+									"order": 19
+								},
+								{
+									"special_attack": false,
+									"special_defend": true,
+									"missed_hit": false,
+									"damage": 62,
+									"order": 21
+								}
+							]
+						}
+					]
+				}
+			},
+			{
+				"engagement": {
+					"round": 1,
+					"champions": [
+						{
+							"id": "3071",
+							"attack": [
+								{
+									"special_attack": false,
+									"special_defend": false,
+									"missed_hit": false,
+									"damage": 92,
+									"order": 0
+								},
+								{
+									"special_attack": false,
+									"special_defend": false,
+									"missed_hit": false,
+									"damage": 0,
+									"order": 2
+								},
+								{
+									"special_attack": false,
+									"special_defend": false,
+									"missed_hit": false,
+									"damage": 0,
+									"order": 4
+								},
+								{
+									"special_attack": false,
+									"special_defend": false,
+									"missed_hit": false,
+									"damage": 173,
+									"order": 6
+								},
+								{
+									"special_attack": false,
+									"special_defend": false,
+									"missed_hit": false,
+									"damage": 166,
+									"order": 8
+								},
+								{
+									"special_attack": false,
+									"special_defend": false,
+									"missed_hit": false,
+									"damage": 128,
+									"order": 10
+								},
+								{
+									"special_attack": false,
+									"special_defend": false,
+									"missed_hit": false,
+									"damage": 0,
+									"order": 12
+								},
+								{
+									"special_attack": false,
+									"special_defend": false,
+									"missed_hit": false,
+									"damage": 136,
+									"order": 14
+								},
+								{
+									"special_attack": false,
+									"special_defend": false,
+									"missed_hit": false,
+									"damage": 116,
+									"order": 16
+								}
+							]
+						},
+						{
+							"id": "7667",
+							"attack": [
+								{
+									"special_attack": false,
+									"special_defend": false,
+									"missed_hit": false,
+									"damage": 0,
+									"order": 1
+								},
+								{
+									"special_attack": false,
+									"special_defend": false,
+									"missed_hit": false,
+									"damage": 96,
+									"order": 3
+								},
+								{
+									"special_attack": false,
+									"special_defend": false,
+									"missed_hit": false,
+									"damage": 190,
+									"order": 5
+								},
+								{
+									"special_attack": true,
+									"special_defend": false,
+									"missed_hit": false,
+									"damage": 253,
+									"order": 7
+								},
+								{
+									"special_attack": false,
+									"special_defend": false,
+									"missed_hit": false,
+									"damage": 0,
+									"order": 9
+								},
+								{
+									"special_attack": false,
+									"special_defend": false,
+									"missed_hit": false,
+									"damage": 173,
+									"order": 11
+								},
+								{
+									"special_attack": false,
+									"special_defend": false,
+									"missed_hit": false,
+									"damage": 116,
+									"order": 13
+								},
+								{
+									"special_attack": false,
+									"special_defend": false,
+									"missed_hit": false,
+									"damage": 145,
+									"order": 15
+								},
+								{
+									"special_attack": false,
+									"special_defend": false,
+									"missed_hit": false,
+									"damage": 74,
+									"order": 17
+								}
+							]
+						}
+					]
+				}
+			},
+			{
+				"engagement": {
+					"round": 2,
+					"champions": [
+						{
+							"id": "8333",
+							"attack": [
+								{
+									"special_attack": false,
+									"special_defend": true,
+									"missed_hit": false,
+									"damage": 50,
+									"order": 1
+								},
+								{
+									"special_attack": false,
+									"special_defend": false,
+									"missed_hit": false,
+									"damage": 0,
+									"order": 3
+								},
+								{
+									"special_attack": false,
+									"special_defend": false,
+									"missed_hit": false,
+									"damage": 102,
+									"order": 5
+								},
+								{
+									"special_attack": false,
+									"special_defend": false,
+									"missed_hit": false,
+									"damage": 88,
+									"order": 7
+								},
+								{
+									"special_attack": false,
+									"special_defend": false,
+									"missed_hit": false,
+									"damage": 0,
+									"order": 9
+								},
+								{
+									"special_attack": false,
+									"special_defend": false,
+									"missed_hit": false,
+									"damage": 175,
+									"order": 11
+								},
+								{
+									"special_attack": false,
+									"special_defend": false,
+									"missed_hit": false,
+									"damage": 153,
+									"order": 13
+								},
+								{
+									"special_attack": false,
+									"special_defend": false,
+									"missed_hit": false,
+									"damage": 159,
+									"order": 15
+								},
+								{
+									"special_attack": false,
+									"special_defend": false,
+									"missed_hit": false,
+									"damage": 104,
+									"order": 17
+								},
+								{
+									"special_attack": false,
+									"special_defend": false,
+									"missed_hit": false,
+									"damage": 152,
+									"order": 19
+								}
+							]
+						},
+						{
+							"id": "8399",
+							"attack": [
+								{
+									"special_attack": false,
+									"special_defend": false,
+									"missed_hit": false,
+									"damage": 82,
+									"order": 0
+								},
+								{
+									"special_attack": false,
+									"special_defend": false,
+									"missed_hit": false,
+									"damage": 69,
+									"order": 2
+								},
+								{
+									"special_attack": false,
+									"special_defend": false,
+									"missed_hit": false,
+									"damage": 108,
+									"order": 4
+								},
+								{
+									"special_attack": false,
+									"special_defend": false,
+									"missed_hit": false,
+									"damage": 0,
+									"order": 6
+								},
+								{
+									"special_attack": false,
+									"special_defend": false,
+									"missed_hit": false,
+									"damage": 118,
+									"order": 8
+								},
+								{
+									"special_attack": false,
+									"special_defend": false,
+									"missed_hit": false,
+									"damage": 151,
+									"order": 10
+								},
+								{
+									"special_attack": false,
+									"special_defend": false,
+									"missed_hit": false,
+									"damage": 123,
+									"order": 12
+								},
+								{
+									"special_attack": false,
+									"special_defend": false,
+									"missed_hit": false,
+									"damage": 133,
+									"order": 14
+								},
+								{
+									"special_attack": false,
+									"special_defend": false,
+									"missed_hit": false,
+									"damage": 139,
+									"order": 16
+								},
+								{
+									"special_attack": false,
+									"special_defend": true,
+									"missed_hit": false,
+									"damage": 8,
+									"order": 18
+								},
+								{
+									"special_attack": false,
+									"special_defend": false,
+									"missed_hit": false,
+									"damage": 148,
+									"order": 20
+								}
+							]
+						}
+					]
+				}
+			},
+			{
+				"engagement": {
+					"round": 2,
+					"champions": [
+						{
+							"id": "4233",
+							"attack": [
+								{
+									"special_attack": true,
+									"special_defend": false,
+									"missed_hit": false,
+									"damage": 173,
+									"order": 0
+								},
+								{
+									"special_attack": true,
+									"special_defend": false,
+									"missed_hit": false,
+									"damage": 288,
+									"order": 2
+								},
+								{
+									"special_attack": false,
+									"special_defend": false,
+									"missed_hit": false,
+									"damage": 106,
+									"order": 4
+								},
+								{
+									"special_attack": false,
+									"special_defend": false,
+									"missed_hit": false,
+									"damage": 136,
+									"order": 6
+								},
+								{
+									"special_attack": false,
+									"special_defend": false,
+									"missed_hit": false,
+									"damage": 140,
+									"order": 8
+								},
+								{
+									"special_attack": false,
+									"special_defend": false,
+									"missed_hit": false,
+									"damage": 0,
+									"order": 10
+								},
+								{
+									"special_attack": false,
+									"special_defend": true,
+									"missed_hit": false,
+									"damage": 52,
+									"order": 12
+								},
+								{
+									"special_attack": false,
+									"special_defend": false,
+									"missed_hit": false,
+									"damage": 138,
+									"order": 14
+								}
+							]
+						},
+						{
+							"id": "7667",
+							"attack": [
+								{
+									"special_attack": false,
+									"special_defend": false,
+									"missed_hit": false,
+									"damage": 99,
+									"order": 1
+								},
+								{
+									"special_attack": false,
+									"special_defend": false,
+									"missed_hit": false,
+									"damage": 74,
+									"order": 3
+								},
+								{
+									"special_attack": false,
+									"special_defend": false,
+									"missed_hit": false,
+									"damage": 0,
+									"order": 5
+								},
+								{
+									"special_attack": false,
+									"special_defend": false,
+									"missed_hit": false,
+									"damage": 137,
+									"order": 7
+								},
+								{
+									"special_attack": false,
+									"special_defend": false,
+									"missed_hit": false,
+									"damage": 0,
+									"order": 9
+								},
+								{
+									"special_attack": false,
+									"special_defend": false,
+									"missed_hit": false,
+									"damage": 91,
+									"order": 11
+								},
+								{
+									"special_attack": false,
+									"special_defend": false,
+									"missed_hit": false,
+									"damage": 131,
+									"order": 13
+								}
+							]
+						}
+					]
+				}
+			},
+			{
+				"engagement": {
+					"round": 3,
+					"champions": [
+						{
+							"id": "4233",
+							"attack": [
+								{
+									"special_attack": false,
+									"special_defend": false,
+									"missed_hit": false,
+									"damage": 68,
+									"order": 0
+								},
+								{
+									"special_attack": false,
+									"special_defend": false,
+									"missed_hit": false,
+									"damage": 139,
+									"order": 2
+								},
+								{
+									"special_attack": false,
+									"special_defend": false,
+									"missed_hit": false,
+									"damage": 142,
+									"order": 4
+								},
+								{
+									"special_attack": false,
+									"special_defend": false,
+									"missed_hit": false,
+									"damage": 156,
+									"order": 6
+								},
+								{
+									"special_attack": false,
+									"special_defend": false,
+									"missed_hit": false,
+									"damage": 100,
+									"order": 8
+								},
+								{
+									"special_attack": false,
+									"special_defend": false,
+									"missed_hit": false,
+									"damage": 113,
+									"order": 10
+								},
+								{
+									"special_attack": false,
+									"special_defend": false,
+									"missed_hit": false,
+									"damage": 74,
+									"order": 12
+								},
+								{
+									"special_attack": false,
+									"special_defend": true,
+									"missed_hit": false,
+									"damage": 34,
+									"order": 14
+								},
+								{
+									"special_attack": true,
+									"special_defend": false,
+									"missed_hit": false,
+									"damage": 288,
+									"order": 16
+								}
+							]
+						},
+						{
+							"id": "8399",
+							"attack": [
+								{
+									"special_attack": false,
+									"special_defend": false,
+									"missed_hit": false,
+									"damage": 129,
+									"order": 1
+								},
+								{
+									"special_attack": false,
+									"special_defend": false,
+									"missed_hit": false,
+									"damage": 181,
+									"order": 3
+								},
+								{
+									"special_attack": false,
+									"special_defend": false,
+									"missed_hit": false,
+									"damage": 89,
+									"order": 5
+								},
+								{
+									"special_attack": false,
+									"special_defend": false,
+									"missed_hit": false,
+									"damage": 80,
+									"order": 7
+								},
+								{
+									"special_attack": false,
+									"special_defend": false,
+									"missed_hit": false,
+									"damage": 162,
+									"order": 9
+								},
+								{
+									"special_attack": false,
+									"special_defend": false,
+									"missed_hit": false,
+									"damage": 144,
+									"order": 11
+								},
+								{
+									"special_attack": false,
+									"special_defend": false,
+									"missed_hit": false,
+									"damage": 142,
+									"order": 13
+								},
+								{
+									"special_attack": false,
+									"special_defend": true,
+									"missed_hit": false,
+									"damage": 16,
+									"order": 15
+								}
+							]
+						}
+					]
+				}
+			}
+		],
+		"info": {
+			"name": "Red Rum Rumble",
+			"type": 1,
+			"size": 8,
+			"payout": {
+				"currency": "USD",
+				"value": 0
+			},
+			"fee": {
+				"currency": "USD",
+				"value": 2.838
+			},
+			"challenger_stake": {
+				"currency": "USD",
+				"value": 0
+			},
+			"opponent_stake": {
+				"currency": "USD",
+				"value": 0
+			},
+			"wagering": false,
+			"location": "Village Tavern"
+		}
+	}
+}

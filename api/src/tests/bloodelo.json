@@ -1,0 +1,647 @@
+{
+	"total_count": 73404,
+	"total_pages": 73404,
+	"has_next_page": true,
+	"current_page": 12,
+	"item_count": 1,
+	"items": [
+		{
+			"service_id": 3,
+			"tournament_id": -1440948,
+			"class": {
+				"title": "heroic"
+			},
+			"configs": {
+				"creator": "0x0000000000000000000000000000000000000000",
+				"size": 8,
+				"currency": "0x7ceb23fd6bc0add59e62ac25578270cff1b9f619",
+				"status": 2,
+				"fee_percentage": 250,
+				"start_at": 0,
+				"buy_in": "2000000000000000",
+				"top_up": "0",
+				"data": "0x"
+			},
+			"key": "bc50c32d7d0afb8adf505e0768e97beb",
+			"legacy": true,
+			"level": {
+				"nav_key": "snowfields_day",
+				"description": "Snowfields Day Location",
+				"title": "Snowfields Day",
+				"key": "594d2c411c68bb9c018b430b75f79b67"
+			},
+			"modified": "2022-03-30T00:50:23.577Z",
+			"name": "Red Rum Rumble",
+			"restrictions": {
+				"elo_min": 0,
+				"elo_max": 0,
+				"win_rate_percent_min": 0,
+				"win_rate_percent_max": 0,
+				"win_rate_base_divider": 10000,
+				"whitelist": [],
+				"blacklist": [],
+				"character_classes": [],
+				"data": "0x"
+			},
+			"start_time": "2022-03-30 00:40",
+			"status": "COMPLETE_SUCCEED",
+			"tournament_type": "SYSTEM_BATTLE",
+			"warriors": [
+				{
+					"account": "0xfecc129cb601b754813936f238a7c56086982f4c",
+					"id": 4233,
+					"stance": 4,
+					"data": "0x",
+					"win_position": 1,
+					"career": {
+						"first_wins": 43,
+						"second_wins": 56,
+						"total_fought": 403
+					},
+					"barrack": {
+						"cover": null,
+						"description": "Many will enter none will survive.",
+						"inappropriate_description": false,
+						"inappropriate_name": false,
+						"key": "77f8de0e8d5fe46d1a94df4c85d057db",
+						"name": "Blood Mountain 🌋",
+						"nav_key": "blood_mountain_🌋",
+						"wallet_address": "0xfecc129cb601b754813936f238a7c56086982f4c",
+						"solo_career": {
+							"total_first_win": 7,
+							"total_fought": 11,
+							"total_second_win": 4
+						},
+						"tournament_career": {
+							"total_buy_in": {
+								"$numberDecimal": "1218617000000000000"
+							},
+							"total_first_win": 519,
+							"total_first_winnings": {
+								"$numberDecimal": "852343727947750000.000000000000000"
+							},
+							"total_fought": 4444,
+							"total_fourth_win": 2199,
+							"total_second_win": 586,
+							"total_second_winnings": {
+								"$numberDecimal": "291341122080000000.000000000000000"
+							},
+							"total_third_win": 1140
+						}
+					},
+					"joiner_barrack": {
+						"cover": null,
+						"description": "Many will enter none will survive.",
+						"inappropriate_description": false,
+						"inappropriate_name": false,
+						"key": "77f8de0e8d5fe46d1a94df4c85d057db",
+						"name": "Blood Mountain 🌋",
+						"nav_key": "blood_mountain_🌋",
+						"wallet_address": "0xfecc129cb601b754813936f238a7c56086982f4c",
+						"solo_career": {
+							"total_first_win": 7,
+							"total_fought": 11,
+							"total_second_win": 4
+						},
+						"tournament_career": {
+							"total_buy_in": {
+								"$numberDecimal": "1218617000000000000"
+							},
+							"total_first_win": 519,
+							"total_first_winnings": {
+								"$numberDecimal": "852343727947750000.000000000000000"
+							},
+							"total_fought": 4444,
+							"total_fourth_win": 2199,
+							"total_second_win": 586,
+							"total_second_winnings": {
+								"$numberDecimal": "291341122080000000.000000000000000"
+							},
+							"total_third_win": 1140
+						}
+					}
+				},
+				{
+					"account": "0xaac6fb64d81b2feac0ce0a32637c788d524d1f58",
+					"id": 8333,
+					"stance": 1,
+					"data": "0x",
+					"win_position": 3,
+					"career": {
+						"first_wins": 2,
+						"second_wins": 3,
+						"total_fought": 23
+					},
+					"barrack": {
+						"description": "",
+						"inappropriate_description": false,
+						"inappropriate_name": false,
+						"key": "f9738e02340515318b043c6d614a69e1",
+						"name": "",
+						"tournament_career": {
+							"total_buy_in": {
+								"$numberDecimal": "187166700000000000"
+							},
+							"total_first_win": 7,
+							"total_first_winnings": {
+								"$numberDecimal": "141960000000000000.000000000000000"
+							},
+							"total_fought": 50,
+							"total_fourth_win": 29,
+							"total_second_win": 5,
+							"total_second_winnings": {
+								"$numberDecimal": "25740000000000000.000000000000000"
+							},
+							"total_third_win": 9
+						},
+						"wallet_address": "0xaac6fb64d81b2feac0ce0a32637c788d524d1f58",
+						"solo_career": {
+							"total_first_win": 0,
+							"total_fought": 0,
+							"total_second_win": 0
+						}
+					},
+					"joiner_barrack": {
+						"description": "",
+						"inappropriate_description": false,
+						"inappropriate_name": false,
+						"key": "f9738e02340515318b043c6d614a69e1",
+						"name": "",
+						"tournament_career": {
+							"total_buy_in": {
+								"$numberDecimal": "187166700000000000"
+							},
+							"total_first_win": 7,
+							"total_first_winnings": {
+								"$numberDecimal": "141960000000000000.000000000000000"
+							},
+							"total_fought": 50,
+							"total_fourth_win": 29,
+							"total_second_win": 5,
+							"total_second_winnings": {
+								"$numberDecimal": "25740000000000000.000000000000000"
+							},
+							"total_third_win": 9
+						},
+						"wallet_address": "0xaac6fb64d81b2feac0ce0a32637c788d524d1f58",
+						"solo_career": {
+							"total_first_win": 0,
+							"total_fought": 0,
+							"total_second_win": 0
+						}
+					}
+				},
+				{
+					"account": "0x2c7db3ab2afe77eb55036ad916d0f7d8679eda82",
+					"id": 8399,
+					"stance": 3,
+					"data": "0x",
+					"win_position": 2,
+					"career": {
+						"first_wins": 21,
+						"second_wins": 17,
+						"total_fought": 162
+					},
+					"barrack": {
+						"cover": null,
+						"description": "Checkout myvillagers.io/ - Data, analytics and more for The Red Villlage",
+						"inappropriate_description": false,
+						"inappropriate_name": false,
+						"key": "3c9a758e9813dd913d9ae686fd4b951e",
+						"name": "𝕋𝕣𝕠𝕥𝕆𝕟 𝔾𝕒𝕞𝕚𝕟𝕘🗡️",
+						"nav_key": "𝕋_𝕣_𝕠_𝕥_𝕆_𝕟_𝔾_𝕒_𝕞_𝕚_𝕟_𝕘_🗡️",
+						"wallet_address": "0xd725f8fe989bb13327e122ef8087bc5c09721ebc",
+						"solo_career": {
+							"total_first_win": 71,
+							"total_fought": 173,
+							"total_second_win": 102
+						},
+						"tournament_career": {
+							"total_buy_in": {
+								"$numberDecimal": "6071712200000000000"
+							},
+							"total_first_win": 867,
+							"total_first_winnings": {
+								"$numberDecimal": "4116929889685300000.000000000000000"
+							},
+							"total_fought": 7139,
+							"total_fourth_win": 3607,
+							"total_second_win": 881,
+							"total_second_winnings": {
+								"$numberDecimal": "1523500072875300000.000000000000000"
+							},
+							"total_third_win": 1784
+						},
+						"avatar": "barrack/avatar/1660543668",
+						"discord": {
+							"name_flex": "@TrotOn#2698 or @MindTempest #1849"
+						}
+					},
+					"joiner_barrack": {
+						"description": "",
+						"inappropriate_description": false,
+						"inappropriate_name": false,
+						"key": "740fd31623a23bf979fb80de845c827a",
+						"name": "",
+						"tournament_career": {
+							"total_buy_in": {
+								"$numberDecimal": "34000000000000000"
+							},
+							"total_first_win": 3,
+							"total_first_winnings": {
+								"$numberDecimal": "21840000000000000.000000000000000"
+							},
+							"total_fought": 19,
+							"total_fourth_win": 9,
+							"total_second_win": 4,
+							"total_second_winnings": {
+								"$numberDecimal": "16380000000000000.000000000000000"
+							},
+							"total_third_win": 3
+						},
+						"wallet_address": "0x2c7db3ab2afe77eb55036ad916d0f7d8679eda82",
+						"solo_career": {
+							"total_first_win": 0,
+							"total_fought": 0,
+							"total_second_win": 0
+						}
+					}
+				},
+				{
+					"account": "0x664c6244bc22259951cdf7763b927d088d1c58f1",
+					"id": 3071,
+					"stance": 1,
+					"data": "0x",
+					"win_position": 4,
+					"career": {
+						"first_wins": 62,
+						"second_wins": 64,
+						"total_fought": 436
+					},
+					"barrack": {
+						"cover": null,
+						"description": "",
+						"inappropriate_description": false,
+						"inappropriate_name": false,
+						"key": "329a391345a1bf4a1250845a7c996471",
+						"name": "Permacope",
+						"nav_key": "permacope",
+						"wallet_address": "0xca38d006b38ee546f2d82e9dd902f54fc6db66b5",
+						"solo_career": {
+							"total_first_win": 11,
+							"total_fought": 22,
+							"total_second_win": 11
+						},
+						"tournament_career": {
+							"total_buy_in": {
+								"$numberDecimal": "2925009200000000000"
+							},
+							"total_first_win": 672,
+							"total_first_winnings": {
+								"$numberDecimal": "2448434277421550000.000000000000000"
+							},
+							"total_fought": 5316,
+							"total_fourth_win": 2618,
+							"total_second_win": 701,
+							"total_second_winnings": {
+								"$numberDecimal": "839961618083400000.000000000000000"
+							},
+							"total_third_win": 1325
+						}
+					},
+					"joiner_barrack": {
+						"description": "",
+						"inappropriate_description": false,
+						"inappropriate_name": false,
+						"key": "baddffaee54d727f613383620f5879ad",
+						"name": "",
+						"tournament_career": {
+							"total_buy_in": {
+								"$numberDecimal": "80000000000000000"
+							},
+							"total_first_win": 6,
+							"total_first_winnings": {
+								"$numberDecimal": "21840000000000000.000000000000000"
+							},
+							"total_fought": 89,
+							"total_fourth_win": 59,
+							"total_second_win": 9,
+							"total_second_winnings": {
+								"$numberDecimal": "18720000000000000.000000000000000"
+							},
+							"total_third_win": 15
+						},
+						"wallet_address": "0x664c6244bc22259951cdf7763b927d088d1c58f1",
+						"solo_career": {
+							"total_first_win": 0,
+							"total_fought": 0,
+							"total_second_win": 0
+						}
+					}
+				},
+				{
+					"account": "0xc73004f98805209b9a0db9f455f360cc082f2d19",
+					"id": 4783,
+					"stance": 3,
+					"data": "0x",
+					"win_position": 4,
+					"career": {
+						"first_wins": 30,
+						"second_wins": 28,
+						"total_fought": 232
+					},
+					"barrack": {
+						"cover": null,
+						"description": "Barbarians and Wizards",
+						"inappropriate_description": false,
+						"inappropriate_name": false,
+						"key": "15aee89121d980465e99bbbd10d16253",
+						"name": "City By The Bay Barracks",
+						"nav_key": "city_by_the_bay_barracks",
+						"wallet_address": "0xe2629a70cb45bc3d87b4c2b21f246ede172b16ae",
+						"solo_career": {
+							"total_first_win": 10,
+							"total_fought": 27,
+							"total_second_win": 17
+						},
+						"tournament_career": {
+							"total_buy_in": {
+								"$numberDecimal": "1300520100000000000"
+							},
+							"total_first_win": 267,
+							"total_first_winnings": {
+								"$numberDecimal": "1218391200000000000.000000000000000"
+							},
+							"total_fought": 2026,
+							"total_fourth_win": 955,
+							"total_second_win": 277,
+							"total_second_winnings": {
+								"$numberDecimal": "383238900000000000.000000000000000"
+							},
+							"total_third_win": 527
+						},
+						"discord": {
+							"name_flex": "@Field of Kreams#8091"
+						}
+					},
+					"joiner_barrack": {
+						"description": "",
+						"inappropriate_description": false,
+						"inappropriate_name": false,
+						"key": "4b08c687314b0b9eb5fbf71b1c0e9390",
+						"name": "",
+						"tournament_career": {
+							"total_buy_in": {
+								"$numberDecimal": "514855900000000000"
+							},
+							"total_first_win": 36,
+							"total_first_winnings": {
+								"$numberDecimal": "322016604000000000.000000000000000"
+							},
+							"total_fought": 271,
+							"total_fourth_win": 137,
+							"total_second_win": 29,
+							"total_second_winnings": {
+								"$numberDecimal": "125813844000000000.000000000000000"
+							},
+							"total_third_win": 69
+						},
+						"wallet_address": "0xc73004f98805209b9a0db9f455f360cc082f2d19",
+						"solo_career": {
+							"total_first_win": 0,
+							"total_fought": 0,
+							"total_second_win": 0
+						}
+					}
+				},
+				{
+					"account": "0xe2629a70cb45bc3d87b4c2b21f246ede172b16ae",
+					"id": 7667,
+					"stance": 3,
+					"data": "0x",
+					"win_position": 3,
+					"career": {
+						"first_wins": 9,
+						"second_wins": 8,
+						"total_fought": 83
+					},
+					"barrack": {
+						"cover": null,
+						"description": "Barbarians and Wizards",
+						"inappropriate_description": false,
+						"inappropriate_name": false,
+						"key": "15aee89121d980465e99bbbd10d16253",
+						"name": "City By The Bay Barracks",
+						"nav_key": "city_by_the_bay_barracks",
+						"wallet_address": "0xe2629a70cb45bc3d87b4c2b21f246ede172b16ae",
+						"solo_career": {
+							"total_first_win": 10,
+							"total_fought": 27,
+							"total_second_win": 17
+						},
+						"tournament_career": {
+							"total_buy_in": {
+								"$numberDecimal": "1300520100000000000"
+							},
+							"total_first_win": 267,
+							"total_first_winnings": {
+								"$numberDecimal": "1218391200000000000.000000000000000"
+							},
+							"total_fought": 2026,
+							"total_fourth_win": 955,
+							"total_second_win": 277,
+							"total_second_winnings": {
+								"$numberDecimal": "383238900000000000.000000000000000"
+							},
+							"total_third_win": 527
+						},
+						"discord": {
+							"name_flex": "@Field of Kreams#8091"
+						}
+					},
+					"joiner_barrack": {
+						"cover": null,
+						"description": "Barbarians and Wizards",
+						"inappropriate_description": false,
+						"inappropriate_name": false,
+						"key": "15aee89121d980465e99bbbd10d16253",
+						"name": "City By The Bay Barracks",
+						"nav_key": "city_by_the_bay_barracks",
+						"wallet_address": "0xe2629a70cb45bc3d87b4c2b21f246ede172b16ae",
+						"solo_career": {
+							"total_first_win": 10,
+							"total_fought": 27,
+							"total_second_win": 17
+						},
+						"tournament_career": {
+							"total_buy_in": {
+								"$numberDecimal": "1300520100000000000"
+							},
+							"total_first_win": 267,
+							"total_first_winnings": {
+								"$numberDecimal": "1218391200000000000.000000000000000"
+							},
+							"total_fought": 2026,
+							"total_fourth_win": 955,
+							"total_second_win": 277,
+							"total_second_winnings": {
+								"$numberDecimal": "383238900000000000.000000000000000"
+							},
+							"total_third_win": 527
+						},
+						"discord": {
+							"name_flex": "@Field of Kreams#8091"
+						}
+					}
+				},
+				{
+					"account": "0xd77844791f3d81db1f903c02ebe92f1b84d610ff",
+					"id": 3929,
+					"stance": 4,
+					"data": "0x",
+					"win_position": 4,
+					"career": {
+						"first_wins": 1,
+						"second_wins": 2,
+						"total_fought": 23
+					},
+					"barrack": {
+						"description": "",
+						"inappropriate_description": false,
+						"inappropriate_name": false,
+						"key": "b79de3c5f008c9d2239c99b10652f32c",
+						"name": "",
+						"tournament_career": {
+							"total_buy_in": {
+								"$numberDecimal": "30183000000000000"
+							},
+							"total_first_win": 11,
+							"total_first_winnings": {
+								"$numberDecimal": "5460000000000000.000000000000000"
+							},
+							"total_fought": 108,
+							"total_fourth_win": 59,
+							"total_second_win": 12,
+							"total_second_winnings": {
+								"$numberDecimal": "7897500000000000.000000000000000"
+							},
+							"total_third_win": 26
+						},
+						"wallet_address": "0xd77844791f3d81db1f903c02ebe92f1b84d610ff",
+						"solo_career": {
+							"total_first_win": 0,
+							"total_fought": 0,
+							"total_second_win": 0
+						}
+					},
+					"joiner_barrack": {
+						"description": "",
+						"inappropriate_description": false,
+						"inappropriate_name": false,
+						"key": "b79de3c5f008c9d2239c99b10652f32c",
+						"name": "",
+						"tournament_career": {
+							"total_buy_in": {
+								"$numberDecimal": "30183000000000000"
+							},
+							"total_first_win": 11,
+							"total_first_winnings": {
+								"$numberDecimal": "5460000000000000.000000000000000"
+							},
+							"total_fought": 108,
+							"total_fourth_win": 59,
+							"total_second_win": 12,
+							"total_second_winnings": {
+								"$numberDecimal": "7897500000000000.000000000000000"
+							},
+							"total_third_win": 26
+						},
+						"wallet_address": "0xd77844791f3d81db1f903c02ebe92f1b84d610ff",
+						"solo_career": {
+							"total_first_win": 0,
+							"total_fought": 0,
+							"total_second_win": 0
+						}
+					}
+				},
+				{
+					"account": "0xe823c48f73f6e50ba3a123161c5920d17f66ad89",
+					"id": 5276,
+					"stance": 1,
+					"data": "0x",
+					"win_position": 4,
+					"career": {
+						"first_wins": 11,
+						"second_wins": 9,
+						"total_fought": 96
+					},
+					"barrack": {
+						"cover": null,
+						"description": "",
+						"inappropriate_description": false,
+						"inappropriate_name": false,
+						"key": "811b71917d621a8e01da754903172613",
+						"name": "💧 Bloo Fella Barracks💧",
+						"nav_key": "💧_bloo_fella_barracks_💧",
+						"wallet_address": "0xe823c48f73f6e50ba3a123161c5920d17f66ad89",
+						"solo_career": {
+							"total_first_win": 2,
+							"total_fought": 11,
+							"total_second_win": 9
+						},
+						"tournament_career": {
+							"total_buy_in": {
+								"$numberDecimal": "792461100000000000"
+							},
+							"total_first_win": 63,
+							"total_first_winnings": {
+								"$numberDecimal": "415502937230500000.000000000000000"
+							},
+							"total_fought": 604,
+							"total_fourth_win": 328,
+							"total_second_win": 57,
+							"total_second_winnings": {
+								"$numberDecimal": "161510544000000000.000000000000000"
+							},
+							"total_third_win": 156
+						},
+						"avatar": "barrack/avatar/1657038771"
+					},
+					"joiner_barrack": {
+						"cover": null,
+						"description": "",
+						"inappropriate_description": false,
+						"inappropriate_name": false,
+						"key": "811b71917d621a8e01da754903172613",
+						"name": "💧 Bloo Fella Barracks💧",
+						"nav_key": "💧_bloo_fella_barracks_💧",
+						"wallet_address": "0xe823c48f73f6e50ba3a123161c5920d17f66ad89",
+						"solo_career": {
+							"total_first_win": 2,
+							"total_fought": 11,
+							"total_second_win": 9
+						},
+						"tournament_career": {
+							"total_buy_in": {
+								"$numberDecimal": "792461100000000000"
+							},
+							"total_first_win": 63,
+							"total_first_winnings": {
+								"$numberDecimal": "415502937230500000.000000000000000"
+							},
+							"total_fought": 604,
+							"total_fourth_win": 328,
+							"total_second_win": 57,
+							"total_second_winnings": {
+								"$numberDecimal": "161510544000000000.000000000000000"
+							},
+							"total_third_win": 156
+						},
+						"avatar": "barrack/avatar/1657038771"
+					}
+				}
+			],
+			"solo_warriors": []
+		}
+	]
+}

@@ -1,0 +1,138 @@
+{
+	"attributes": {
+		"id": 5118,
+		"attributes": [
+			{
+				"trait_type": "Bloodline",
+				"value": "Mystic"
+			},
+			{
+				"trait_type": "Genotype",
+				"value": "R5"
+			},
+			{
+				"trait_type": "Character Class",
+				"value": "Druid"
+			},
+			{
+				"trait_type": "Breed",
+				"value": "Elf"
+			},
+			{
+				"trait_type": "Armor Color",
+				"value": "Charcoal"
+			},
+			{
+				"trait_type": "Hair Style",
+				"value": "Druid Bald"
+			},
+			{
+				"trait_type": "Warpaint",
+				"value": "None"
+			}
+		],
+		"champion_type": "mystic",
+		"description": "The second generation of Pureblood Champions in The Red Village ecosystem is known as the Mystic Bloodline. These famed warriors are prized for their rarity and are highly sought-after. Ferocious, brutal, and ready for bloodshed.",
+		"image": "ipfs://QmQXp37BRkmG5GS4WgF9h5RurYqK1SRDpt7uCMorabiv6o/5118.jpg",
+		"key": "64f3d833d91d38a35a3ce8530111b58b",
+		"name": "Briar Cacophony"
+	},
+	"lineage_node": {},
+	"latest_summon_info": {
+		"champion_id": 5118
+	},
+	"statistic": {
+		"wisdom": {
+			"point": 0,
+			"strength": {
+				"current_range": 100,
+				"range": [
+					1,
+					100
+				]
+			},
+			"attack": {
+				"current_range": 100,
+				"range": [
+					1,
+					100
+				]
+			},
+			"defence": {
+				"current_range": 100,
+				"range": [
+					1,
+					100
+				]
+			},
+			"omega": {
+				"current_range": 100,
+				"range": [
+					1,
+					100
+				]
+			}
+		},
+		"champion_id": 5118,
+		"owner_address": "0xDB14278a4b6f6a67b087E9E2324f4A807cb80D81",
+		"blooding_career": {
+			"total_first_win": 0,
+			"total_fought": 0,
+			"total_fourth_win": 0,
+			"total_second_win": 0,
+			"total_third_win": 0
+		},
+		"solo_career": {
+			"total_first_win": 0,
+			"total_fought": 0,
+			"total_second_win": 0
+		},
+		"tournament_career": {
+			"total_buy_in": {
+				"$numberDecimal": "0"
+			},
+			"total_first_win": 0,
+			"total_first_winnings": {
+				"$numberDecimal": "0"
+			},
+			"total_fought": 0,
+			"total_fourth_win": 0,
+			"total_second_win": 0,
+			"total_second_winnings": {
+				"$numberDecimal": "0"
+			},
+			"total_third_win": 0
+		},
+		"elo": 1800
+	},
+	"offchain": {},
+	"barrack": {
+		"description": "",
+		"inappropriate_description": false,
+		"inappropriate_name": false,
+		"key": "a3f4d5b8052634ef2d3f9629dccaedb6",
+		"name": "",
+		"tournament_career": {
+			"total_buy_in": {
+				"$numberDecimal": "210000000000000000"
+			},
+			"total_first_win": 20,
+			"total_first_winnings": {
+				"$numberDecimal": "141960000000000000.000000000000000"
+			},
+			"total_fought": 138,
+			"total_fourth_win": 55,
+			"total_second_win": 17,
+			"total_second_winnings": {
+				"$numberDecimal": "58500000000000000.000000000000000"
+			},
+			"total_third_win": 46
+		},
+		"wallet_address": "0xdb14278a4b6f6a67b087e9e2324f4a807cb80d81",
+		"solo_career": {
+			"total_first_win": 0,
+			"total_fought": 0,
+			"total_second_win": 0
+		}
+	}
+}
