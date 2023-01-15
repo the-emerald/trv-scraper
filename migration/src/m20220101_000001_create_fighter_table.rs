@@ -26,6 +26,7 @@ impl MigrationTrait for Migration {
                     .col(ColumnDef::new(Fighter::DefenceTo).integer().not_null())
                     .col(ColumnDef::new(Fighter::OmegaFrom).integer().not_null())
                     .col(ColumnDef::new(Fighter::OmegaTo).integer().not_null())
+                    .col(ColumnDef::new(Fighter::LastUpdated).date_time().not_null())
                     .to_owned(),
             )
             .await
@@ -52,4 +53,5 @@ enum Fighter {
     DefenceTo,
     OmegaFrom,
     OmegaTo,
+    LastUpdated,
 }

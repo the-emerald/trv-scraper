@@ -1,6 +1,7 @@
 use anyhow::Result;
 use api::fighter::FighterResponse;
 use backoff::{Error, ExponentialBackoff};
+use chrono::Utc;
 use ethers_core::types::Address;
 use futures::{stream, StreamExt};
 use itertools::Itertools;
@@ -66,6 +67,7 @@ impl ChampionTask {
                 defence_to: Set(ft.statistic.wisdom.defence.to as i32),
                 omega_from: Set(ft.statistic.wisdom.omega.from as i32),
                 omega_to: Set(ft.statistic.wisdom.omega.to as i32),
+                last_updated: Set(Utc::now().naive_utc()),
             })
             .collect::<Vec<_>>()
             .into_iter()
