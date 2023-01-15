@@ -1,0 +1,140 @@
+{
+	"attributes": {
+		"id": 28787,
+		"attributes": [
+			{
+				"trait_type": "Background",
+				"value": "Gray"
+			},
+			{
+				"trait_type": "Bloodline",
+				"value": "Halfblood"
+			},
+			{
+				"trait_type": "Genotype",
+				"value": "R14"
+			},
+			{
+				"trait_type": "Character Class",
+				"value": "Barbarian"
+			},
+			{
+				"trait_type": "Breed",
+				"value": "High Born"
+			},
+			{
+				"trait_type": "Armor Color",
+				"value": "Spectral"
+			},
+			{
+				"trait_type": "Warpaint",
+				"value": "None"
+			},
+			{
+				"trait_type": "Hair Style",
+				"value": "Blonde Barbarian Mohawk"
+			}
+		],
+		"description": "Summoned Champions are feared and respected within The Red Village. Some are incredibly powerful, challenging even the most formidable of Purebloods. Summoned Champions are born of the Bloodwraith Gaa'gore's dark ritual.",
+		"image": "https://assets.theredvillage.com/champions/summoned/images/28787.jpg",
+		"key": "585e8f668ab1a87be13e7662db2363f2",
+		"name": "Summon #28787"
+	},
+	"lineage_node": {
+		"metadata": {
+			"latest_summon_time": 1672704551,
+			"session_id": 5,
+			"summon_type": 0,
+			"summoned_at": 1672704551
+		},
+		"summoned_in_life": {
+			"private": 0,
+			"public": 0
+		},
+		"inited": true,
+		"original_mum": 807,
+		"parents": [
+			432,
+			807
+		],
+		"status": "METADATA_CREATED"
+	},
+	"latest_summon_info": {
+		"champion_id": 28787,
+		"lineage_node": {
+			"metadata": {
+				"latest_summon_time": 1672704551,
+				"session_id": 5,
+				"summon_type": 0,
+				"summoned_at": 1672704551
+			},
+			"inited": true,
+			"original_mum": 807,
+			"parents": [
+				432,
+				807
+			],
+			"status": "METADATA_CREATED"
+		}
+	},
+	"statistic": {
+		"wisdom": {
+			"point": 0,
+			"strength": {
+				"current_range": 100,
+				"range": [
+					1,
+					100
+				]
+			},
+			"attack": {
+				"current_range": 100,
+				"range": [
+					1,
+					100
+				]
+			},
+			"defence": {
+				"current_range": 100,
+				"range": [
+					1,
+					100
+				]
+			},
+			"omega": {
+				"current_range": 100,
+				"range": [
+					1,
+					100
+				]
+			}
+		},
+		"champion_id": 28787,
+		"blooding_career": {
+			"total_first_win": 0,
+			"total_fought": 0,
+			"total_fourth_win": 0,
+			"total_second_win": 0,
+			"total_third_win": 0
+		},
+		"tournament_career": {
+			"total_buy_in": {
+				"$numberDecimal": "0"
+			},
+			"total_first_win": 0,
+			"total_first_winnings": {
+				"$numberDecimal": "0"
+			},
+			"total_fought": 0,
+			"total_fourth_win": 0,
+			"total_second_win": 0,
+			"total_second_winnings": {
+				"$numberDecimal": "0"
+			},
+			"total_third_win": 0
+		},
+		"owner_address": "0x1b7d1c6200af18c8f734cfb3d3831cc6c3de5c2e"
+	},
+	"offchain": {},
+	"barrack": null
+}

@@ -19,7 +19,7 @@ pub struct Attributes {
 #[derive(Debug, Clone, Deserialize)]
 pub struct Statistics {
     pub wisdom: Wisdom,
-    pub elo: u64,
+    pub elo: Option<u64>,
     pub owner_address: Address,
 }
 
@@ -65,6 +65,7 @@ mod tests {
 
     const TEST_FIGHTER: &str = include_str!("tests/fighter.json");
     const TEST_FIGHTER_29001: &str = include_str!("tests/fighter_29001.json");
+    const TEST_FIGHTER_28787: &str = include_str!("tests/fighter_28787.json");
 
     #[test]
     fn test_fighter() {
@@ -74,5 +75,10 @@ mod tests {
     #[test]
     fn test_fighter_29001() {
         let _ = serde_json::from_str::<FighterResponse>(TEST_FIGHTER_29001).unwrap();
+    }
+
+    #[test]
+    fn test_fighter_28787() {
+        let _ = serde_json::from_str::<FighterResponse>(TEST_FIGHTER_28787).unwrap();
     }
 }
