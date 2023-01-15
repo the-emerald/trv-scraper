@@ -38,11 +38,8 @@ impl ChampionTask {
 
     #[instrument(skip_all)]
     pub async fn run(self) -> Result<()> {
-        // On boot, scan once.
-        self.scan().await?;
-
-        // Afterwards: every X hours, scan once.
         let mut interval = tokio::time::interval(Duration::from_millis(SCRAPE_INTERVAL));
+        // Note that the first tick completes immediately.
         loop {
             interval.tick().await;
             self.scan().await?;
