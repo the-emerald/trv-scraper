@@ -8,6 +8,7 @@ use sea_orm::sea_query::OnConflict;
 use serde::Deserialize;
 use serde_json::Value;
 use std::str::FromStr;
+use std::time::Duration;
 use tracing::{info, instrument, warn};
 
 use entity::entities::{fighter, prelude::*};
@@ -15,6 +16,8 @@ use sea_orm::ActiveValue::*;
 use sea_orm::{prelude::*, QueryOrder};
 
 const CONCURRENT_REQUESTS: usize = 128;
+/// 2 hours
+const SCRAPE_INTERVAL: u64 = 2 * 60 * 60 * 1000;
 
 #[derive(Debug)]
 pub struct ChampionTask {
@@ -34,11 +37,15 @@ impl ChampionTask {
 
     #[instrument(skip_all)]
     pub async fn run(self) -> Result<()> {
-        // On boot: scan once
+        // On boot, scan once.
         self.scan().await?;
-        // Afterwards: every X hours, scan again
-        // TODO: Loop
-        Ok(())
+
+        // Afterwards: every X hours, scan once.
+        let mut interval = tokio::time::interval(Duration::from_millis(SCRAPE_INTERVAL));
+        loop {
+            interval.tick().await;
+            self.scan().await?;
+        }
     }
 
     async fn scan(&self) -> Result<()> {
