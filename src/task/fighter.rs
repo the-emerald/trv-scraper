@@ -152,16 +152,6 @@ impl ChampionTask {
             .into_iter()
             .filter_map(|x| x.ok())
             .collect()
-
-        // futures::future::join_all((0..up_to).map(|i| async move {
-        //     let resp = self.get_champion(i).await?;
-        //     info!(n = ?i, "completed");
-        //     Ok::<FighterResponse, reqwest::Error>(resp)
-        // }))
-        // .await
-        // .into_iter()
-        // .filter_map(|x| x.ok())
-        // .collect()
     }
 
     async fn get_champion(&self, id: u64) -> Result<FighterResponse, reqwest::Error> {
