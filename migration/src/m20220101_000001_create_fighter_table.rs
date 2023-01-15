@@ -13,7 +13,7 @@ impl MigrationTrait for Migration {
                     .if_not_exists()
                     .col(
                         ColumnDef::new(Fighter::Id)
-                            .integer()
+                            .big_unsigned()
                             .not_null()
                             .primary_key(),
                     )

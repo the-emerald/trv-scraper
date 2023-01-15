@@ -6,7 +6,7 @@ use sea_orm::entity::prelude::*;
 #[sea_orm(table_name = "fighter")]
 pub struct Model {
     #[sea_orm(primary_key, auto_increment = false)]
-    pub id: i32,
+    pub id: i64,
     pub wisdom_point: i32,
     pub strength_from: i32,
     pub strength_to: i32,
