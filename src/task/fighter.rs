@@ -3,6 +3,7 @@ use api::fighter::FighterResponse;
 use backoff::{Error, ExponentialBackoff};
 use ethers_core::types::Address;
 use futures::{stream, StreamExt};
+use itertools::Itertools;
 use sea_orm::sea_query::OnConflict;
 use serde::Deserialize;
 use serde_json::Value;
@@ -59,27 +60,33 @@ impl ChampionTask {
                 omega_from: Set(ft.statistic.wisdom.omega.from as i32),
                 omega_to: Set(ft.statistic.wisdom.omega.to as i32),
             })
+            .collect::<Vec<_>>()
+            .into_iter()
+            .chunks(100)
+            .into_iter()
+            .map(|ck| ck.collect::<Vec<_>>())
             .collect::<Vec<_>>();
 
-        let _ = Fighter::insert_many(champions)
-            .on_conflict(
-                OnConflict::column(fighter::Column::Id)
-                    .update_columns([
-                        fighter::Column::AttackFrom,
-                        fighter::Column::AttackTo,
-                        fighter::Column::DefenceFrom,
-                        fighter::Column::DefenceTo,
-                        fighter::Column::OmegaFrom,
-                        fighter::Column::OmegaTo,
-                        fighter::Column::StrengthFrom,
-                        fighter::Column::StrengthTo,
-                        fighter::Column::WisdomPoint,
-                    ])
-                    .to_owned(),
-            )
-            .exec(&self.conn)
-            .await?;
-
+        for chunk in champions {
+            let _ = Fighter::insert_many(chunk)
+                .on_conflict(
+                    OnConflict::column(fighter::Column::Id)
+                        .update_columns([
+                            fighter::Column::AttackFrom,
+                            fighter::Column::AttackTo,
+                            fighter::Column::DefenceFrom,
+                            fighter::Column::DefenceTo,
+                            fighter::Column::OmegaFrom,
+                            fighter::Column::OmegaTo,
+                            fighter::Column::StrengthFrom,
+                            fighter::Column::StrengthTo,
+                            fighter::Column::WisdomPoint,
+                        ])
+                        .to_owned(),
+                )
+                .exec(&self.conn)
+                .await?;
+        }
         Ok(())
     }
 

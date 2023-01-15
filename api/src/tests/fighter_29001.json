@@ -1,0 +1,172 @@
+{
+	"attributes": {
+		"id": 29001,
+		"attributes": [
+			{
+				"trait_type": "Background",
+				"value": "Gray"
+			},
+			{
+				"trait_type": "Bloodline",
+				"value": "Halfblood"
+			},
+			{
+				"trait_type": "Genotype",
+				"value": "R15"
+			},
+			{
+				"trait_type": "Character Class",
+				"value": "Barbarian"
+			},
+			{
+				"trait_type": "Breed",
+				"value": "Origin"
+			},
+			{
+				"trait_type": "Armor Color",
+				"value": "Greatwood"
+			},
+			{
+				"trait_type": "Warpaint",
+				"value": "Silver Ragnarok"
+			},
+			{
+				"trait_type": "Hair Style",
+				"value": "Gray Barbarian Mohawk"
+			}
+		],
+		"description": "Summoned Champions are feared and respected within The Red Village. Some are incredibly powerful, challenging even the most formidable of Purebloods. Summoned Champions are born of the Bloodwraith Gaa'gore's dark ritual.",
+		"image": "https://assets.theredvillage.com/champions/summoned/images/29001.jpg",
+		"key": "581cfe1396d45f9ebe8a04ee537c6508",
+		"name": "Divine Executioner"
+	},
+	"lineage_node": {
+		"metadata": {
+			"latest_summon_time": 1672886217,
+			"session_id": 5,
+			"summon_type": 1,
+			"summoned_at": 1672886217
+		},
+		"summoned_in_life": {
+			"private": 0,
+			"public": 0
+		},
+		"parents": [
+			673,
+			205
+		],
+		"inited": true,
+		"original_mum": 205,
+		"status": "METADATA_CREATED"
+	},
+	"latest_summon_info": {
+		"champion_id": 29001,
+		"lineage_node": {
+			"metadata": {
+				"latest_summon_time": 1672886217,
+				"session_id": 5,
+				"summon_type": 1,
+				"summoned_at": 1672886217
+			},
+			"parents": [
+				673,
+				205
+			],
+			"inited": true,
+			"original_mum": 205,
+			"status": "METADATA_CREATED"
+		}
+	},
+	"statistic": {
+		"wisdom": {
+			"point": 101,
+			"strength": {
+				"current_range": 100,
+				"range": [
+					1,
+					100
+				]
+			},
+			"attack": {
+				"current_range": 100,
+				"range": [
+					1,
+					100
+				]
+			},
+			"defence": {
+				"current_range": 100,
+				"range": [
+					1,
+					100
+				]
+			},
+			"omega": {
+				"current_range": 100,
+				"range": [
+					1,
+					100
+				]
+			}
+		},
+		"champion_id": 29001,
+		"blooding_career": {
+			"total_first_win": 0,
+			"total_fought": 0,
+			"total_fourth_win": 0,
+			"total_second_win": 0,
+			"total_third_win": 0
+		},
+		"owner_address": "0xa1e998c23a73c489bf3afa73fa9a575f2b6e774d",
+		"tournament_career": {
+			"total_buy_in": {
+				"$numberDecimal": "0"
+			},
+			"total_first_win": 11,
+			"total_first_winnings": {
+				"$numberDecimal": "0"
+			},
+			"total_fought": 101,
+			"total_fourth_win": 58,
+			"total_second_win": 8,
+			"total_second_winnings": {
+				"$numberDecimal": "0"
+			},
+			"total_third_win": 24
+		},
+		"challenge_status": "NOT_INTERESTED",
+		"elo": 1731,
+		"default_stance": 2
+	},
+	"offchain": {},
+	"barrack": {
+		"description": "",
+		"inappropriate_description": false,
+		"inappropriate_name": false,
+		"key": "f2d3bd7cd214106924e209dcdf429e2f",
+		"name": "Death's Sanctuary 🪦",
+		"nav_key": "deaths_sanctuary_🪦",
+		"wallet_address": "0xa1e998c23a73c489bf3afa73fa9a575f2b6e774d",
+		"tournament_career": {
+			"total_buy_in": {
+				"$numberDecimal": "7200000000000000"
+			},
+			"total_first_win": 60,
+			"total_first_winnings": {
+				"$numberDecimal": "7488000000000000.000000000000000"
+			},
+			"total_fought": 444,
+			"total_fourth_win": 232,
+			"total_second_win": 56,
+			"total_second_winnings": {
+				"$numberDecimal": "0E-15"
+			},
+			"total_third_win": 96
+		},
+		"solo_career": {
+			"total_first_win": 2,
+			"total_fought": 3,
+			"total_second_win": 1
+		}
+	}
+}

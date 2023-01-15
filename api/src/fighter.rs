@@ -11,7 +11,7 @@ pub struct FighterResponse {
 #[derive(Debug, Clone, Deserialize)]
 pub struct Attributes {
     pub id: u64,
-    pub champion_type: String,
+    pub champion_type: Option<String>,
     #[serde(flatten)]
     pub attributes: Metadata,
 }
@@ -64,9 +64,15 @@ mod tests {
     use super::*;
 
     const TEST_FIGHTER: &str = include_str!("tests/fighter.json");
+    const TEST_FIGHTER_29001: &str = include_str!("tests/fighter_29001.json");
 
     #[test]
     fn test_fighter() {
         let _ = serde_json::from_str::<FighterResponse>(TEST_FIGHTER).unwrap();
+    }
+
+    #[test]
+    fn test_fighter_29001() {
+        let _ = serde_json::from_str::<FighterResponse>(TEST_FIGHTER_29001).unwrap();
     }
 }
