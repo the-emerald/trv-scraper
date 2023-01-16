@@ -1,5 +1,5 @@
 use chrono::{DateTime, NaiveDateTime, Utc};
-use ethers_core::types::Address;
+use ethers_core::types::{Address, U256};
 use serde::{de::Error, Deserialize, Serialize};
 use serde_json::Value;
 
@@ -17,7 +17,7 @@ pub struct TournamentResponse {
 pub enum Tournament {
     OneVOne {
         tournament_id: i64,
-        configs: Value,
+        configs: Configs,
         key: String,
         level: Level,
         modified: DateTime<Utc>,
@@ -30,7 +30,7 @@ pub enum Tournament {
     Blooding {
         tournament_id: i64,
         class: Value,
-        configs: Value,
+        configs: Configs,
         key: String,
         legacy: bool,
         level: Level,
@@ -45,7 +45,7 @@ pub enum Tournament {
     Bloodbath {
         tournament_id: i64,
         class: Value,
-        configs: Value,
+        configs: Configs,
         key: String,
         legacy: bool,
         level: Level,
@@ -60,7 +60,7 @@ pub enum Tournament {
     BloodElo {
         tournament_id: i64,
         class: Value,
-        configs: Value,
+        configs: Configs,
         key: String,
         legacy: bool,
         level: Level,
@@ -96,7 +96,7 @@ impl<'de> Deserialize<'de> for Tournament {
             service_id: u64,
             tournament_id: i64,
             class: Option<Value>,
-            configs: Value,
+            configs: Configs,
             key: String,
             legacy: Option<bool>,
             level: Level,
@@ -238,6 +238,16 @@ pub enum Status {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Level {
     pub nav_key: String,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct Configs {
+    pub currency: Address,
+    pub fee_percentage: u64,
+    #[serde(with = "crate::util::u256_fromstr_radix_10")]
+    pub buy_in: U256,
+    #[serde(with = "crate::util::u256_fromstr_radix_10")]
+    pub top_up: U256,
 }
 
 #[cfg(test)]

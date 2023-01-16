@@ -3,6 +3,7 @@ use serde::{Deserialize, Serialize};
 pub mod fighter;
 pub mod tournament;
 pub mod tournament_detail;
+pub mod util;
 
 #[derive(Clone, Copy, Debug, Serialize, Deserialize)]
 pub struct Pagination {
