@@ -73,6 +73,17 @@ pub enum Tournament {
     },
 }
 
+impl Tournament {
+    pub fn service_id(&self) -> u64 {
+        match self {
+            Tournament::OneVOne { .. } => 0,
+            Tournament::Blooding { .. } => 1,
+            Tournament::Bloodbath { .. } => 2,
+            Tournament::BloodElo { .. } => 3,
+        }
+    }
+}
+
 impl<'de> Deserialize<'de> for Tournament {
     fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
     where
