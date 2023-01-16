@@ -208,6 +208,11 @@ mod tests {
     const TEST_BLOODBATH: &str = include_str!("tests/bloodbath.json");
     const TEST_BLOODELO: &str = include_str!("tests/bloodelo.json");
 
+    const TEST_1V1_LARGE: &str = include_str!("tests/1v1_large.json");
+    const TEST_BLOODING_LARGE: &str = include_str!("tests/blooding_large.json");
+    const TEST_BLOODBATH_LARGE: &str = include_str!("tests/bloodbath_large.json");
+    const TEST_BLOODELO_LARGE: &str = include_str!("tests/bloodelo_large.json");
+
     #[test]
     fn test_1v1() {
         let _ = serde_json::from_str::<TournamentResponse>(TEST_1V1).unwrap();
@@ -226,5 +231,25 @@ mod tests {
     #[test]
     fn test_bloodelo() {
         let _ = serde_json::from_str::<TournamentResponse>(TEST_BLOODELO).unwrap();
+    }
+
+    #[test]
+    fn test_1v1_large() {
+        let _ = serde_json::from_str::<TournamentResponse>(TEST_1V1_LARGE).unwrap();
+    }
+
+    #[test]
+    fn test_blooding_large() {
+        let _ = serde_json::from_str::<TournamentResponse>(TEST_BLOODING_LARGE).unwrap();
+    }
+
+    #[test]
+    fn test_bloodbath_large() {
+        let _ = serde_json::from_str::<TournamentResponse>(TEST_BLOODBATH_LARGE).unwrap();
+    }
+
+    #[test]
+    fn test_bloodelo_large() {
+        let _ = serde_json::from_str::<TournamentResponse>(TEST_BLOODELO_LARGE).unwrap();
     }
 }
