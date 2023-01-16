@@ -41,7 +41,6 @@ pub enum Tournament {
         status: Status,
         tournament_type: String,
         warriors: Vec<Warrior>,
-        solo_warriors: Vec<SoloWarrior>,
     },
     Bloodbath {
         tournament_id: i64,
@@ -57,7 +56,6 @@ pub enum Tournament {
         status: Status,
         tournament_type: String,
         warriors: Vec<Warrior>,
-        solo_warriors: Vec<SoloWarrior>,
     },
     BloodElo {
         tournament_id: i64,
@@ -73,7 +71,6 @@ pub enum Tournament {
         status: Status,
         tournament_type: String,
         warriors: Vec<Warrior>,
-        solo_warriors: Vec<SoloWarrior>,
     },
 }
 
@@ -130,7 +127,6 @@ impl<'de> Deserialize<'de> for Tournament {
                 start_time: sink.start_time,
                 status: sink.status,
                 warriors: sink.warriors,
-                solo_warriors: sink.solo_warriors,
                 class: sink
                     .class
                     .ok_or_else(|| D::Error::custom("expected class"))?,
@@ -152,7 +148,6 @@ impl<'de> Deserialize<'de> for Tournament {
                 start_time: sink.start_time,
                 status: sink.status,
                 warriors: sink.warriors,
-                solo_warriors: sink.solo_warriors,
                 class: sink
                     .class
                     .ok_or_else(|| D::Error::custom("expected class"))?,
@@ -174,7 +169,6 @@ impl<'de> Deserialize<'de> for Tournament {
                 start_time: sink.start_time,
                 status: sink.status,
                 warriors: sink.warriors,
-                solo_warriors: sink.solo_warriors,
                 class: sink
                     .class
                     .ok_or_else(|| D::Error::custom("expected class"))?,
