@@ -128,9 +128,7 @@ impl<'de> Deserialize<'de> for Tournament {
                 class: sink
                     .class
                     .ok_or_else(|| D::Error::custom("expected class"))?,
-                legacy: sink
-                    .legacy
-                    .ok_or_else(|| D::Error::custom("expected legacy"))?,
+                legacy: sink.legacy.unwrap_or_default(),
                 name: sink.name.ok_or_else(|| D::Error::custom("expected name"))?,
                 tournament_type: sink
                     .tournament_type
@@ -149,9 +147,7 @@ impl<'de> Deserialize<'de> for Tournament {
                 class: sink
                     .class
                     .ok_or_else(|| D::Error::custom("expected class"))?,
-                legacy: sink
-                    .legacy
-                    .ok_or_else(|| D::Error::custom("expected legacy"))?,
+                legacy: sink.legacy.unwrap_or_default(),
                 name: sink.name.ok_or_else(|| D::Error::custom("expected name"))?,
                 tournament_type: sink
                     .tournament_type
@@ -170,9 +166,7 @@ impl<'de> Deserialize<'de> for Tournament {
                 class: sink
                     .class
                     .ok_or_else(|| D::Error::custom("expected class"))?,
-                legacy: sink
-                    .legacy
-                    .ok_or_else(|| D::Error::custom("expected legacy"))?,
+                legacy: sink.legacy.unwrap_or_default(),
                 name: sink.name.ok_or_else(|| D::Error::custom("expected name"))?,
                 tournament_type: sink
                     .tournament_type
