@@ -24,7 +24,6 @@ pub enum Tournament {
         solo_optionals: Value,
         start_time: String,
         status: Status,
-        warriors: Vec<Warrior>,
         solo_warriors: Vec<SoloWarrior>,
     },
     Blooding {
@@ -114,7 +113,6 @@ impl<'de> Deserialize<'de> for Tournament {
                     .ok_or_else(|| D::Error::custom("expected solo_optional"))?,
                 start_time: sink.start_time,
                 status: sink.status,
-                warriors: sink.warriors,
                 solo_warriors: sink.solo_warriors,
             }),
             1 => Ok(Tournament::Blooding {
