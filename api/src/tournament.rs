@@ -1,3 +1,4 @@
+use chrono::{DateTime, NaiveDateTime, Utc};
 use ethers_core::types::Address;
 use serde::{de::Error, Deserialize, Serialize};
 use serde_json::Value;
@@ -19,10 +20,10 @@ pub enum Tournament {
         configs: Value,
         key: String,
         level: Level,
-        modified: String,
+        modified: DateTime<Utc>,
         restrictions: Value,
         solo_optionals: Value,
-        start_time: String,
+        start_time: NaiveDateTime,
         status: Status,
         solo_warriors: Vec<SoloWarrior>,
     },
@@ -33,10 +34,10 @@ pub enum Tournament {
         key: String,
         legacy: bool,
         level: Level,
-        modified: String,
+        modified: DateTime<Utc>,
         name: String,
         restrictions: Value,
-        start_time: String,
+        start_time: NaiveDateTime,
         status: Status,
         tournament_type: String,
         warriors: Vec<Warrior>,
@@ -48,10 +49,10 @@ pub enum Tournament {
         key: String,
         legacy: bool,
         level: Level,
-        modified: String,
+        modified: DateTime<Utc>,
         name: String,
         restrictions: Value,
-        start_time: String,
+        start_time: NaiveDateTime,
         status: Status,
         tournament_type: String,
         warriors: Vec<Warrior>,
@@ -63,10 +64,10 @@ pub enum Tournament {
         key: String,
         legacy: bool,
         level: Level,
-        modified: String,
+        modified: DateTime<Utc>,
         name: String,
         restrictions: Value,
-        start_time: String,
+        start_time: NaiveDateTime,
         status: Status,
         tournament_type: String,
         warriors: Vec<Warrior>,
@@ -99,10 +100,11 @@ impl<'de> Deserialize<'de> for Tournament {
             key: String,
             legacy: Option<bool>,
             level: Level,
-            modified: String,
+            modified: DateTime<Utc>,
             name: Option<String>,
             restrictions: Value,
-            start_time: String,
+            #[serde(with = "start_time_dt_format")]
+            start_time: NaiveDateTime,
             status: Status,
             tournament_type: Option<String>,
             warriors: Vec<Warrior>,
@@ -188,6 +190,29 @@ impl<'de> Deserialize<'de> for Tournament {
                 sink.service_id
             ))),
         }
+    }
+}
+
+pub mod start_time_dt_format {
+    use chrono::NaiveDateTime;
+    use serde::{self, Deserialize, Deserializer, Serializer};
+
+    const FORMAT: &str = "%Y-%m-%d %H:%M";
+
+    pub fn serialize<S>(date: &NaiveDateTime, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: Serializer,
+    {
+        let s = format!("{}", date.format(FORMAT));
+        serializer.serialize_str(&s)
+    }
+
+    pub fn deserialize<'de, D>(deserializer: D) -> Result<NaiveDateTime, D::Error>
+    where
+        D: Deserializer<'de>,
+    {
+        let s = String::deserialize(deserializer)?;
+        NaiveDateTime::parse_from_str(&s, FORMAT).map_err(serde::de::Error::custom)
     }
 }
 
