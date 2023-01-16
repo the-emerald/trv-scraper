@@ -18,7 +18,7 @@ pub enum Tournament {
         tournament_id: i64,
         configs: Value,
         key: String,
-        level: Value,
+        level: Level,
         modified: String,
         restrictions: Value,
         solo_optionals: Value,
@@ -32,7 +32,7 @@ pub enum Tournament {
         configs: Value,
         key: String,
         legacy: bool,
-        level: Value,
+        level: Level,
         modified: String,
         name: String,
         restrictions: Value,
@@ -47,7 +47,7 @@ pub enum Tournament {
         configs: Value,
         key: String,
         legacy: bool,
-        level: Value,
+        level: Level,
         modified: String,
         name: String,
         restrictions: Value,
@@ -62,7 +62,7 @@ pub enum Tournament {
         configs: Value,
         key: String,
         legacy: bool,
-        level: Value,
+        level: Level,
         modified: String,
         name: String,
         restrictions: Value,
@@ -87,7 +87,7 @@ impl<'de> Deserialize<'de> for Tournament {
             configs: Value,
             key: String,
             legacy: Option<bool>,
-            level: Value,
+            level: Level,
             modified: String,
             name: Option<String>,
             restrictions: Value,
@@ -197,6 +197,11 @@ pub enum Status {
     Completed,
     #[serde(rename = "CANCEL_SUCCEED")]
     Cancelled,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct Level {
+    pub nav_key: String,
 }
 
 #[cfg(test)]
