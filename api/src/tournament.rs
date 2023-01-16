@@ -25,7 +25,6 @@ pub enum Tournament {
         start_time: String,
         status: Status,
         warriors: Vec<Warrior>,
-        eth_price: u64,
         solo_warriors: Vec<SoloWarrior>,
     },
     Blooding {
@@ -102,7 +101,6 @@ impl<'de> Deserialize<'de> for Tournament {
             warriors: Vec<Warrior>,
             solo_warriors: Vec<SoloWarrior>,
             solo_optionals: Option<Value>,
-            eth_price: Option<u64>,
         }
         let sink: KitchenSink = Deserialize::deserialize(deserializer)?;
 
@@ -120,9 +118,6 @@ impl<'de> Deserialize<'de> for Tournament {
                 start_time: sink.start_time,
                 status: sink.status,
                 warriors: sink.warriors,
-                eth_price: sink
-                    .eth_price
-                    .ok_or_else(|| D::Error::custom("expected eth_price"))?,
                 solo_warriors: sink.solo_warriors,
             }),
             1 => Ok(Tournament::Blooding {
