@@ -19,6 +19,7 @@ use sea_orm::{prelude::*, QueryOrder};
 const CONCURRENT_REQUESTS: usize = 128;
 /// 2 hours
 const SCRAPE_INTERVAL: u64 = 2 * 60 * 60 * 1000;
+const SUMMONED_CHAMPIONS_CONTRACT: &str = "0x57f698d99d964aef66d974739b98ec694724b1b8";
 
 #[derive(Debug)]
 pub struct ChampionTask {
@@ -98,7 +99,7 @@ impl ChampionTask {
 
     async fn get_count(&self) -> Result<u64> {
         let contract_address =
-            Address::from_str("0x57f698d99d964aef66d974739b98ec694724b1b8").unwrap();
+            Address::from_str(SUMMONED_CHAMPIONS_CONTRACT).expect("invalid contract address");
 
         // Fetch last known highest counter
         let mut last_highest = Fighter::find()
@@ -106,7 +107,7 @@ impl ChampionTask {
             .one(&self.conn)
             .await?
             .map(|m| m.id as u64)
-            // Checkpoint value
+            // Checkpoint value as of 2023-01-15
             .unwrap_or(29000);
 
         // Use pagination to search
@@ -117,13 +118,12 @@ impl ChampionTask {
                 contract_address,
                 last_highest,
             )
-            .await
-            .expect("fix me");
+            .await?;
 
             match res.next_token {
                 Some(next) => {
                     let next = next.trim_start_matches("0x");
-                    last_highest = u64::from_str_radix(next, 16).expect("nooooo");
+                    last_highest = u64::from_str_radix(next, 16)?;
                     continue;
                 }
                 None => {
