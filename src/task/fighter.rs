@@ -1,7 +1,7 @@
 use anyhow::Result;
 use api::fighter::FighterResponse;
 use backoff::{Error, ExponentialBackoff};
-use chrono::Utc;
+use chrono::{DateTime, Utc};
 use ethers_core::types::Address;
 use futures::{stream, StreamExt};
 use itertools::Itertools;
@@ -53,7 +53,7 @@ impl ChampionTask {
             .scrape_champions(count)
             .await
             .into_iter()
-            .map(|ft| fighter::ActiveModel {
+            .map(|(ft, dt)| fighter::ActiveModel {
                 id: Set(ft.attributes.id as i64),
                 wisdom_point: Set(ft.statistic.wisdom.point as i32),
                 strength_from: Set(ft.statistic.wisdom.strength.from as i32),
@@ -64,7 +64,7 @@ impl ChampionTask {
                 defence_to: Set(ft.statistic.wisdom.defence.to as i32),
                 omega_from: Set(ft.statistic.wisdom.omega.from as i32),
                 omega_to: Set(ft.statistic.wisdom.omega.to as i32),
-                last_updated: Set(Utc::now().naive_utc()),
+                last_updated: Set(dt.naive_utc()),
             })
             .collect::<Vec<_>>()
             .into_iter()
@@ -138,12 +138,12 @@ impl ChampionTask {
         // Ok(1000)
     }
 
-    async fn scrape_champions(&self, up_to: u64) -> Vec<FighterResponse> {
+    async fn scrape_champions(&self, up_to: u64) -> Vec<(FighterResponse, DateTime<Utc>)> {
         stream::iter(0..up_to)
             .map(|i| async move {
                 let resp = self.get_champion(i).await?;
                 info!(n = ?i, "completed");
-                Ok::<FighterResponse, reqwest::Error>(resp)
+                Ok::<(FighterResponse, DateTime<Utc>), reqwest::Error>((resp, Utc::now()))
             })
             .buffer_unordered(CONCURRENT_REQUESTS)
             .collect::<Vec<Result<_, _>>>()
