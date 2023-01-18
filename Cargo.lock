@@ -3538,6 +3538,7 @@ dependencies = [
  "chrono",
  "dotenv",
  "entity",
+ "erc-nft-metadata",
  "ethers-core",
  "futures",
  "itertools",

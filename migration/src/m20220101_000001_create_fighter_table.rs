@@ -29,13 +29,48 @@ impl MigrationTrait for Migration {
                     .col(ColumnDef::new(Fighter::LastUpdated).date_time().not_null())
                     .to_owned(),
             )
-            .await
+            .await?;
+
+        manager
+            .create_table(
+                Table::create()
+                    .table(FighterTrait::Table)
+                    .if_not_exists()
+                    .col(
+                        ColumnDef::new(FighterTrait::FighterId)
+                            .big_unsigned()
+                            .not_null(),
+                    )
+                    .col(ColumnDef::new(FighterTrait::TraitType).string().not_null())
+                    .col(ColumnDef::new(FighterTrait::Value).string().not_null())
+                    .foreign_key(
+                        ForeignKey::create()
+                            .name("fk-fighter_id-fighter_trait")
+                            .from(FighterTrait::Table, FighterTrait::FighterId)
+                            .to(Fighter::Table, Fighter::Id),
+                    )
+                    .primary_key(
+                        Index::create()
+                            .col(FighterTrait::FighterId)
+                            .col(FighterTrait::TraitType),
+                    )
+                    .to_owned(),
+            )
+            .await?;
+
+        Ok(())
     }
 
     async fn down(&self, manager: &SchemaManager) -> Result<(), DbErr> {
         manager
+            .drop_table(Table::drop().table(FighterTrait::Table).to_owned())
+            .await?;
+
+        manager
             .drop_table(Table::drop().table(Fighter::Table).to_owned())
-            .await
+            .await?;
+
+        Ok(())
     }
 }
 
@@ -54,4 +89,12 @@ enum Fighter {
     OmegaFrom,
     OmegaTo,
     LastUpdated,
+}
+
+#[derive(Iden)]
+enum FighterTrait {
+    Table,
+    FighterId,
+    TraitType,
+    Value,
 }

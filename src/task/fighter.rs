@@ -2,6 +2,7 @@ use anyhow::Result;
 use api::fighter::FighterResponse;
 use backoff::{Error, ExponentialBackoff};
 use chrono::{DateTime, Utc};
+use erc_nft_metadata::AttributeEntry;
 use ethers_core::types::Address;
 use futures::{stream, StreamExt};
 use itertools::Itertools;
@@ -12,7 +13,7 @@ use std::str::FromStr;
 use std::time::Duration;
 use tracing::{info, instrument, warn};
 
-use entity::entities::{fighter, prelude::*};
+use entity::entities::{fighter, fighter_trait, prelude::*};
 use sea_orm::ActiveValue::*;
 use sea_orm::{prelude::*, QueryOrder};
 
@@ -44,30 +45,59 @@ impl ChampionTask {
         loop {
             interval.tick().await;
             self.scan().await?;
+            info!("champion scan complete");
         }
     }
 
     async fn scan(&self) -> Result<()> {
         let count = self.get_count().await?;
         info!(count = ?count, "highest token id");
-        let champions = self
-            .scrape_champions(count)
-            .await
-            .into_iter()
-            .map(|(ft, dt)| fighter::ActiveModel {
-                id: Set(ft.attributes.id as i64),
-                wisdom_point: Set(ft.statistic.wisdom.point as i32),
-                strength_from: Set(ft.statistic.wisdom.strength.from as i32),
-                strength_to: Set(ft.statistic.wisdom.strength.to as i32),
-                attack_from: Set(ft.statistic.wisdom.attack.from as i32),
-                attack_to: Set(ft.statistic.wisdom.attack.to as i32),
-                defence_from: Set(ft.statistic.wisdom.defence.from as i32),
-                defence_to: Set(ft.statistic.wisdom.defence.to as i32),
-                omega_from: Set(ft.statistic.wisdom.omega.from as i32),
-                omega_to: Set(ft.statistic.wisdom.omega.to as i32),
+        let mut champions = vec![];
+        let mut traits = vec![];
+
+        for (fighter, dt) in self.scrape_champions(count).await.into_iter() {
+            champions.push(fighter::ActiveModel {
+                id: Set(fighter.attributes.id as i64),
+                wisdom_point: Set(fighter.statistic.wisdom.point as i32),
+                strength_from: Set(fighter.statistic.wisdom.strength.from as i32),
+                strength_to: Set(fighter.statistic.wisdom.strength.to as i32),
+                attack_from: Set(fighter.statistic.wisdom.attack.from as i32),
+                attack_to: Set(fighter.statistic.wisdom.attack.to as i32),
+                defence_from: Set(fighter.statistic.wisdom.defence.from as i32),
+                defence_to: Set(fighter.statistic.wisdom.defence.to as i32),
+                omega_from: Set(fighter.statistic.wisdom.omega.from as i32),
+                omega_to: Set(fighter.statistic.wisdom.omega.to as i32),
                 last_updated: Set(dt.naive_utc()),
-            })
-            .collect::<Vec<_>>()
+            });
+
+            traits.extend(
+                fighter
+                    .attributes
+                    .attributes
+                    .attributes
+                    .into_iter()
+                    .map(|x| match x {
+                        AttributeEntry::String { trait_type, value } => {
+                            fighter_trait::ActiveModel {
+                                fighter_id: Set(fighter.attributes.id as i64),
+                                trait_type: Set(trait_type),
+                                value: Set(value),
+                            }
+                        }
+                        AttributeEntry::Number {
+                            trait_type,
+                            value,
+                            display_type: _,
+                        } => fighter_trait::ActiveModel {
+                            fighter_id: Set(fighter.attributes.id as i64),
+                            trait_type: Set(trait_type),
+                            value: Set(value.to_string()),
+                        },
+                    }),
+            )
+        }
+
+        let champions = champions
             .into_iter()
             .chunks(100)
             .into_iter()
@@ -94,6 +124,32 @@ impl ChampionTask {
                 .exec(&self.conn)
                 .await?;
         }
+
+        let traits = traits
+            .into_iter()
+            .chunks(100)
+            .into_iter()
+            .map(|ck| ck.collect::<Vec<_>>())
+            .collect::<Vec<_>>();
+
+        for chunk in traits {
+            let _ = FighterTrait::insert_many(chunk)
+                .on_conflict(
+                    OnConflict::columns([
+                        fighter_trait::Column::FighterId,
+                        fighter_trait::Column::TraitType,
+                    ])
+                    .update_columns([
+                        fighter_trait::Column::FighterId,
+                        fighter_trait::Column::TraitType,
+                        fighter_trait::Column::Value,
+                    ])
+                    .to_owned(),
+                )
+                .exec(&self.conn)
+                .await?;
+        }
+
         Ok(())
     }
 
