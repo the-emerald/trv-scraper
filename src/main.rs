@@ -1,5 +1,6 @@
 use anyhow::Context;
 use anyhow::Result;
+use sea_orm::ConnectOptions;
 use sea_orm::Database;
 use std::env;
 use task::fighter::ChampionTask;
@@ -12,9 +13,11 @@ async fn main() -> Result<()> {
     tracing_subscriber::fmt::init();
     dotenv::dotenv().ok();
 
-    let db_url = env::var("DATABASE_URL").context("DATABASE_URL not set")?;
+    let opt = ConnectOptions::new(env::var("DATABASE_URL").context("DATABASE_URL not set")?)
+        .sqlx_logging(false)
+        .to_owned();
     let alchemy_api_key = env::var("ALCHEMY_API_KEY").context("ALCHEMY_API_KEY not set")?;
-    let database = Database::connect(db_url).await?;
+    let database = Database::connect(opt).await?;
 
     let client = reqwest::Client::new();
 
