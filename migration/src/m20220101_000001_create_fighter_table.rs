@@ -26,7 +26,14 @@ impl MigrationTrait for Migration {
                     .col(ColumnDef::new(Fighter::DefenceTo).integer().not_null())
                     .col(ColumnDef::new(Fighter::OmegaFrom).integer().not_null())
                     .col(ColumnDef::new(Fighter::OmegaTo).integer().not_null())
+                    .col(ColumnDef::new(Fighter::Mum).big_unsigned())
                     .col(ColumnDef::new(Fighter::LastUpdated).date_time().not_null())
+                    .foreign_key(
+                        ForeignKey::create()
+                            .name("fk-mum-fighter")
+                            .from(Fighter::Table, Fighter::Mum)
+                            .to(Fighter::Table, Fighter::Id),
+                    )
                     .to_owned(),
             )
             .await?;
@@ -58,10 +65,50 @@ impl MigrationTrait for Migration {
             )
             .await?;
 
+        manager
+            .create_table(
+                Table::create()
+                    .table(FighterParent::Table)
+                    .if_not_exists()
+                    .col(
+                        ColumnDef::new(FighterParent::FighterId)
+                            .big_unsigned()
+                            .not_null(),
+                    )
+                    .col(
+                        ColumnDef::new(FighterParent::ParentId)
+                            .big_unsigned()
+                            .not_null(),
+                    )
+                    .primary_key(
+                        Index::create()
+                            .col(FighterParent::FighterId)
+                            .col(FighterParent::ParentId),
+                    )
+                    .foreign_key(
+                        ForeignKey::create()
+                            .name("fk-fighter_id-fighter_parent")
+                            .from(FighterParent::Table, FighterParent::FighterId)
+                            .to(Fighter::Table, Fighter::Id),
+                    )
+                    .foreign_key(
+                        ForeignKey::create()
+                            .name("fk-parent_id-fighter_parent")
+                            .from(FighterParent::Table, FighterParent::ParentId)
+                            .to(Fighter::Table, Fighter::Id),
+                    )
+                    .to_owned(),
+            )
+            .await?;
+
         Ok(())
     }
 
     async fn down(&self, manager: &SchemaManager) -> Result<(), DbErr> {
+        manager
+            .drop_table(Table::drop().table(FighterParent::Table).to_owned())
+            .await?;
+
         manager
             .drop_table(Table::drop().table(FighterTrait::Table).to_owned())
             .await?;
@@ -88,6 +135,7 @@ enum Fighter {
     DefenceTo,
     OmegaFrom,
     OmegaTo,
+    Mum,
     LastUpdated,
 }
 
@@ -97,4 +145,11 @@ enum FighterTrait {
     FighterId,
     TraitType,
     Value,
+}
+
+#[derive(Iden)]
+enum FighterParent {
+    Table,
+    FighterId,
+    ParentId,
 }

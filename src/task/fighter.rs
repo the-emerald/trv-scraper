@@ -13,7 +13,7 @@ use std::str::FromStr;
 use std::time::Duration;
 use tracing::{info, instrument, warn};
 
-use entity::entities::{fighter, fighter_trait, prelude::*};
+use entity::entities::{fighter, fighter_parent, fighter_trait, prelude::*};
 use sea_orm::ActiveValue::*;
 use sea_orm::{prelude::*, QueryOrder};
 
@@ -52,10 +52,24 @@ impl ChampionTask {
     async fn scan(&self) -> Result<()> {
         let count = self.get_count().await?;
         info!(count = ?count, "highest token id");
+
         let mut champions = vec![];
         let mut traits = vec![];
+        let mut parents = vec![];
 
         for (fighter, dt) in self.scrape_champions(count).await.into_iter() {
+            if let Some(lineage_node) = fighter.lineage_node {
+                parents.push(fighter_parent::ActiveModel {
+                    fighter_id: Set(fighter.attributes.id as i64),
+                    parent_id: Set(lineage_node.parents[0] as i64),
+                });
+
+                parents.push(fighter_parent::ActiveModel {
+                    fighter_id: Set(fighter.attributes.id as i64),
+                    parent_id: Set(lineage_node.parents[1] as i64),
+                });
+            }
+
             champions.push(fighter::ActiveModel {
                 id: Set(fighter.attributes.id as i64),
                 wisdom_point: Set(fighter.statistic.wisdom.point as i32),
@@ -68,6 +82,7 @@ impl ChampionTask {
                 omega_from: Set(fighter.statistic.wisdom.omega.from as i32),
                 omega_to: Set(fighter.statistic.wisdom.omega.to as i32),
                 last_updated: Set(dt.naive_utc()),
+                mum: Set(fighter.lineage_node.map(|l| l.original_mum as i64)),
             });
 
             traits.extend(
@@ -143,6 +158,30 @@ impl ChampionTask {
                         fighter_trait::Column::FighterId,
                         fighter_trait::Column::TraitType,
                         fighter_trait::Column::Value,
+                    ])
+                    .to_owned(),
+                )
+                .exec(&self.conn)
+                .await?;
+        }
+
+        let parents = parents
+            .into_iter()
+            .chunks(100)
+            .into_iter()
+            .map(|ck| ck.collect::<Vec<_>>())
+            .collect::<Vec<_>>();
+
+        for chunk in parents {
+            let _ = FighterParent::insert_many(chunk)
+                .on_conflict(
+                    OnConflict::columns([
+                        fighter_parent::Column::FighterId,
+                        fighter_parent::Column::ParentId,
+                    ])
+                    .update_columns([
+                        fighter_parent::Column::FighterId,
+                        fighter_parent::Column::ParentId,
                     ])
                     .to_owned(),
                 )

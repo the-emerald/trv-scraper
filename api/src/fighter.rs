@@ -6,6 +6,8 @@ use serde::Deserialize;
 pub struct FighterResponse {
     pub attributes: Attributes,
     pub statistic: Statistics,
+    #[serde(deserialize_with = "crate::util::object_empty_or_error_as_none")]
+    pub lineage_node: Option<LineageNode>,
 }
 
 #[derive(Debug, Clone, Deserialize)]
@@ -59,17 +61,29 @@ impl<'de> Deserialize<'de> for Stat {
     }
 }
 
+#[derive(Debug, Copy, Clone, Deserialize)]
+pub struct LineageNode {
+    pub original_mum: u64,
+    pub parents: [u64; 2],
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
 
     const TEST_FIGHTER: &str = include_str!("tests/fighter.json");
+    const TEST_FIGHTER_363: &str = include_str!("tests/fighter_363.json");
     const TEST_FIGHTER_29001: &str = include_str!("tests/fighter_29001.json");
     const TEST_FIGHTER_28787: &str = include_str!("tests/fighter_28787.json");
 
     #[test]
     fn test_fighter() {
         let _ = serde_json::from_str::<FighterResponse>(TEST_FIGHTER).unwrap();
+    }
+
+    #[test]
+    fn test_fighter_363() {
+        let _ = serde_json::from_str::<FighterResponse>(TEST_FIGHTER_363).unwrap();
     }
 
     #[test]

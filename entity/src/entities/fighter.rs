@@ -16,11 +16,20 @@ pub struct Model {
     pub defence_to: i32,
     pub omega_from: i32,
     pub omega_to: i32,
+    pub mum: Option<i64>,
     pub last_updated: DateTime,
 }
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]
 pub enum Relation {
+    #[sea_orm(
+        belongs_to = "Entity",
+        from = "Column::Mum",
+        to = "Column::Id",
+        on_update = "NoAction",
+        on_delete = "NoAction"
+    )]
+    SelfRef,
     #[sea_orm(has_many = "super::fighter_trait::Entity")]
     FighterTrait,
 }

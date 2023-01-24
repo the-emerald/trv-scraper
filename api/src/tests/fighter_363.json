@@ -1,0 +1,167 @@
+{
+	"attributes": {
+		"id": 363,
+		"attributes": [
+			{
+				"trait_type": "Background",
+				"value": "Black"
+			},
+			{
+				"trait_type": "Bloodline",
+				"value": "Genesis"
+			},
+			{
+				"trait_type": "Genotype",
+				"value": "R1"
+			},
+			{
+				"trait_type": "Character Class",
+				"value": "Barbarian"
+			},
+			{
+				"trait_type": "Breed",
+				"value": "Elf"
+			},
+			{
+				"trait_type": "Armor Color",
+				"value": "Frost"
+			},
+			{
+				"trait_type": "Hair Style",
+				"value": "Tan Barbarian Wartail"
+			},
+			{
+				"trait_type": "Warpaint",
+				"value": "Red Ragnarok"
+			}
+		],
+		"champion_type": "genesis",
+		"description": "The first generation of Pureblood Champions in The Red Village ecosystem are known as the Genesis Bloodline. They are the rarest of the Champions. Powerful, vicious, and hungry for blood.",
+		"image": "ipfs://QmQbJMSgi5XwSGLra2s2pUdVBfAQhS7nDbP9oBHe76mShH/363.png",
+		"key": "c9e38efd6d14b1ba1f1bc71eb26e0d54",
+		"name": "Swifthunt"
+	},
+	"lineage_node": {
+		"summoned_in_life": {
+			"private": 0,
+			"public": 1
+		},
+		"parents": []
+	},
+	"latest_summon_info": {
+		"champion_id": 28894,
+		"lineage_node": {
+			"metadata": {
+				"latest_summon_time": 1672818209,
+				"session_id": 5,
+				"summon_type": 0,
+				"summoned_at": 1672818209
+			},
+			"parents": [
+				626,
+				363
+			],
+			"inited": true,
+			"original_mum": 363,
+			"status": "METADATA_CREATED"
+		}
+	},
+	"statistic": {
+		"wisdom": {
+			"point": 91,
+			"strength": {
+				"current_range": 100,
+				"range": [
+					1,
+					100
+				]
+			},
+			"attack": {
+				"current_range": 100,
+				"range": [
+					1,
+					100
+				]
+			},
+			"defence": {
+				"current_range": 100,
+				"range": [
+					1,
+					100
+				]
+			},
+			"omega": {
+				"current_range": 100,
+				"range": [
+					1,
+					100
+				]
+			}
+		},
+		"champion_id": 363,
+		"owner_address": "0x1661f6527d8aeb9e01df3253c4a709386971d6ec",
+		"blooding_career": {
+			"total_first_win": 0,
+			"total_fought": 0,
+			"total_fourth_win": 0,
+			"total_second_win": 0,
+			"total_third_win": 0
+		},
+		"solo_career": {
+			"total_first_win": 0,
+			"total_fought": 0,
+			"total_second_win": 0
+		},
+		"tournament_career": {
+			"total_buy_in": {
+				"$numberDecimal": "1460000000000000"
+			},
+			"total_first_win": 11,
+			"total_first_winnings": {
+				"$numberDecimal": "0"
+			},
+			"total_fought": 85,
+			"total_fourth_win": 38,
+			"total_second_win": 10,
+			"total_second_winnings": {
+				"$numberDecimal": "0"
+			},
+			"total_third_win": 26
+		},
+		"elo": 1847,
+		"default_stance": 1
+	},
+	"offchain": {},
+	"barrack": {
+		"cover": null,
+		"description": "",
+		"inappropriate_description": false,
+		"inappropriate_name": false,
+		"key": "1ed9e4234eeb31bb09c4fbd61d28a799",
+		"name": "🩸  T&A BAD BLOOD BARRACKS 🩸",
+		"nav_key": "🩸_t_a_bad_blood_barracks_🩸",
+		"wallet_address": "0x1661f6527d8aeb9e01df3253c4a709386971d6ec",
+		"solo_career": {
+			"total_first_win": 1,
+			"total_fought": 5,
+			"total_second_win": 4
+		},
+		"tournament_career": {
+			"total_buy_in": {
+				"$numberDecimal": "624553800000000000"
+			},
+			"total_first_win": 305,
+			"total_first_winnings": {
+				"$numberDecimal": "557005294096950000.000000000000000"
+			},
+			"total_fought": 2948,
+			"total_fourth_win": 1516,
+			"total_second_win": 371,
+			"total_second_winnings": {
+				"$numberDecimal": "172704504489300000.000000000000000"
+			},
+			"total_third_win": 756
+		},
+		"avatar": "upload/1673590073"
+	}
+}

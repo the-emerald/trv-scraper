@@ -3,4 +3,5 @@
 pub mod prelude;
 
 pub mod fighter;
+pub mod fighter_parent;
 pub mod fighter_trait;
