@@ -14,7 +14,7 @@ use serde::Deserialize;
 use serde_json::Value;
 use std::str::FromStr;
 use std::time::Duration;
-use tracing::{info, instrument, warn};
+use tracing::{debug, info, instrument, warn};
 
 const CONCURRENT_REQUESTS: usize = 128;
 /// 2 hours
@@ -43,6 +43,7 @@ impl ChampionTask {
         // Note that the first tick completes immediately.
         loop {
             interval.tick().await;
+            info!("beginning champion scan");
             self.scan().await?;
             info!("champion scan complete");
         }
@@ -50,7 +51,7 @@ impl ChampionTask {
 
     async fn scan(&self) -> Result<()> {
         let count = self.get_count().await?;
-        info!(count = ?count, "highest token id");
+        debug!(count = ?count, "highest token id");
 
         let mut champions = vec![];
         let mut traits = vec![];
@@ -289,7 +290,7 @@ impl ChampionTask {
         stream::iter(0..up_to)
             .map(|i| async move {
                 let resp = self.get_champion(i).await?;
-                info!(n = ?i, "completed");
+                debug!(n = ?i, "completed");
                 Ok::<(FighterResponse, DateTime<Utc>), reqwest::Error>((resp, Utc::now()))
             })
             .buffer_unordered(CONCURRENT_REQUESTS)
@@ -302,7 +303,7 @@ impl ChampionTask {
 
     async fn get_champion(&self, id: u64) -> Result<FighterResponse, reqwest::Error> {
         backoff::future::retry(ExponentialBackoff::default(), || async {
-            info!(id = ?id, "sending request");
+            debug!(id = ?id, "sending request");
             self.client
                 .get(format!(
                     "https://federation22.theredvillage.com/api/v2/champions/id/{}",
