@@ -2,20 +2,19 @@ use anyhow::Result;
 use api::fighter::FighterResponse;
 use backoff::{Error, ExponentialBackoff};
 use chrono::{DateTime, Utc};
+use entity::entities::{fighter, fighter_parent, fighter_trait, prelude::*};
 use erc_nft_metadata::AttributeEntry;
 use ethers_core::types::Address;
 use futures::{stream, StreamExt};
 use itertools::Itertools;
 use sea_orm::sea_query::OnConflict;
+use sea_orm::{prelude::*, QueryOrder};
+use sea_orm::{ActiveValue::*, TransactionTrait};
 use serde::Deserialize;
 use serde_json::Value;
 use std::str::FromStr;
 use std::time::Duration;
 use tracing::{info, instrument, warn};
-
-use entity::entities::{fighter, fighter_parent, fighter_trait, prelude::*};
-use sea_orm::ActiveValue::*;
-use sea_orm::{prelude::*, QueryOrder};
 
 const CONCURRENT_REQUESTS: usize = 128;
 /// 2 hours
@@ -120,6 +119,7 @@ impl ChampionTask {
             .collect::<Vec<_>>();
 
         for chunk in champions {
+            // No need to "clear out" rows here
             let _ = Fighter::insert_many(chunk)
                 .on_conflict(
                     OnConflict::column(fighter::Column::Id)
@@ -137,7 +137,11 @@ impl ChampionTask {
                         .to_owned(),
                 )
                 .exec(&self.conn)
-                .await?;
+                .await
+                .map_err(|e| {
+                    warn!(e = ?e);
+                    e
+                })?;
         }
 
         let traits = traits
@@ -148,21 +152,45 @@ impl ChampionTask {
             .collect::<Vec<_>>();
 
         for chunk in traits {
-            let _ = FighterTrait::insert_many(chunk)
-                .on_conflict(
-                    OnConflict::columns([
-                        fighter_trait::Column::FighterId,
-                        fighter_trait::Column::TraitType,
-                    ])
-                    .update_columns([
-                        fighter_trait::Column::FighterId,
-                        fighter_trait::Column::TraitType,
-                        fighter_trait::Column::Value,
-                    ])
-                    .to_owned(),
-                )
-                .exec(&self.conn)
-                .await?;
+            let ids = chunk
+                .iter()
+                .map(|x| x.fighter_id.clone().unwrap())
+                .collect::<Vec<_>>();
+
+            self.conn
+                .transaction::<_, (), DbErr>(|txn| {
+                    Box::pin(async move {
+                        // Remove all traits associated with the IDs
+                        fighter_trait::Entity::delete_many()
+                            .filter(fighter_trait::Column::FighterId.is_in(ids))
+                            .exec(txn)
+                            .await?;
+
+                        // Now we can insert fresh traits back in.
+                        FighterTrait::insert_many(chunk)
+                            .on_conflict(
+                                OnConflict::columns([
+                                    fighter_trait::Column::FighterId,
+                                    fighter_trait::Column::TraitType,
+                                ])
+                                .update_columns([
+                                    fighter_trait::Column::FighterId,
+                                    fighter_trait::Column::TraitType,
+                                    fighter_trait::Column::Value,
+                                ])
+                                .to_owned(),
+                            )
+                            .exec(txn)
+                            .await?;
+
+                        Ok(())
+                    })
+                })
+                .await
+                .map_err(|e| {
+                    warn!(e = ?e);
+                    e
+                })?;
         }
 
         let parents = parents
@@ -173,20 +201,44 @@ impl ChampionTask {
             .collect::<Vec<_>>();
 
         for chunk in parents {
-            let _ = FighterParent::insert_many(chunk)
-                .on_conflict(
-                    OnConflict::columns([
-                        fighter_parent::Column::FighterId,
-                        fighter_parent::Column::ParentId,
-                    ])
-                    .update_columns([
-                        fighter_parent::Column::FighterId,
-                        fighter_parent::Column::ParentId,
-                    ])
-                    .to_owned(),
-                )
-                .exec(&self.conn)
-                .await?;
+            let ids = chunk
+                .iter()
+                .map(|x| x.fighter_id.clone().unwrap())
+                .collect::<Vec<_>>();
+
+            self.conn
+                .transaction::<_, (), DbErr>(|txn| {
+                    Box::pin(async move {
+                        // Remove all parents associated with IDs in this chunk
+                        fighter_parent::Entity::delete_many()
+                            .filter(fighter_parent::Column::FighterId.is_in(ids))
+                            .exec(txn)
+                            .await?;
+
+                        // Now insert
+                        FighterParent::insert_many(chunk)
+                            .on_conflict(
+                                OnConflict::columns([
+                                    fighter_parent::Column::FighterId,
+                                    fighter_parent::Column::ParentId,
+                                ])
+                                .update_columns([
+                                    fighter_parent::Column::FighterId,
+                                    fighter_parent::Column::ParentId,
+                                ])
+                                .to_owned(),
+                            )
+                            .exec(txn)
+                            .await?;
+
+                        Ok(())
+                    })
+                })
+                .await
+                .map_err(|e| {
+                    warn!(e = ?e);
+                    e
+                })?;
         }
 
         Ok(())
