@@ -306,8 +306,7 @@ impl ChampionTask {
             debug!(id = ?id, "sending request");
             self.client
                 .get(format!(
-                    "https://federation22.theredvillage.com/api/v2/champions/id/{}",
-                    id
+                    "https://federation22.theredvillage.com/api/v2/champions/id/{id}",
                 ))
                 .send()
                 .await
@@ -345,11 +344,10 @@ async fn get_nfts_for_collection(
     backoff::future::retry(ExponentialBackoff::default(), || async {
         client
             .get(format!(
-                "https://polygon-mainnet.g.alchemy.com/nft/v2/{}/getNFTsForCollection",
-                key
+                "https://polygon-mainnet.g.alchemy.com/nft/v2/{key}/getNFTsForCollection",
             ))
             .query(&[
-                ("contractAddress", format!("{:?}", contract_address)),
+                ("contractAddress", format!("{contract_address:?}",)),
                 ("withMetadata", "false".to_owned()),
                 ("startToken", start_token.to_string()),
             ])
