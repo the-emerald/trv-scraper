@@ -13,12 +13,10 @@ use sea_orm::{ActiveValue::*, TransactionTrait};
 use serde::Deserialize;
 use serde_json::Value;
 use std::str::FromStr;
-use std::time::Duration;
 use tracing::{debug, info, instrument, warn};
 
-const CONCURRENT_REQUESTS: usize = 128;
-/// 2 hours
-const SCRAPE_INTERVAL: u64 = 2 * 60 * 60 * 1000;
+use crate::CONCURRENT_REQUESTS;
+
 const SUMMONED_CHAMPIONS_CONTRACT: &str = "0x57f698d99d964aef66d974739b98ec694724b1b8";
 
 #[derive(Debug)]
@@ -38,18 +36,8 @@ impl ChampionTask {
     }
 
     #[instrument(skip_all)]
-    pub async fn run(self) -> Result<()> {
-        let mut interval = tokio::time::interval(Duration::from_millis(SCRAPE_INTERVAL));
-        // Note that the first tick completes immediately.
-        loop {
-            interval.tick().await;
-            info!("beginning champion scan");
-            self.scan().await?;
-            info!("champion scan complete");
-        }
-    }
-
-    async fn scan(&self) -> Result<()> {
+    pub async fn scan(&self) -> Result<()> {
+        info!("beginning champion scan");
         let count = self.get_count().await?;
         debug!(count = ?count, "highest token id");
 
@@ -242,6 +230,7 @@ impl ChampionTask {
                 })?;
         }
 
+        info!("champion scan complete");
         Ok(())
     }
 

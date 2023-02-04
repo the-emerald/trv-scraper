@@ -3,10 +3,14 @@ use anyhow::Result;
 use sea_orm::ConnectOptions;
 use sea_orm::Database;
 use std::env;
+use std::time::Duration;
 use task::fighter::ChampionTask;
-use tracing::warn;
 
 pub mod task;
+
+const CONCURRENT_REQUESTS: usize = 128;
+/// 2 hours
+const SCRAPE_INTERVAL: u64 = 2 * 60 * 60 * 1000;
 
 #[tokio::main]
 async fn main() -> Result<()> {
@@ -21,13 +25,10 @@ async fn main() -> Result<()> {
 
     let client = reqwest::Client::new();
 
-    let _ = tokio::task::spawn(ChampionTask::new(client, database, alchemy_api_key).run());
-
-    match tokio::signal::ctrl_c().await {
-        Ok(()) => Ok(()),
-        Err(e) => {
-            warn!(e = ?e, "unable to listen to shutdown signal");
-            Ok(())
-        }
+    let mut interval = tokio::time::interval(Duration::from_millis(SCRAPE_INTERVAL));
+    let champion_task = ChampionTask::new(client, database, alchemy_api_key);
+    loop {
+        interval.tick().await;
+        let _ = champion_task.scan().await;
     }
 }
