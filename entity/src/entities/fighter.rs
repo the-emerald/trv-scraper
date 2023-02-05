@@ -49,17 +49,4 @@ impl Related<super::tournament::Entity> for Entity {
     }
 }
 
-impl Related<super::tournament::Entity> for Entity {
-    fn to() -> RelationDef {
-        super::tournament_solo_warrior::Relation::Tournament.def()
-    }
-    fn via() -> Option<RelationDef> {
-        Some(
-            super::tournament_solo_warrior::Relation::Fighter
-                .def()
-                .rev(),
-        )
-    }
-}
-
 impl ActiveModelBehavior for ActiveModel {}

@@ -6,5 +6,4 @@ pub mod fighter;
 pub mod fighter_parent;
 pub mod fighter_trait;
 pub mod tournament;
-pub mod tournament_solo_warrior;
 pub mod tournament_warrior;

@@ -51,53 +51,6 @@ impl MigrationTrait for Migration {
         manager
             .create_table(
                 Table::create()
-                    .table(TournamentSoloWarrior::Table)
-                    .if_not_exists()
-                    .col(
-                        ColumnDef::new(TournamentSoloWarrior::TournamentId)
-                            .big_integer()
-                            .not_null(),
-                    )
-                    .col(
-                        ColumnDef::new(TournamentSoloWarrior::WarriorId)
-                            .big_unsigned()
-                            .not_null(),
-                    )
-                    .col(
-                        ColumnDef::new(TournamentSoloWarrior::Account)
-                            .binary_len(20)
-                            .not_null(),
-                    )
-                    .foreign_key(
-                        ForeignKey::create()
-                            .name("fk-tournament_id-tournament_solo_warrior")
-                            .from(
-                                TournamentSoloWarrior::Table,
-                                TournamentSoloWarrior::TournamentId,
-                            )
-                            .to(Tournament::Table, Tournament::Id),
-                    )
-                    .foreign_key(
-                        ForeignKey::create()
-                            .name("fk-warrior_id-tournament_solo_warrior")
-                            .from(
-                                TournamentSoloWarrior::Table,
-                                TournamentSoloWarrior::WarriorId,
-                            )
-                            .to(Fighter::Table, Fighter::Id),
-                    )
-                    .primary_key(
-                        Index::create()
-                            .col(TournamentSoloWarrior::TournamentId)
-                            .col(TournamentSoloWarrior::WarriorId),
-                    )
-                    .to_owned(),
-            )
-            .await?;
-
-        manager
-            .create_table(
-                Table::create()
                     .table(TournamentWarrior::Table)
                     .if_not_exists()
                     .col(
@@ -110,6 +63,7 @@ impl MigrationTrait for Migration {
                             .big_unsigned()
                             .not_null(),
                     )
+                    .col(ColumnDef::new(TournamentWarrior::Account).binary_len(20))
                     .foreign_key(
                         ForeignKey::create()
                             .name("fk-tournament_id-tournament_warrior")
@@ -137,10 +91,6 @@ impl MigrationTrait for Migration {
     async fn down(&self, manager: &SchemaManager) -> Result<(), DbErr> {
         manager
             .drop_table(Table::drop().table(TournamentWarrior::Table).to_owned())
-            .await?;
-
-        manager
-            .drop_table(Table::drop().table(TournamentSoloWarrior::Table).to_owned())
             .await?;
 
         manager
@@ -173,16 +123,9 @@ enum Tournament {
 }
 
 #[derive(Iden)]
-enum TournamentSoloWarrior {
-    Table,
-    TournamentId,
-    WarriorId,
-    Account,
-}
-
-#[derive(Iden)]
 enum TournamentWarrior {
     Table,
     TournamentId,
     WarriorId,
+    Account,
 }

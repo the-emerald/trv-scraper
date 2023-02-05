@@ -5,9 +5,7 @@ use sea_orm::entity::prelude::*;
 #[derive(Clone, Debug, PartialEq, DeriveEntityModel, Eq)]
 #[sea_orm(table_name = "tournament_solo_warrior")]
 pub struct Model {
-    #[sea_orm(primary_key, auto_increment = false)]
     pub tournament_id: i64,
-    #[sea_orm(primary_key, auto_increment = false)]
     pub warrior_id: i64,
     pub account: Vec<u8>,
 }
