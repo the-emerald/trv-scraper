@@ -29,6 +29,9 @@ async fn main() -> Result<()> {
     let champion_task = ChampionTask::new(client, database, alchemy_api_key);
     loop {
         interval.tick().await;
+        // Rescan all champions
         let _ = champion_task.scan().await;
+        // TODO: Fetch new tournaments
+        // TODO: Fetch hit-by-hit for each new tournament
     }
 }
