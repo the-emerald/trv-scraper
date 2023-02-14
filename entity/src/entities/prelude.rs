@@ -3,5 +3,6 @@
 pub use super::fighter::Entity as Fighter;
 pub use super::fighter_parent::Entity as FighterParent;
 pub use super::fighter_trait::Entity as FighterTrait;
+pub use super::meta_failed_tournament_request::Entity as MetaFailedTournamentRequest;
 pub use super::tournament::Entity as Tournament;
 pub use super::tournament_warrior::Entity as TournamentWarrior;

@@ -85,6 +85,29 @@ impl MigrationTrait for Migration {
             )
             .await?;
 
+        manager
+            .create_table(
+                Table::create()
+                    .table(MetaFailedTournamentRequest::Table)
+                    .col(
+                        ColumnDef::new(MetaFailedTournamentRequest::PageSize)
+                            .unsigned()
+                            .not_null(),
+                    )
+                    .col(
+                        ColumnDef::new(MetaFailedTournamentRequest::PageIndex)
+                            .unsigned()
+                            .not_null(),
+                    )
+                    .primary_key(
+                        Index::create()
+                            .col(MetaFailedTournamentRequest::PageSize)
+                            .col(MetaFailedTournamentRequest::PageIndex),
+                    )
+                    .to_owned(),
+            )
+            .await?;
+
         Ok(())
     }
 
@@ -128,4 +151,11 @@ enum TournamentWarrior {
     TournamentId,
     WarriorId,
     Account,
+}
+
+#[derive(Iden)]
+enum MetaFailedTournamentRequest {
+    Table,
+    PageSize,
+    PageIndex,
 }
