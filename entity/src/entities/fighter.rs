@@ -17,7 +17,7 @@ pub struct Model {
     pub omega_from: i32,
     pub omega_to: i32,
     pub mum: Option<i64>,
-    pub last_updated: DateTime,
+    pub meta_last_updated: DateTime,
 }
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]
