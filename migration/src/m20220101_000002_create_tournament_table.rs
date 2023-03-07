@@ -120,6 +120,14 @@ impl MigrationTrait for Migration {
             .drop_table(Table::drop().table(Tournament::Table).to_owned())
             .await?;
 
+        manager
+            .drop_table(
+                Table::drop()
+                    .table(MetaFailedTournamentRequest::Table)
+                    .to_owned(),
+            )
+            .await?;
+
         Ok(())
     }
 }
