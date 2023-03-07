@@ -21,6 +21,7 @@ pub struct Model {
     pub solo_optionals: Option<Json>,
     pub start_time: DateTime,
     pub status: String,
+    pub meta_last_updated: DateTime,
 }
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]
