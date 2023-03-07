@@ -218,13 +218,13 @@ pub mod start_time_dt_format {
 
 #[derive(Debug, Copy, Clone, Serialize, Deserialize)]
 pub struct Warrior {
-    account: Address,
-    id: u64,
+    pub account: Address,
+    pub id: u64,
 }
 
 #[derive(Debug, Copy, Clone, Serialize, Deserialize)]
 pub struct SoloWarrior {
-    id: u64,
+    pub id: u64,
 }
 
 #[derive(Debug, Copy, Clone, Serialize, Deserialize)]
