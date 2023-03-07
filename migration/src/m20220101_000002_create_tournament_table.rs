@@ -44,7 +44,11 @@ impl MigrationTrait for Migration {
                     .col(ColumnDef::new(Tournament::SoloOptionals).json_binary())
                     .col(ColumnDef::new(Tournament::StartTime).date_time().not_null())
                     .col(ColumnDef::new(Tournament::Status).string().not_null())
-                    .col(ColumnDef::new(Tournament::MetaLastUpdated).date_time().not_null())
+                    .col(
+                        ColumnDef::new(Tournament::MetaLastUpdated)
+                            .date_time()
+                            .not_null(),
+                    )
                     .to_owned(),
             )
             .await?;
