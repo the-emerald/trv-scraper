@@ -1,4 +1,5 @@
 use chrono::{DateTime, NaiveDateTime, Utc};
+use entity::entities::sea_orm_active_enums::TournamentStatus;
 use ethers_core::types::{Address, U256};
 use serde::{de::Error, Deserialize, Serialize};
 use serde_json::Value;
@@ -233,6 +234,15 @@ pub enum Status {
     Completed,
     #[serde(rename = "CANCEL_SUCCEED")]
     Cancelled,
+}
+
+impl From<Status> for TournamentStatus {
+    fn from(value: Status) -> Self {
+        match value {
+            Status::Completed => Self::Completed,
+            Status::Cancelled => Self::Cancelled,
+        }
+    }
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]

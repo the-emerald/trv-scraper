@@ -1,4 +1,4 @@
-use sea_orm_migration::prelude::*;
+use sea_orm_migration::{prelude::*, sea_query::extension::postgres::Type};
 
 use crate::m20220101_000001_create_fighter_table::Fighter;
 
@@ -8,6 +8,15 @@ pub struct Migration;
 #[async_trait::async_trait]
 impl MigrationTrait for Migration {
     async fn up(&self, manager: &SchemaManager) -> Result<(), DbErr> {
+        manager
+            .create_type(
+                Type::create()
+                    .as_enum(TournamentStatus::Type)
+                    .values([TournamentStatus::Completed, TournamentStatus::Cancelled])
+                    .to_owned(),
+            )
+            .await?;
+
         manager
             .create_table(
                 Table::create()
@@ -43,7 +52,11 @@ impl MigrationTrait for Migration {
                     )
                     .col(ColumnDef::new(Tournament::SoloOptionals).json_binary())
                     .col(ColumnDef::new(Tournament::StartTime).date_time().not_null())
-                    .col(ColumnDef::new(Tournament::Status).string().not_null())
+                    .col(
+                        ColumnDef::new(Tournament::Status)
+                            .custom(Alias::new("tournament_status"))
+                            .not_null(),
+                    )
                     .col(
                         ColumnDef::new(Tournament::MetaLastUpdated)
                             .date_time()
@@ -133,6 +146,10 @@ impl MigrationTrait for Migration {
             )
             .await?;
 
+        manager
+            .drop_type(Type::drop().name(TournamentStatus::Type).to_owned())
+            .await?;
+
         Ok(())
     }
 }
@@ -172,4 +189,25 @@ enum MetaFailedTournamentRequest {
     Table,
     PageSize,
     PageIndex,
+}
+
+enum TournamentStatus {
+    Type,
+    Completed,
+    Cancelled,
+}
+
+impl Iden for TournamentStatus {
+    fn unquoted(&self, s: &mut dyn std::fmt::Write) {
+        write!(
+            s,
+            "{}",
+            match self {
+                TournamentStatus::Type => "tournament_status",
+                TournamentStatus::Completed => "completed",
+                TournamentStatus::Cancelled => "cancelled",
+            }
+        )
+        .unwrap()
+    }
 }
