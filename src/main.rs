@@ -5,6 +5,7 @@ use sea_orm::Database;
 use std::env;
 use std::time::Duration;
 use task::fighter::ChampionTask;
+use task::tournament::TournamentTask;
 
 pub mod task;
 
@@ -26,12 +27,17 @@ async fn main() -> Result<()> {
     let client = reqwest::Client::new();
 
     let mut interval = tokio::time::interval(Duration::from_millis(SCRAPE_INTERVAL));
-    let champion_task = ChampionTask::new(client, database, alchemy_api_key);
+    let champion_task = ChampionTask::new(client.clone(), database.clone(), alchemy_api_key);
+    let tournament_task = TournamentTask::new(client, database, 128);
+
     loop {
         interval.tick().await;
         // Rescan all champions
         let _ = champion_task.scan().await;
-        // TODO: Fetch new tournaments
+
+        // Fetch new tournaments
+        let _ = tournament_task.scan().await;
+
         // TODO: Fetch hit-by-hit for each new tournament
     }
 }
