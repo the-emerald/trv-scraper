@@ -84,6 +84,68 @@ impl Tournament {
             Tournament::BloodElo { .. } => 3,
         }
     }
+
+    pub fn status(&self) -> Status {
+        match self {
+            Tournament::OneVOne {
+                tournament_id: _,
+                configs: _,
+                key: _,
+                level: _,
+                modified: _,
+                restrictions: _,
+                solo_optionals: _,
+                start_time: _,
+                status,
+                solo_warriors: _,
+            } => *status,
+            Tournament::Blooding {
+                tournament_id: _,
+                class: _,
+                configs: _,
+                key: _,
+                legacy: _,
+                level: _,
+                modified: _,
+                name: _,
+                restrictions: _,
+                start_time: _,
+                status,
+                tournament_type: _,
+                warriors: _,
+            } => *status,
+            Tournament::Bloodbath {
+                tournament_id: _,
+                class: _,
+                configs: _,
+                key: _,
+                legacy: _,
+                level: _,
+                modified: _,
+                name: _,
+                restrictions: _,
+                start_time: _,
+                status,
+                tournament_type: _,
+                warriors: _,
+            } => *status,
+            Tournament::BloodElo {
+                tournament_id: _,
+                class: _,
+                configs: _,
+                key: _,
+                legacy: _,
+                level: _,
+                modified: _,
+                name: _,
+                restrictions: _,
+                start_time: _,
+                status,
+                tournament_type: _,
+                warriors: _,
+            } => *status,
+        }
+    }
 }
 
 impl<'de> Deserialize<'de> for Tournament {
@@ -228,7 +290,7 @@ pub struct SoloWarrior {
     pub id: u64,
 }
 
-#[derive(Debug, Copy, Clone, Serialize, Deserialize)]
+#[derive(Debug, Copy, Clone, Serialize, Deserialize, PartialEq, Eq)]
 pub enum Status {
     #[serde(rename = "COMPLETE_SUCCEED")]
     Completed,

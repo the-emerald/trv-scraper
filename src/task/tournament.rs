@@ -1,5 +1,5 @@
 use anyhow::Result;
-use api::tournament::{Tournament, TournamentResponse};
+use api::tournament::{Status, Tournament, TournamentResponse};
 use backoff::{Error, ExponentialBackoff};
 use chrono::Utc;
 use entity::entities::{meta_failed_tournament_request, tournament, tournament_warrior};
@@ -115,6 +115,10 @@ impl TournamentTask {
         // let mut tournament_solo_warrior_rows = vec![];
 
         for tournament in tournaments {
+            if tournament.status() == Status::Cancelled {
+                continue;
+            }
+
             let service_id = tournament.service_id();
             match tournament {
                 Tournament::OneVOne {
