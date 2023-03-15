@@ -12,7 +12,11 @@ impl MigrationTrait for Migration {
             .create_type(
                 Type::create()
                     .as_enum(TournamentStatus::Type)
-                    .values([TournamentStatus::Completed, TournamentStatus::Cancelled])
+                    .values([
+                        TournamentStatus::Completed,
+                        TournamentStatus::Cancelled,
+                        TournamentStatus::Created,
+                    ])
                     .to_owned(),
             )
             .await?;
@@ -208,6 +212,7 @@ enum TournamentStatus {
     Type,
     Completed,
     Cancelled,
+    Created,
 }
 
 impl Iden for TournamentStatus {
@@ -219,6 +224,7 @@ impl Iden for TournamentStatus {
                 TournamentStatus::Type => "tournament_status",
                 TournamentStatus::Completed => "completed",
                 TournamentStatus::Cancelled => "cancelled",
+                TournamentStatus::Created => "created",
             }
         )
         .unwrap()
