@@ -411,9 +411,7 @@ impl TournamentTask {
     ) -> Result<TournamentResponse, reqwest::Error> {
         backoff::future::retry(ExponentialBackoff::default(), || async {
             self.client
-                .get(format!(
-                    "https://federation22.theredvillage.com/api/v2/tournaments"
-                ))
+                .get("https://federation22.theredvillage.com/api/v2/tournaments".to_string())
                 .query(&[("page_size", page_size), ("page_index", page_index)])
                 .send()
                 .await
