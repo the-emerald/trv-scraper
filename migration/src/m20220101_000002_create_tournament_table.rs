@@ -21,12 +21,7 @@ impl MigrationTrait for Migration {
             .create_table(
                 Table::create()
                     .table(Tournament::Table)
-                    .col(
-                        ColumnDef::new(Tournament::Id)
-                            .big_integer()
-                            .not_null()
-                            .primary_key(),
-                    )
+                    .col(ColumnDef::new(Tournament::Id).big_integer().not_null())
                     .col(ColumnDef::new(Tournament::ServiceId).unsigned().not_null())
                     .col(
                         ColumnDef::new(Tournament::Currency)
@@ -62,6 +57,11 @@ impl MigrationTrait for Migration {
                             .date_time()
                             .not_null(),
                     )
+                    .primary_key(
+                        Index::create()
+                            .col(Tournament::Id)
+                            .col(Tournament::ServiceId),
+                    )
                     .to_owned(),
             )
             .await?;
@@ -77,6 +77,11 @@ impl MigrationTrait for Migration {
                             .not_null(),
                     )
                     .col(
+                        ColumnDef::new(TournamentWarrior::TournamentServiceId)
+                            .unsigned()
+                            .not_null(),
+                    )
+                    .col(
                         ColumnDef::new(TournamentWarrior::WarriorId)
                             .big_unsigned()
                             .not_null(),
@@ -85,8 +90,14 @@ impl MigrationTrait for Migration {
                     .foreign_key(
                         ForeignKey::create()
                             .name("fk-tournament_id-tournament_warrior")
-                            .from(TournamentWarrior::Table, TournamentWarrior::TournamentId)
-                            .to(Tournament::Table, Tournament::Id),
+                            .from(
+                                TournamentWarrior::Table,
+                                (
+                                    TournamentWarrior::TournamentId,
+                                    TournamentWarrior::TournamentServiceId,
+                                ),
+                            )
+                            .to(Tournament::Table, (Tournament::Id, Tournament::ServiceId)),
                     )
                     .foreign_key(
                         ForeignKey::create()
@@ -97,6 +108,7 @@ impl MigrationTrait for Migration {
                     .primary_key(
                         Index::create()
                             .col(TournamentWarrior::TournamentId)
+                            .col(TournamentWarrior::TournamentServiceId)
                             .col(TournamentWarrior::WarriorId),
                     )
                     .to_owned(),
@@ -180,6 +192,7 @@ enum Tournament {
 enum TournamentWarrior {
     Table,
     TournamentId,
+    TournamentServiceId,
     WarriorId,
     Account,
 }

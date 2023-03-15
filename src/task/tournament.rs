@@ -6,8 +6,8 @@ use entity::entities::{meta_failed_tournament_request, tournament, tournament_wa
 use ethers_core::abi::AbiEncode;
 use itertools::Itertools;
 use sea_orm::{
-    sea_query::OnConflict, ActiveValue::NotSet, ColumnTrait, DatabaseConnection, DbErr,
-    EntityTrait, PaginatorTrait, QueryFilter, Set, TransactionTrait,
+    sea_query::OnConflict, ColumnTrait, Condition, DatabaseConnection, DbErr, EntityTrait,
+    PaginatorTrait, QueryFilter, Set, TransactionTrait,
 };
 use tracing::{info, instrument, warn};
 
@@ -37,7 +37,7 @@ impl TournamentTask {
         let mut next_page_index = self.get_starting_page().await?;
 
         loop {
-            // info!(page = ?next_page_index, "scanning");
+            info!(size = ?self.page_size, page = ?next_page_index, "scanning");
 
             let batch = match self
                 .get_tournament_batch(self.page_size, next_page_index)
@@ -136,8 +136,9 @@ impl TournamentTask {
                     tournament_warrior_rows.extend(solo_warriors.into_iter().map(|sw| {
                         tournament_warrior::ActiveModel {
                             tournament_id: Set(tournament_id),
+                            tournament_service_id: Set(service_id as i32),
                             warrior_id: Set(sw.id as i64),
-                            account: NotSet,
+                            account: Set(None),
                         }
                     }));
 
@@ -149,10 +150,10 @@ impl TournamentTask {
                         buy_in: Set(configs.buy_in.encode()),
                         top_up: Set(configs.top_up.encode()),
                         key: Set(key),
-                        legacy: NotSet,
+                        legacy: Set(None),
                         level: Set(level.nav_key),
                         modified: Set(modified.naive_utc()),
-                        name: NotSet,
+                        name: Set(None),
                         restrictions: Set(restrictions),
                         solo_optionals: Set(Some(solo_optionals)),
                         start_time: Set(start_time),
@@ -178,6 +179,7 @@ impl TournamentTask {
                     tournament_warrior_rows.extend(warriors.into_iter().map(|sw| {
                         tournament_warrior::ActiveModel {
                             tournament_id: Set(tournament_id),
+                            tournament_service_id: Set(service_id as i32),
                             warrior_id: Set(sw.id as i64),
                             account: Set(Some(sw.account.as_bytes().to_vec())),
                         }
@@ -196,7 +198,7 @@ impl TournamentTask {
                         modified: Set(modified.naive_utc()),
                         name: Set(Some(name)),
                         restrictions: Set(restrictions),
-                        solo_optionals: NotSet,
+                        solo_optionals: Set(None),
                         start_time: Set(start_time),
                         status: Set(status.into()),
                         meta_last_updated: Set(time.naive_utc()),
@@ -220,6 +222,7 @@ impl TournamentTask {
                     tournament_warrior_rows.extend(warriors.into_iter().map(|sw| {
                         tournament_warrior::ActiveModel {
                             tournament_id: Set(tournament_id),
+                            tournament_service_id: Set(service_id as i32),
                             warrior_id: Set(sw.id as i64),
                             account: Set(Some(sw.account.as_bytes().to_vec())),
                         }
@@ -238,7 +241,7 @@ impl TournamentTask {
                         modified: Set(modified.naive_utc()),
                         name: Set(Some(name)),
                         restrictions: Set(restrictions),
-                        solo_optionals: NotSet,
+                        solo_optionals: Set(None),
                         start_time: Set(start_time),
                         status: Set(status.into()),
                         meta_last_updated: Set(time.naive_utc()),
@@ -262,6 +265,7 @@ impl TournamentTask {
                     tournament_warrior_rows.extend(warriors.into_iter().map(|sw| {
                         tournament_warrior::ActiveModel {
                             tournament_id: Set(tournament_id),
+                            tournament_service_id: Set(service_id as i32),
                             warrior_id: Set(sw.id as i64),
                             account: Set(Some(sw.account.as_bytes().to_vec())),
                         }
@@ -280,7 +284,7 @@ impl TournamentTask {
                         modified: Set(modified.naive_utc()),
                         name: Set(Some(name)),
                         restrictions: Set(restrictions),
-                        solo_optionals: NotSet,
+                        solo_optionals: Set(None),
                         start_time: Set(start_time),
                         status: Set(status.into()),
                         meta_last_updated: Set(time.naive_utc()),
@@ -299,8 +303,9 @@ impl TournamentTask {
         for chunk in tournament_rows {
             let _ = tournament::Entity::insert_many(chunk)
                 .on_conflict(
-                    OnConflict::column(tournament::Column::Id)
+                    OnConflict::columns([tournament::Column::Id, tournament::Column::ServiceId])
                         .update_columns([
+                            tournament::Column::Id,
                             tournament::Column::ServiceId,
                             tournament::Column::Currency,
                             tournament::Column::FeePercentage,
@@ -337,26 +342,47 @@ impl TournamentTask {
         for chunk in tournament_warrior_rows {
             let ids = chunk
                 .iter()
-                .map(|x| x.tournament_id.clone().unwrap())
+                .map(|x| {
+                    (
+                        x.tournament_id.clone().unwrap(),
+                        x.tournament_service_id.clone().unwrap(),
+                    )
+                })
                 .collect::<Vec<_>>();
             self.conn
                 .transaction::<_, (), DbErr>(|txn| {
                     Box::pin(async move {
                         // Remove all rows associated with the IDs
-                        tournament_warrior::Entity::delete_many()
-                            .filter(tournament_warrior::Column::TournamentId.is_in(ids))
-                            .exec(txn)
-                            .await?;
+                        for (tid, sid) in ids {
+                            tournament_warrior::Entity::delete_many()
+                                .filter(
+                                    Condition::all()
+                                        .add(tournament_warrior::Column::TournamentId.eq(tid))
+                                        .add(
+                                            tournament_warrior::Column::TournamentServiceId.eq(sid),
+                                        ),
+                                )
+                                .exec(txn)
+                                .await?;
+                        }
+
+                        // // Remove all rows associated with the IDs
+                        // tournament_warrior::Entity::delete_many()
+                        //     .filter(tournament_warrior::Column::TournamentId.is_in(ids))
+                        //     .exec(txn)
+                        //     .await?;
 
                         // Insert fresh warriors.
                         tournament_warrior::Entity::insert_many(chunk)
                             .on_conflict(
                                 OnConflict::columns([
                                     tournament_warrior::Column::TournamentId,
+                                    tournament_warrior::Column::TournamentServiceId,
                                     tournament_warrior::Column::WarriorId,
                                 ])
                                 .update_columns([
                                     tournament_warrior::Column::TournamentId,
+                                    tournament_warrior::Column::TournamentServiceId,
                                     tournament_warrior::Column::WarriorId,
                                     tournament_warrior::Column::Account,
                                 ])

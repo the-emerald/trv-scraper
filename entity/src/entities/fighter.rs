@@ -32,6 +32,8 @@ pub enum Relation {
     SelfRef,
     #[sea_orm(has_many = "super::fighter_trait::Entity")]
     FighterTrait,
+    #[sea_orm(has_many = "super::tournament_warrior::Entity")]
+    TournamentWarrior,
 }
 
 impl Related<super::fighter_trait::Entity> for Entity {
@@ -40,12 +42,9 @@ impl Related<super::fighter_trait::Entity> for Entity {
     }
 }
 
-impl Related<super::tournament::Entity> for Entity {
+impl Related<super::tournament_warrior::Entity> for Entity {
     fn to() -> RelationDef {
-        super::tournament_warrior::Relation::Tournament.def()
-    }
-    fn via() -> Option<RelationDef> {
-        Some(super::tournament_warrior::Relation::Fighter.def().rev())
+        Relation::TournamentWarrior.def()
     }
 }
 

@@ -8,6 +8,8 @@ pub struct Model {
     #[sea_orm(primary_key, auto_increment = false)]
     pub tournament_id: i64,
     #[sea_orm(primary_key, auto_increment = false)]
+    pub tournament_service_id: i32,
+    #[sea_orm(primary_key, auto_increment = false)]
     pub warrior_id: i64,
     pub account: Option<Vec<u8>>,
 }
@@ -25,7 +27,7 @@ pub enum Relation {
     #[sea_orm(
         belongs_to = "super::tournament::Entity",
         from = "Column::TournamentId",
-        to = "super::tournament::Column::Id",
+        to = "super::tournament::Column::ServiceId",
         on_update = "NoAction",
         on_delete = "NoAction"
     )]

@@ -8,6 +8,7 @@ use sea_orm::entity::prelude::*;
 pub struct Model {
     #[sea_orm(primary_key, auto_increment = false)]
     pub id: i64,
+    #[sea_orm(primary_key, auto_increment = false)]
     pub service_id: i32,
     pub currency: Vec<u8>,
     pub fee_percentage: i32,
@@ -26,14 +27,14 @@ pub struct Model {
 }
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]
-pub enum Relation {}
+pub enum Relation {
+    #[sea_orm(has_many = "super::tournament_warrior::Entity")]
+    TournamentWarrior,
+}
 
-impl Related<super::fighter::Entity> for Entity {
+impl Related<super::tournament_warrior::Entity> for Entity {
     fn to() -> RelationDef {
-        super::tournament_warrior::Relation::Fighter.def()
-    }
-    fn via() -> Option<RelationDef> {
-        Some(super::tournament_warrior::Relation::Tournament.def().rev())
+        Relation::TournamentWarrior.def()
     }
 }
 
