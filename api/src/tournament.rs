@@ -7,11 +7,32 @@ use serde_json::Value;
 use crate::Pagination;
 
 #[derive(Clone, Deserialize)]
+pub struct RawTournamentResponse {
+    #[serde(flatten)]
+    pub pagination: Pagination,
+
+    pub items: Vec<serde_json::Value>,
+}
+
+#[derive(Clone, Deserialize)]
 pub struct TournamentResponse {
     #[serde(flatten)]
     pub pagination: Pagination,
 
     pub items: Vec<Tournament>,
+}
+
+impl From<RawTournamentResponse> for TournamentResponse {
+    fn from(value: RawTournamentResponse) -> Self {
+        Self {
+            pagination: value.pagination,
+            items: value
+                .items
+                .into_iter()
+                .filter_map(|i| serde_json::from_value(i).ok())
+                .collect::<Vec<_>>(),
+        }
+    }
 }
 
 #[derive(Debug, Clone)]

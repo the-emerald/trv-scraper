@@ -1,5 +1,5 @@
 use anyhow::Result;
-use api::tournament::{Status, Tournament, TournamentResponse};
+use api::tournament::{RawTournamentResponse, Status, Tournament, TournamentResponse};
 use backoff::{Error, ExponentialBackoff};
 use chrono::Utc;
 use entity::entities::{meta_failed_tournament_request, tournament, tournament_warrior};
@@ -416,9 +416,10 @@ impl TournamentTask {
                 .send()
                 .await
                 .and_then(|resp| resp.error_for_status())
-                .map(|resp| resp.json::<TournamentResponse>())?
+                .map(|resp| resp.json::<RawTournamentResponse>())?
                 .await
                 .map_err(Error::Permanent)
+                .map(|raw| raw.into())
         })
         .await
     }
