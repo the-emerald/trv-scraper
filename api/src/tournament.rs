@@ -22,19 +22,6 @@ pub struct TournamentResponse {
     pub items: Vec<Tournament>,
 }
 
-impl From<RawTournamentResponse> for TournamentResponse {
-    fn from(value: RawTournamentResponse) -> Self {
-        Self {
-            pagination: value.pagination,
-            items: value
-                .items
-                .into_iter()
-                .filter_map(|i| serde_json::from_value(i).ok())
-                .collect::<Vec<_>>(),
-        }
-    }
-}
-
 #[derive(Debug, Clone)]
 pub enum Tournament {
     OneVOne {

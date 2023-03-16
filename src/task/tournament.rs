@@ -11,9 +11,6 @@ use sea_orm::{
 };
 use tracing::{info, instrument, warn};
 
-const REGISTER_FAILED_PAGE_ERROR: &str =
-    "could not register failed page. this page will not be tried again!";
-
 #[derive(Debug)]
 pub struct TournamentTask {
     client: reqwest::Client,
@@ -51,12 +48,24 @@ impl TournamentTask {
                         .insert_failed_page(self.page_size, next_page_index)
                         .await
                     {
-                        warn!(size = ?self.page_size, index = ?next_page_index, e = ?e, REGISTER_FAILED_PAGE_ERROR);
+                        warn!(size = ?self.page_size, index = ?next_page_index, e = ?e, "could not register failed page. this page will not be tried again!");
                     }
 
                     next_page_index += 1;
                     continue;
                 }
+            };
+
+            let batch = TournamentResponse {
+                pagination: batch.pagination,
+                items: batch.items.into_iter().enumerate().filter_map(|(idx, item)| match serde_json::from_value(item) {
+                    Ok(v) => Some(v),
+                    Err(e) => {
+                        warn!(size = ?self.page_size, page = ?next_page_index, index = ?idx, e = ?e, "could not deserialize, skipping. this tournament will not be tried again!");
+                        None
+                    }
+                })
+                .collect()
             };
 
             if let Err(e) = self.insert_into_database(batch.items).await {
@@ -67,7 +76,7 @@ impl TournamentTask {
                     .insert_failed_page(self.page_size, next_page_index)
                     .await
                 {
-                    warn!(size = ?self.page_size, index = ?next_page_index, e = ?e, REGISTER_FAILED_PAGE_ERROR);
+                    warn!(size = ?self.page_size, index = ?next_page_index, e = ?e, "could not register failed page. this page will not be tried again!");
                 }
             }
 
@@ -408,7 +417,7 @@ impl TournamentTask {
         &self,
         page_size: u64,
         page_index: u64,
-    ) -> Result<TournamentResponse, reqwest::Error> {
+    ) -> Result<RawTournamentResponse, reqwest::Error> {
         backoff::future::retry(ExponentialBackoff::default(), || async {
             self.client
                 .get("https://federation22.theredvillage.com/api/v2/tournaments".to_string())
@@ -419,7 +428,7 @@ impl TournamentTask {
                 .map(|resp| resp.json::<RawTournamentResponse>())?
                 .await
                 .map_err(Error::Permanent)
-                .map(|raw| raw.into())
+            // .map(|raw| raw.into())
         })
         .await
     }
