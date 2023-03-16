@@ -13,6 +13,8 @@ const CONCURRENT_REQUESTS: usize = 128;
 /// 2 hours
 const SCRAPE_INTERVAL: u64 = 2 * 60 * 60 * 1000;
 
+const TOURNAMENT_PAGE_SIZE: u64 = 128;
+
 #[tokio::main]
 async fn main() -> Result<()> {
     tracing_subscriber::fmt::init();
@@ -28,7 +30,7 @@ async fn main() -> Result<()> {
 
     let mut interval = tokio::time::interval(Duration::from_millis(SCRAPE_INTERVAL));
     let champion_task = ChampionTask::new(client.clone(), database.clone(), alchemy_api_key);
-    let tournament_task = TournamentTask::new(client, database, 128);
+    let tournament_task = TournamentTask::new(client, database, TOURNAMENT_PAGE_SIZE);
 
     loop {
         interval.tick().await;
