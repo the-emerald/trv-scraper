@@ -306,6 +306,8 @@ pub enum Status {
     Cancelled,
     #[serde(rename = "CREATE_SUCCEED")]
     Created,
+    #[serde(rename = "FOUGHT_SUCCEED")]
+    Fought,
 }
 
 impl From<Status> for TournamentStatus {
@@ -314,6 +316,7 @@ impl From<Status> for TournamentStatus {
             Status::Completed => Self::Completed,
             Status::Cancelled => Self::Cancelled,
             Status::Created => Self::Created,
+            Status::Fought => Self::Fought,
         }
     }
 }

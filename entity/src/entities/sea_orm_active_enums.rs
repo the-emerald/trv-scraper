@@ -11,4 +11,6 @@ pub enum TournamentStatus {
     Completed,
     #[sea_orm(string_value = "created")]
     Created,
+    #[sea_orm(string_value = "fought")]
+    Fought,
 }

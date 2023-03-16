@@ -16,6 +16,7 @@ impl MigrationTrait for Migration {
                         TournamentStatus::Completed,
                         TournamentStatus::Cancelled,
                         TournamentStatus::Created,
+                        TournamentStatus::Fought,
                     ])
                     .to_owned(),
             )
@@ -213,6 +214,7 @@ enum TournamentStatus {
     Completed,
     Cancelled,
     Created,
+    Fought,
 }
 
 impl Iden for TournamentStatus {
@@ -225,6 +227,7 @@ impl Iden for TournamentStatus {
                 TournamentStatus::Completed => "completed",
                 TournamentStatus::Cancelled => "cancelled",
                 TournamentStatus::Created => "created",
+                TournamentStatus::Fought => "fought",
             }
         )
         .unwrap()
