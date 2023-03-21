@@ -276,7 +276,7 @@ impl ChampionTask {
     }
 
     async fn scrape_champions(&self, up_to: u64) -> Vec<(FighterResponse, DateTime<Utc>)> {
-        stream::iter(0..up_to)
+        stream::iter(0..=up_to)
             .map(|i| async move {
                 let resp = self.get_champion(i).await?;
                 debug!(n = ?i, "completed");
