@@ -7,7 +7,7 @@ use ethers_core::abi::AbiEncode;
 use itertools::Itertools;
 use sea_orm::{
     sea_query::OnConflict, ColumnTrait, Condition, DatabaseConnection, DbErr, EntityTrait,
-    PaginatorTrait, QueryFilter, Set, TransactionTrait,
+    ModelTrait, PaginatorTrait, QueryFilter, Set, TransactionTrait,
 };
 use tracing::{info, instrument, warn};
 
@@ -30,6 +30,8 @@ impl TournamentTask {
     #[instrument(skip_all)]
     pub async fn scan(&self) -> Result<()> {
         info!("beginning tournament scan");
+
+        let _ = self.retry_failed().await;
 
         let mut next_page_index = self.get_starting_page().await?;
 
@@ -106,7 +108,7 @@ impl TournamentTask {
             page_index: Set(page_index as i32),
         })
         .on_conflict(
-            OnConflict::columns([Column::PageIndex, Column::PageSize])
+            OnConflict::columns([Column::PageSize, Column::PageIndex])
                 .do_nothing()
                 .to_owned(),
         )
@@ -375,12 +377,6 @@ impl TournamentTask {
                                 .await?;
                         }
 
-                        // // Remove all rows associated with the IDs
-                        // tournament_warrior::Entity::delete_many()
-                        //     .filter(tournament_warrior::Column::TournamentId.is_in(ids))
-                        //     .exec(txn)
-                        //     .await?;
-
                         // Insert fresh warriors.
                         tournament_warrior::Entity::insert_many(chunk)
                             .on_conflict(
@@ -428,8 +424,49 @@ impl TournamentTask {
                 .map(|resp| resp.json::<RawTournamentResponse>())?
                 .await
                 .map_err(Error::Permanent)
-            // .map(|raw| raw.into())
         })
         .await
+    }
+
+    async fn retry_failed(&self) -> Result<()> {
+        for page in meta_failed_tournament_request::Entity::find()
+            .all(&self.conn)
+            .await?
+        {
+            let batch = match self
+                .get_tournament_batch(page.page_size as u64, page.page_index as u64)
+                .await
+            {
+                Ok(v) => v,
+                Err(e) => {
+                    warn!(e = ?e);
+                    continue;
+                }
+            };
+
+            let batch = TournamentResponse {
+                pagination: batch.pagination,
+                items: batch.items.into_iter().enumerate().filter_map(|(idx, item)| match serde_json::from_value(item) {
+                    Ok(v) => Some(v),
+                    Err(e) => {
+                        warn!(size = ?page.page_size, page = ?page.page_index, index = ?idx, e = ?e, "could not deserialize, skipping. this tournament will not be tried again!");
+                        None
+                    }
+                })
+                .collect()
+            };
+
+            if let Err(e) = self.insert_into_database(batch.items).await {
+                warn!(e = ?e);
+                continue;
+            }
+
+            // If it's ok we delete the page.
+            let _ = page.delete(&self.conn).await.map_err(|e| {
+                warn!(e = ?e);
+                e
+            });
+        }
+        Ok(())
     }
 }
