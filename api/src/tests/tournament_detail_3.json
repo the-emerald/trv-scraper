@@ -1,0 +1,85 @@
+{
+	"match": {
+		"champions": [
+			{
+				"token_id": 3093,
+				"first_wins": 170,
+				"second_wins": 183,
+				"total_fought": 1247,
+				"stance": 3,
+				"barrack": {
+					"name": "🐦🐤 The Birdfeeder 🍩🍕",
+					"description": "Where Birdseed's Champions rest and recuperate! The Birdfeeder is where the big birds eat!"
+				}
+			},
+			{
+				"token_id": 3253,
+				"first_wins": 253,
+				"second_wins": 230,
+				"total_fought": 1505,
+				"stance": 3,
+				"barrack": {
+					"name": "Ranger Danger",
+					"description": "The Ranger Genepool"
+				}
+			},
+			{
+				"token_id": 3760,
+				"first_wins": 269,
+				"second_wins": 204,
+				"total_fought": 1358,
+				"stance": 1,
+				"barrack": {
+					"name": "Plover Pillagers",
+					"description": "Top of the pecking order"
+				}
+			},
+			{
+				"token_id": 4053,
+				"first_wins": 389,
+				"second_wins": 320,
+				"total_fought": 2400,
+				"stance": 4,
+				"barrack": {
+					"name": "Catch Me Fightin' Dirty",
+					"description": ""
+				}
+			},
+			{
+				"token_id": 10375,
+				"first_wins": 359,
+				"second_wins": 316,
+				"total_fought": 2262,
+				"stance": 3,
+				"barrack": {
+					"name": "👉 T&A SYNDICATE 👈",
+					"description": "Message us with any questions on champs for sale or Summoning or email us at     trvsales000@gmail.com"
+				}
+			}
+		],
+		"battles": [],
+		"info": {
+			"name": "Throatcutters",
+			"type": 1,
+			"size": 8,
+			"payout": {
+				"currency": "USD",
+				"value": 0
+			},
+			"fee": {
+				"currency": "USD",
+				"value": 9.81981
+			},
+			"challenger_stake": {
+				"currency": "USD",
+				"value": 0
+			},
+			"opponent_stake": {
+				"currency": "USD",
+				"value": 0
+			},
+			"wagering": false,
+			"location": "Blood Theatre Night"
+		}
+	}
+}

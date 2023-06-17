@@ -88,10 +88,22 @@ pub struct Attack {
 mod tests {
     use super::*;
 
-    const TEST_DETAIL: &str = include_str!("tests/tournament_detail.json");
+    const TEST_DETAIL_1: &str = include_str!("tests/tournament_detail_1.json");
+    const TEST_DETAIL_2: &str = include_str!("tests/tournament_detail_2.json");
+    const TEST_DETAIL_3: &str = include_str!("tests/tournament_detail_3.json");
 
     #[test]
-    fn test_detail() {
-        let _ = serde_json::from_str::<TournamentDetailResponse>(TEST_DETAIL).unwrap();
+    fn test_detail_1() {
+        let _ = serde_json::from_str::<TournamentDetailResponse>(TEST_DETAIL_1).unwrap();
+    }
+
+    #[test]
+    fn test_detail_2() {
+        let _ = serde_json::from_str::<TournamentDetailResponse>(TEST_DETAIL_2).unwrap();
+    }
+
+    #[test]
+    fn test_detail_3() {
+        let _ = serde_json::from_str::<TournamentDetailResponse>(TEST_DETAIL_3).unwrap();
     }
 }
