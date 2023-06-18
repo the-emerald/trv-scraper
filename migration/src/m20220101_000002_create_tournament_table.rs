@@ -126,12 +126,12 @@ impl MigrationTrait for Migration {
                     .table(MetaFailedTournamentRequest::Table)
                     .col(
                         ColumnDef::new(MetaFailedTournamentRequest::PageSize)
-                            .unsigned()
+                            .big_unsigned()
                             .not_null(),
                     )
                     .col(
                         ColumnDef::new(MetaFailedTournamentRequest::PageIndex)
-                            .unsigned()
+                            .big_unsigned()
                             .not_null(),
                     )
                     .primary_key(
@@ -147,10 +147,14 @@ impl MigrationTrait for Migration {
             .create_table(
                 Table::create()
                     .table(MetaLastPage::Table)
-                    .col(ColumnDef::new(MetaLastPage::PageSize).unsigned().not_null())
+                    .col(
+                        ColumnDef::new(MetaLastPage::PageSize)
+                            .big_unsigned()
+                            .not_null(),
+                    )
                     .col(
                         ColumnDef::new(MetaLastPage::PageIndex)
-                            .unsigned()
+                            .big_unsigned()
                             .not_null(),
                     )
                     .primary_key(

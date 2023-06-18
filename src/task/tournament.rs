@@ -95,13 +95,13 @@ impl TournamentTask {
         self.conn
             .execute(Statement::from_string(
                 DatabaseBackend::Postgres,
-                "TRUNCATE `meta_last_page`".to_owned(),
+                "TRUNCATE `meta_last_page`;".to_owned(),
             ))
             .await?;
 
         meta_last_page::ActiveModel {
-            page_size: Set(self.page_size as i32),
-            page_index: Set(next_page_index as i32),
+            page_size: Set(self.page_size as i64),
+            page_index: Set(next_page_index as i64),
         }
         .insert(&self.conn)
         .await?;
@@ -124,8 +124,8 @@ impl TournamentTask {
         use meta_failed_tournament_request::*;
 
         Entity::insert(meta_failed_tournament_request::ActiveModel {
-            page_size: Set(page_size as i32),
-            page_index: Set(page_index as i32),
+            page_size: Set(page_size as i64),
+            page_index: Set(page_index as i64),
         })
         .on_conflict(
             OnConflict::columns([Column::PageSize, Column::PageIndex])
