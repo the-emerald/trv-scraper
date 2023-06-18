@@ -2,12 +2,15 @@ use anyhow::Result;
 use api::tournament::{RawTournamentResponse, Status, Tournament, TournamentResponse};
 use backoff::{Error, ExponentialBackoff};
 use chrono::Utc;
-use entity::entities::{meta_failed_tournament_request, tournament, tournament_warrior};
+use entity::entities::{
+    meta_failed_tournament_request, meta_last_page, tournament, tournament_warrior,
+};
 use ethers_core::abi::AbiEncode;
 use itertools::Itertools;
 use sea_orm::{
-    sea_query::OnConflict, ColumnTrait, Condition, DatabaseConnection, DbErr, EntityTrait,
-    ModelTrait, PaginatorTrait, QueryFilter, Set, TransactionTrait,
+    sea_query::OnConflict, ActiveModelTrait, ColumnTrait, Condition, ConnectionTrait,
+    DatabaseBackend, DatabaseConnection, DbErr, EntityTrait, ModelTrait, QueryFilter, Set,
+    Statement, TransactionTrait,
 };
 use tracing::{info, instrument, warn};
 
@@ -89,14 +92,31 @@ impl TournamentTask {
             }
         }
 
+        self.conn
+            .execute(Statement::from_string(
+                DatabaseBackend::Postgres,
+                "TRUNCATE `meta_last_page`".to_owned(),
+            ))
+            .await?;
+
+        meta_last_page::ActiveModel {
+            page_size: Set(self.page_size as i32),
+            page_index: Set(next_page_index as i32),
+        }
+        .insert(&self.conn)
+        .await?;
+
         Ok(())
     }
 
     /// Get the starting page number.
-    /// Note that this value may result in rescanning of existing tournaments, but should never miss a page.
     async fn get_starting_page(&self) -> Result<u64> {
-        let rows = tournament::Entity::find().count(&self.conn).await?;
-        Ok(rows / self.page_size)
+        let entry = meta_last_page::Entity::find()
+            .one(&self.conn)
+            .await?
+            .map(|v| v.page_index * v.page_size)
+            .unwrap_or_default();
+        Ok(entry as u64 / self.page_size)
     }
 
     /// Insert a failed page into the database to be tried later.

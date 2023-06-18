@@ -143,6 +143,25 @@ impl MigrationTrait for Migration {
             )
             .await?;
 
+        manager
+            .create_table(
+                Table::create()
+                    .table(MetaLastPage::Table)
+                    .col(ColumnDef::new(MetaLastPage::PageSize).unsigned().not_null())
+                    .col(
+                        ColumnDef::new(MetaLastPage::PageIndex)
+                            .unsigned()
+                            .not_null(),
+                    )
+                    .primary_key(
+                        Index::create()
+                            .col(MetaFailedTournamentRequest::PageSize)
+                            .col(MetaFailedTournamentRequest::PageIndex),
+                    )
+                    .to_owned(),
+            )
+            .await?;
+
         Ok(())
     }
 
@@ -164,6 +183,10 @@ impl MigrationTrait for Migration {
             .await?;
 
         manager
+            .drop_table(Table::drop().table(MetaLastPage::Table).to_owned())
+            .await?;
+
+        manager
             .drop_type(Type::drop().name(TournamentStatus::Type).to_owned())
             .await?;
 
@@ -173,7 +196,7 @@ impl MigrationTrait for Migration {
 
 /// Learn more at https://docs.rs/sea-query#iden
 #[derive(Iden)]
-enum Tournament {
+pub(crate) enum Tournament {
     Table,
     Id,
     ServiceId,
@@ -232,4 +255,11 @@ impl Iden for TournamentStatus {
         )
         .unwrap()
     }
+}
+
+#[derive(Iden)]
+enum MetaLastPage {
+    Table,
+    PageSize,
+    PageIndex,
 }

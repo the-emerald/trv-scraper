@@ -3,7 +3,7 @@
 use sea_orm::entity::prelude::*;
 
 #[derive(Clone, Debug, PartialEq, DeriveEntityModel, Eq)]
-#[sea_orm(table_name = "meta_failed_tournament_request")]
+#[sea_orm(table_name = "meta_last_page")]
 pub struct Model {
     #[sea_orm(primary_key, auto_increment = false)]
     pub page_size: i32,
