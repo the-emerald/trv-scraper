@@ -81,6 +81,34 @@ pub enum Tournament {
         tournament_type: String,
         warriors: Vec<Warrior>,
     },
+    DoubleUp {
+        tournament_id: i64,
+        class: Value,
+        configs: Configs,
+        key: String,
+        level: Level,
+        modified: DateTime<Utc>,
+        name: String,
+        restrictions: Value,
+        start_time: NaiveDateTime,
+        status: Status,
+        tournament_type: String,
+        warriors: Vec<Warrior>,
+    },
+    DoubleUpReverse {
+        tournament_id: i64,
+        class: Value,
+        configs: Configs,
+        key: String,
+        level: Level,
+        modified: DateTime<Utc>,
+        name: String,
+        restrictions: Value,
+        start_time: NaiveDateTime,
+        status: Status,
+        tournament_type: String,
+        warriors: Vec<Warrior>,
+    },
 }
 
 impl Tournament {
@@ -90,6 +118,8 @@ impl Tournament {
             Tournament::Blooding { .. } => 1,
             Tournament::Bloodbath { .. } => 2,
             Tournament::BloodElo { .. } => 3,
+            Tournament::DoubleUp { .. } => 4,
+            Tournament::DoubleUpReverse { .. } => 5,
         }
     }
 
@@ -143,6 +173,34 @@ impl Tournament {
                 configs: _,
                 key: _,
                 legacy: _,
+                level: _,
+                modified: _,
+                name: _,
+                restrictions: _,
+                start_time: _,
+                status,
+                tournament_type: _,
+                warriors: _,
+            } => *status,
+            Tournament::DoubleUp {
+                tournament_id: _,
+                class: _,
+                configs: _,
+                key: _,
+                level: _,
+                modified: _,
+                name: _,
+                restrictions: _,
+                start_time: _,
+                status,
+                tournament_type: _,
+                warriors: _,
+            } => *status,
+            Tournament::DoubleUpReverse {
+                tournament_id: _,
+                class: _,
+                configs: _,
+                key: _,
                 level: _,
                 modified: _,
                 name: _,
@@ -255,6 +313,42 @@ impl<'de> Deserialize<'de> for Tournament {
                 tournament_type: sink
                     .tournament_type
                     .ok_or_else(|| D::Error::custom("expected tournament type"))?,
+            }),
+            4 => Ok(Tournament::DoubleUp {
+                tournament_id: sink.tournament_id,
+                class: sink
+                    .class
+                    .ok_or_else(|| D::Error::custom("expected class"))?,
+                configs: sink.configs,
+                key: sink.key,
+                level: sink.level,
+                modified: sink.modified,
+                name: sink.name.ok_or_else(|| D::Error::custom("expected name"))?,
+                restrictions: sink.restrictions,
+                start_time: sink.start_time,
+                status: sink.status,
+                tournament_type: sink
+                    .tournament_type
+                    .ok_or_else(|| D::Error::custom("expected tournament type"))?,
+                warriors: sink.warriors,
+            }),
+            5 => Ok(Tournament::DoubleUp {
+                tournament_id: sink.tournament_id,
+                class: sink
+                    .class
+                    .ok_or_else(|| D::Error::custom("expected class"))?,
+                configs: sink.configs,
+                key: sink.key,
+                level: sink.level,
+                modified: sink.modified,
+                name: sink.name.ok_or_else(|| D::Error::custom("expected name"))?,
+                restrictions: sink.restrictions,
+                start_time: sink.start_time,
+                status: sink.status,
+                tournament_type: sink
+                    .tournament_type
+                    .ok_or_else(|| D::Error::custom("expected tournament type"))?,
+                warriors: sink.warriors,
             }),
             _ => Err(D::Error::custom(format!(
                 "{} not a valid service id",

@@ -321,6 +321,72 @@ impl TournamentTask {
                         meta_last_updated: Set(time.naive_utc()),
                     });
                 }
+                Tournament::DoubleUp {
+                    tournament_id,
+                    class: _,
+                    configs,
+                    key,
+                    level,
+                    modified,
+                    name,
+                    restrictions,
+                    start_time,
+                    status,
+                    tournament_type: _,
+                    warriors: _,
+                } => {
+                    tournament_rows.push(tournament::ActiveModel {
+                        id: Set(tournament_id),
+                        service_id: Set(service_id as i32),
+                        currency: Set(configs.currency.as_bytes().to_vec()),
+                        fee_percentage: Set(configs.fee_percentage as i32),
+                        buy_in: Set(configs.buy_in.encode()),
+                        top_up: Set(configs.top_up.encode()),
+                        key: Set(key),
+                        legacy: Set(None),
+                        level: Set(level.nav_key),
+                        modified: Set(modified.naive_utc()),
+                        name: Set(Some(name)),
+                        restrictions: Set(restrictions),
+                        solo_optionals: Set(None),
+                        start_time: Set(start_time),
+                        status: Set(status.into()),
+                        meta_last_updated: Set(time.naive_utc()),
+                    });
+                }
+                Tournament::DoubleUpReverse {
+                    tournament_id,
+                    class: _,
+                    configs,
+                    key,
+                    level,
+                    modified,
+                    name,
+                    restrictions,
+                    start_time,
+                    status,
+                    tournament_type: _,
+                    warriors: _,
+                } => {
+                    tournament_rows.push(tournament::ActiveModel {
+                        id: Set(tournament_id),
+                        service_id: Set(service_id as i32),
+                        currency: Set(configs.currency.as_bytes().to_vec()),
+                        fee_percentage: Set(configs.fee_percentage as i32),
+                        buy_in: Set(configs.buy_in.encode()),
+                        top_up: Set(configs.top_up.encode()),
+                        key: Set(key),
+                        legacy: Set(None),
+                        level: Set(level.nav_key),
+                        modified: Set(modified.naive_utc()),
+                        name: Set(Some(name)),
+                        restrictions: Set(restrictions),
+                        solo_optionals: Set(None),
+                        start_time: Set(start_time),
+                        status: Set(status.into()),
+                        meta_last_updated: Set(time.naive_utc()),
+                    });
+                }
             };
         }
 
