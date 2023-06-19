@@ -109,6 +109,20 @@ pub enum Tournament {
         tournament_type: String,
         warriors: Vec<Warrior>,
     },
+    Traditional {
+        tournament_id: i64,
+        class: Value,
+        configs: Configs,
+        key: String,
+        level: Level,
+        modified: DateTime<Utc>,
+        name: String,
+        restrictions: Value,
+        start_time: NaiveDateTime,
+        status: Status,
+        tournament_type: String,
+        warriors: Vec<Warrior>,
+    },
 }
 
 impl Tournament {
@@ -120,6 +134,7 @@ impl Tournament {
             Tournament::BloodElo { .. } => 3,
             Tournament::DoubleUp { .. } => 4,
             Tournament::DoubleUpReverse { .. } => 5,
+            Tournament::Traditional { .. } => 6,
         }
     }
 
@@ -197,6 +212,20 @@ impl Tournament {
                 warriors: _,
             } => *status,
             Tournament::DoubleUpReverse {
+                tournament_id: _,
+                class: _,
+                configs: _,
+                key: _,
+                level: _,
+                modified: _,
+                name: _,
+                restrictions: _,
+                start_time: _,
+                status,
+                tournament_type: _,
+                warriors: _,
+            } => *status,
+            Tournament::Traditional {
                 tournament_id: _,
                 class: _,
                 configs: _,
