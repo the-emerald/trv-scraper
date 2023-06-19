@@ -95,7 +95,7 @@ impl TournamentTask {
         self.conn
             .execute(Statement::from_string(
                 DatabaseBackend::Postgres,
-                "TRUNCATE `meta_last_page`;".to_owned(),
+                "TRUNCATE meta_last_page;".to_owned(),
             ))
             .await?;
 
