@@ -6,4 +6,7 @@ pub use super::fighter_trait::Entity as FighterTrait;
 pub use super::meta_failed_tournament_request::Entity as MetaFailedTournamentRequest;
 pub use super::meta_last_page::Entity as MetaLastPage;
 pub use super::tournament::Entity as Tournament;
+pub use super::tournament_detail_attack::Entity as TournamentDetailAttack;
+pub use super::tournament_detail_champion::Entity as TournamentDetailChampion;
+pub use super::tournament_detail_round::Entity as TournamentDetailRound;
 pub use super::tournament_warrior::Entity as TournamentWarrior;
