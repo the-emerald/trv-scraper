@@ -9,4 +9,4 @@ pub use super::tournament::Entity as Tournament;
 pub use super::tournament_detail_attack::Entity as TournamentDetailAttack;
 pub use super::tournament_detail_champion::Entity as TournamentDetailChampion;
 pub use super::tournament_detail_round::Entity as TournamentDetailRound;
-pub use super::tournament_warrior::Entity as TournamentWarrior;
+pub use super::tournament_fighter::Entity as TournamentFighter;

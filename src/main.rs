@@ -40,6 +40,7 @@ async fn main() -> Result<()> {
         // Fetch new tournaments
         let _ = tournament_task.scan().await;
 
+        break Ok(());
         // TODO: Fetch hit-by-hit for each new tournament
     }
 }

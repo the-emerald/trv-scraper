@@ -3,7 +3,7 @@ use api::tournament::{RawTournamentResponse, Status, Tournament, TournamentRespo
 use backoff::{Error, ExponentialBackoff};
 use chrono::Utc;
 use entity::entities::{
-    meta_failed_tournament_request, meta_last_page, tournament, tournament_warrior,
+    meta_failed_tournament_request, meta_last_page, tournament, tournament_fighter,
 };
 use ethers_core::abi::AbiEncode;
 use itertools::Itertools;
@@ -165,10 +165,10 @@ impl TournamentTask {
                     solo_warriors,
                 } => {
                     tournament_warrior_rows.extend(solo_warriors.into_iter().map(|sw| {
-                        tournament_warrior::ActiveModel {
+                        tournament_fighter::ActiveModel {
                             tournament_id: Set(tournament_id),
                             tournament_service_id: Set(service_id as i32),
-                            warrior_id: Set(sw.id as i64),
+                            fighter_id: Set(sw.id as i64),
                             account: Set(None),
                         }
                     }));
@@ -208,10 +208,10 @@ impl TournamentTask {
                     warriors,
                 } => {
                     tournament_warrior_rows.extend(warriors.into_iter().map(|sw| {
-                        tournament_warrior::ActiveModel {
+                        tournament_fighter::ActiveModel {
                             tournament_id: Set(tournament_id),
                             tournament_service_id: Set(service_id as i32),
-                            warrior_id: Set(sw.id as i64),
+                            fighter_id: Set(sw.id as i64),
                             account: Set(Some(sw.account.as_bytes().to_vec())),
                         }
                     }));
@@ -251,10 +251,10 @@ impl TournamentTask {
                     warriors,
                 } => {
                     tournament_warrior_rows.extend(warriors.into_iter().map(|sw| {
-                        tournament_warrior::ActiveModel {
+                        tournament_fighter::ActiveModel {
                             tournament_id: Set(tournament_id),
                             tournament_service_id: Set(service_id as i32),
-                            warrior_id: Set(sw.id as i64),
+                            fighter_id: Set(sw.id as i64),
                             account: Set(Some(sw.account.as_bytes().to_vec())),
                         }
                     }));
@@ -294,10 +294,10 @@ impl TournamentTask {
                     warriors,
                 } => {
                     tournament_warrior_rows.extend(warriors.into_iter().map(|sw| {
-                        tournament_warrior::ActiveModel {
+                        tournament_fighter::ActiveModel {
                             tournament_id: Set(tournament_id),
                             tournament_service_id: Set(service_id as i32),
-                            warrior_id: Set(sw.id as i64),
+                            fighter_id: Set(sw.id as i64),
                             account: Set(Some(sw.account.as_bytes().to_vec())),
                         }
                     }));
@@ -484,12 +484,12 @@ impl TournamentTask {
                     Box::pin(async move {
                         // Remove all rows associated with the IDs
                         for (tid, sid) in ids {
-                            tournament_warrior::Entity::delete_many()
+                            tournament_fighter::Entity::delete_many()
                                 .filter(
                                     Condition::all()
-                                        .add(tournament_warrior::Column::TournamentId.eq(tid))
+                                        .add(tournament_fighter::Column::TournamentId.eq(tid))
                                         .add(
-                                            tournament_warrior::Column::TournamentServiceId.eq(sid),
+                                            tournament_fighter::Column::TournamentServiceId.eq(sid),
                                         ),
                                 )
                                 .exec(txn)
@@ -497,18 +497,18 @@ impl TournamentTask {
                         }
 
                         // Insert fresh warriors.
-                        tournament_warrior::Entity::insert_many(chunk)
+                        tournament_fighter::Entity::insert_many(chunk)
                             .on_conflict(
                                 OnConflict::columns([
-                                    tournament_warrior::Column::TournamentId,
-                                    tournament_warrior::Column::TournamentServiceId,
-                                    tournament_warrior::Column::WarriorId,
+                                    tournament_fighter::Column::TournamentId,
+                                    tournament_fighter::Column::TournamentServiceId,
+                                    tournament_fighter::Column::FighterId,
                                 ])
                                 .update_columns([
-                                    tournament_warrior::Column::TournamentId,
-                                    tournament_warrior::Column::TournamentServiceId,
-                                    tournament_warrior::Column::WarriorId,
-                                    tournament_warrior::Column::Account,
+                                    tournament_fighter::Column::TournamentId,
+                                    tournament_fighter::Column::TournamentServiceId,
+                                    tournament_fighter::Column::FighterId,
+                                    tournament_fighter::Column::Account,
                                 ])
                                 .to_owned(),
                             )

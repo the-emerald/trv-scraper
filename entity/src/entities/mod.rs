@@ -12,4 +12,4 @@ pub mod tournament;
 pub mod tournament_detail_attack;
 pub mod tournament_detail_champion;
 pub mod tournament_detail_round;
-pub mod tournament_warrior;
+pub mod tournament_fighter;
