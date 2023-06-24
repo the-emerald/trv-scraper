@@ -91,6 +91,7 @@ mod tests {
     const TEST_DETAIL_1: &str = include_str!("tests/tournament_detail_1.json");
     const TEST_DETAIL_2: &str = include_str!("tests/tournament_detail_2.json");
     const TEST_DETAIL_3: &str = include_str!("tests/tournament_detail_3.json");
+    const TEST_DETAIL_4: &str = include_str!("tests/tournament_detail_empty_battle.json");
 
     #[test]
     fn test_detail_1() {
@@ -105,5 +106,11 @@ mod tests {
     #[test]
     fn test_detail_3() {
         let _ = serde_json::from_str::<TournamentDetailResponse>(TEST_DETAIL_3).unwrap();
+    }
+
+    #[test]
+    fn test_detail_empty_battle() {
+        let x = serde_json::from_str::<TournamentDetailResponse>(TEST_DETAIL_4).unwrap();
+        assert!(x.battles.is_empty());
     }
 }
