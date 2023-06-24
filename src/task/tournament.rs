@@ -1,18 +1,25 @@
 use anyhow::Result;
-use api::tournament::{RawTournamentResponse, Status, Tournament, TournamentResponse};
+use api::{
+    tournament::{RawTournamentResponse, Status, Tournament, TournamentResponse},
+    tournament_detail::TournamentDetailResponse,
+};
 use backoff::{Error, ExponentialBackoff};
 use chrono::Utc;
 use entity::entities::{
-    meta_failed_tournament_request, meta_last_page, tournament, tournament_fighter,
+    meta_failed_tournament_request, meta_last_page, tournament, tournament_detail_attack,
+    tournament_detail_champion, tournament_fighter,
 };
 use ethers_core::abi::AbiEncode;
+use futures::{future, stream, StreamExt};
 use itertools::Itertools;
 use sea_orm::{
     sea_query::OnConflict, ActiveModelTrait, ColumnTrait, Condition, ConnectionTrait,
     DatabaseBackend, DatabaseConnection, DbErr, EntityTrait, ModelTrait, QueryFilter, Set,
     Statement, TransactionTrait,
 };
-use tracing::{info, instrument, warn};
+use tracing::{debug, info, instrument, warn};
+
+use crate::CONCURRENT_REQUESTS;
 
 #[derive(Debug)]
 pub struct TournamentTask {
@@ -73,7 +80,7 @@ impl TournamentTask {
                 .collect()
             };
 
-            if let Err(e) = self.insert_into_database(batch.items).await {
+            if let Err(e) = self.insert_tournament_batch(batch.items.clone()).await {
                 warn!(page = ?batch.pagination, e = ?e, "page failed to insert");
 
                 // If the page insert fails we will try again sometime later
@@ -82,6 +89,29 @@ impl TournamentTask {
                     .await
                 {
                     warn!(size = ?self.page_size, index = ?next_page_index, e = ?e, "could not register failed page. this page will not be tried again!");
+                }
+            }
+
+            let details = stream::iter(batch.items)
+                .filter(|b| future::ready(b.status() != Status::Cancelled))
+                .map(|b| async move {
+                    let id = b.id();
+                    let service_id = b.service_id();
+
+                    self.get_tournament_detail(id, service_id)
+                        .await
+                        .map(|res| (id, service_id, res))
+                })
+                .buffer_unordered(CONCURRENT_REQUESTS)
+                .collect::<Vec<Result<_, _>>>()
+                .await
+                .into_iter()
+                .filter_map(|x| x.ok())
+                .collect::<Vec<_>>();
+
+            for (id, service_id, detail) in details {
+                if let Err(e) = self.insert_tournament_detail(id, service_id, detail).await {
+                    warn!(e = ?e, id = id, service_id = service_id, "could not insert tournament detail")
                 }
             }
 
@@ -139,7 +169,7 @@ impl TournamentTask {
     }
 
     /// Insert a response batch into the database.
-    async fn insert_into_database(&self, tournaments: Vec<Tournament>) -> Result<()> {
+    async fn insert_tournament_batch(&self, tournaments: Vec<Tournament>) -> Result<()> {
         let mut tournament_rows = vec![];
         let mut tournament_warrior_rows = vec![];
         let time = Utc::now();
@@ -575,7 +605,7 @@ impl TournamentTask {
                 .collect()
             };
 
-            if let Err(e) = self.insert_into_database(batch.items).await {
+            if let Err(e) = self.insert_tournament_batch(batch.items).await {
                 warn!(e = ?e);
                 continue;
             }
@@ -586,6 +616,114 @@ impl TournamentTask {
                 e
             });
         }
+        Ok(())
+    }
+
+    async fn get_tournament_detail(
+        &self,
+        id: i64,
+        service_id: u64,
+    ) -> Result<TournamentDetailResponse, reqwest::Error> {
+        backoff::future::retry(ExponentialBackoff::default(), || async {
+            self.client
+                .get(format!("https://federation22.theredvillage.com/api/v2/battles/service/{service_id}/tournament/{id}"))
+                .send()
+                .await
+                .and_then(|resp| resp.error_for_status())
+                .map(|resp| resp.json::<TournamentDetailResponse>())?
+                .await
+                .map_err(|e| {
+                    warn!(e = ?e, id = id, service_id = service_id, "could not get tournament detail");
+                    Error::Permanent(e)
+                })
+        })
+        .await
+    }
+
+    async fn insert_tournament_detail(
+        &self,
+        id: i64,
+        service_id: u64,
+        detail: TournamentDetailResponse,
+    ) -> Result<(), DbErr> {
+        debug!(id = id, service_id = service_id);
+
+        // Champions
+        let champions = detail
+            .champions
+            .iter()
+            .map(|x| tournament_detail_champion::ActiveModel {
+                tournament_id: Set(id),
+                tournament_service_id: Set(service_id as i64),
+                fighter_id: Set(x.token_id as i64),
+                stance: Set(x.stance as i32),
+            })
+            .collect::<Vec<_>>();
+
+        let _ = tournament_detail_champion::Entity::insert_many(champions)
+            .on_conflict(
+                OnConflict::columns([
+                    tournament_detail_champion::Column::TournamentId,
+                    tournament_detail_champion::Column::TournamentServiceId,
+                    tournament_detail_champion::Column::FighterId,
+                ])
+                .update_columns([
+                    tournament_detail_champion::Column::TournamentId,
+                    tournament_detail_champion::Column::TournamentServiceId,
+                    tournament_detail_champion::Column::FighterId,
+                    tournament_detail_champion::Column::Stance,
+                ])
+                .to_owned(),
+            )
+            .exec(&self.conn)
+            .await
+            .map_err(|e| {
+                warn!(e = ?e, id = id, service_id = service_id, "tournament_detail_champion");
+                e
+            });
+
+        // Attack
+        let attacks = detail
+            .battles
+            .iter()
+            .flat_map(|battle| {
+                battle.champions.iter().flat_map(|ca| {
+                    ca.attack
+                        .iter()
+                        .map(|a| tournament_detail_attack::ActiveModel {
+                            tournament_id: Set(id),
+                            tournament_service_id: Set(service_id as i64),
+                            fighter_id: Set(ca.id as i64),
+                            round: Set(battle.round as i32),
+                            special_attack: Set(a.special_attack),
+                            speical_defend: Set(a.special_defend),
+                            damage: Set(a.damage as i32),
+                            order: Set(a.order as i32),
+                        })
+                })
+            })
+            .collect::<Vec<_>>();
+
+        if !attacks.is_empty() {
+            let _ = tournament_detail_attack::Entity::insert_many(attacks)
+                .on_conflict(
+                    OnConflict::columns([
+                        tournament_detail_attack::Column::TournamentId,
+                        tournament_detail_attack::Column::TournamentServiceId,
+                        tournament_detail_attack::Column::Round,
+                        tournament_detail_attack::Column::Order,
+                    ])
+                    .do_nothing()
+                    .to_owned(),
+                )
+                .exec(&self.conn)
+                .await
+                .map_err(|e| {
+                    warn!(e = ?e, id = id, service_id = service_id, "tournament_detail_attack");
+                    e
+                });
+        }
+
         Ok(())
     }
 }

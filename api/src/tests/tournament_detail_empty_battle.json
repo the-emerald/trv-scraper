@@ -1,0 +1,382 @@
+{
+	"match": {
+		"champions": [
+			{
+				"token_id": 2,
+				"first_wins": 331,
+				"second_wins": 284,
+				"total_fought": 2026,
+				"stance": 2,
+				"barrack": {
+					"name": "House of Krawg",
+					"description": ""
+				}
+			},
+			{
+				"token_id": 342,
+				"first_wins": 67,
+				"second_wins": 55,
+				"total_fought": 427,
+				"stance": 2,
+				"barrack": {
+					"name": "House of Krawg",
+					"description": ""
+				}
+			},
+			{
+				"token_id": 415,
+				"first_wins": 57,
+				"second_wins": 68,
+				"total_fought": 517,
+				"stance": 1,
+				"barrack": {
+					"name": "AKAIAMI WARRIORS",
+					"description": ""
+				}
+			},
+			{
+				"token_id": 494,
+				"first_wins": 110,
+				"second_wins": 109,
+				"total_fought": 715,
+				"stance": 4,
+				"barrack": {
+					"name": "The one they call Joe",
+					"description": ""
+				}
+			},
+			{
+				"token_id": 991,
+				"first_wins": 59,
+				"second_wins": 40,
+				"total_fought": 354,
+				"stance": 1,
+				"barrack": {
+					"name": "The one they call Joe",
+					"description": ""
+				}
+			},
+			{
+				"token_id": 2307,
+				"first_wins": 77,
+				"second_wins": 63,
+				"total_fought": 598,
+				"stance": 2,
+				"barrack": {
+					"name": "🩸Blood Demons👿",
+					"description": "Blood Demons are a family of the Demon race in The Darklands, banished to Tartaros by the Blood Queen. \nBlood Demons are among the most intelligent and cunny creatures in The Darklands."
+				}
+			},
+			{
+				"token_id": 2936,
+				"first_wins": 16,
+				"second_wins": 14,
+				"total_fought": 100,
+				"stance": 3,
+				"barrack": {
+					"name": "🩸Blood Demons👿",
+					"description": "Blood Demons are a family of the Demon race in The Darklands, banished to Tartaros by the Blood Queen. \nBlood Demons are among the most intelligent and cunny creatures in The Darklands."
+				}
+			},
+			{
+				"token_id": 3420,
+				"first_wins": 274,
+				"second_wins": 238,
+				"total_fought": 1818,
+				"stance": 2,
+				"barrack": {
+					"name": "House of Krawg",
+					"description": ""
+				}
+			},
+			{
+				"token_id": 3561,
+				"first_wins": 203,
+				"second_wins": 165,
+				"total_fought": 1110,
+				"stance": 3,
+				"barrack": {
+					"name": "Bloodlust 🩸",
+					"description": ""
+				}
+			},
+			{
+				"token_id": 4240,
+				"first_wins": 90,
+				"second_wins": 84,
+				"total_fought": 628,
+				"stance": 3,
+				"barrack": {
+					"name": "🌫️Up In SmOkE🌫️",
+					"description": "We SmOkErS OnLy"
+				}
+			},
+			{
+				"token_id": 10120,
+				"first_wins": 228,
+				"second_wins": 187,
+				"total_fought": 1417,
+				"stance": 1,
+				"barrack": {
+					"name": "Goon Bag Barracks 🍷",
+					"description": "Bunch of Brendos out here hitting the bag and losing fights"
+				}
+			},
+			{
+				"token_id": 10277,
+				"first_wins": 19,
+				"second_wins": 16,
+				"total_fought": 131,
+				"stance": 3,
+				"barrack": {
+					"name": "The Blood Shed",
+					"description": "I drink your blood with cream and sugar."
+				}
+			},
+			{
+				"token_id": 28434,
+				"first_wins": 27,
+				"second_wins": 30,
+				"total_fought": 210,
+				"stance": 2,
+				"barrack": {
+					"name": "AKAIAMI WARRIORS",
+					"description": ""
+				}
+			},
+			{
+				"token_id": 28889,
+				"first_wins": 53,
+				"second_wins": 52,
+				"total_fought": 364,
+				"stance": 3,
+				"barrack": {
+					"name": "House of Krawg",
+					"description": ""
+				}
+			},
+			{
+				"token_id": 29336,
+				"first_wins": 41,
+				"second_wins": 32,
+				"total_fought": 240,
+				"stance": 3,
+				"barrack": {
+					"name": "The Blood Shed",
+					"description": "I drink your blood with cream and sugar."
+				}
+			},
+			{
+				"token_id": 29923,
+				"first_wins": 41,
+				"second_wins": 27,
+				"total_fought": 246,
+				"stance": 4,
+				"barrack": {
+					"name": "WizGrillz 🧙‍♂️ | Ludus Magnus",
+					"description": "Ludus for the Blood Queen!!"
+				}
+			},
+			{
+				"token_id": 30031,
+				"first_wins": 49,
+				"second_wins": 32,
+				"total_fought": 264,
+				"stance": 1,
+				"barrack": {
+					"name": "Bloodlust 🩸",
+					"description": ""
+				}
+			},
+			{
+				"token_id": 30110,
+				"first_wins": 22,
+				"second_wins": 30,
+				"total_fought": 177,
+				"stance": 1,
+				"barrack": {
+					"name": "The Blood Shed",
+					"description": "I drink your blood with cream and sugar."
+				}
+			},
+			{
+				"token_id": 30146,
+				"first_wins": 47,
+				"second_wins": 32,
+				"total_fought": 261,
+				"stance": 2,
+				"barrack": {
+					"name": "The Blood Shed",
+					"description": "I drink your blood with cream and sugar."
+				}
+			},
+			{
+				"token_id": 30238,
+				"first_wins": 71,
+				"second_wins": 44,
+				"total_fought": 447,
+				"stance": 1,
+				"barrack": {
+					"name": "",
+					"description": ""
+				}
+			},
+			{
+				"token_id": 30289,
+				"first_wins": 5,
+				"second_wins": 6,
+				"total_fought": 38,
+				"stance": 1,
+				"barrack": {
+					"name": "The Blood Shed",
+					"description": "I drink your blood with cream and sugar."
+				}
+			},
+			{
+				"token_id": 30562,
+				"first_wins": 22,
+				"second_wins": 16,
+				"total_fought": 127,
+				"stance": 1,
+				"barrack": {
+					"name": "🩸Blood Demons👿",
+					"description": "Blood Demons are a family of the Demon race in The Darklands, banished to Tartaros by the Blood Queen. \nBlood Demons are among the most intelligent and cunny creatures in The Darklands."
+				}
+			},
+			{
+				"token_id": 30582,
+				"first_wins": 75,
+				"second_wins": 37,
+				"total_fought": 314,
+				"stance": 2,
+				"barrack": {
+					"name": "💉Blood and Beers🍻",
+					"description": "It's a game, have fun and some beer."
+				}
+			},
+			{
+				"token_id": 30629,
+				"first_wins": 23,
+				"second_wins": 15,
+				"total_fought": 139,
+				"stance": 2,
+				"barrack": {
+					"name": "🩸Blood Demons👿",
+					"description": "Blood Demons are a family of the Demon race in The Darklands, banished to Tartaros by the Blood Queen. \nBlood Demons are among the most intelligent and cunny creatures in The Darklands."
+				}
+			},
+			{
+				"token_id": 30690,
+				"first_wins": 57,
+				"second_wins": 35,
+				"total_fought": 304,
+				"stance": 1,
+				"barrack": {
+					"name": "",
+					"description": ""
+				}
+			},
+			{
+				"token_id": 30809,
+				"first_wins": 35,
+				"second_wins": 25,
+				"total_fought": 208,
+				"stance": 2,
+				"barrack": {
+					"name": "House of Krawg",
+					"description": ""
+				}
+			},
+			{
+				"token_id": 31433,
+				"first_wins": 20,
+				"second_wins": 18,
+				"total_fought": 115,
+				"stance": 2,
+				"barrack": {
+					"name": "💉Blood and Beers🍻",
+					"description": "It's a game, have fun and some beer."
+				}
+			},
+			{
+				"token_id": 31454,
+				"first_wins": 52,
+				"second_wins": 38,
+				"total_fought": 267,
+				"stance": 3,
+				"barrack": {
+					"name": "🍆Schrute Farms🥦",
+					"description": "Αll champs in schrute farms are raised with fresh fruits and vegetables.I guarantee if you want blood from my barracks the half-blood will be a vegeterian beast"
+				}
+			},
+			{
+				"token_id": 31589,
+				"first_wins": 21,
+				"second_wins": 15,
+				"total_fought": 98,
+				"stance": 1,
+				"barrack": {
+					"name": "",
+					"description": ""
+				}
+			},
+			{
+				"token_id": 31620,
+				"first_wins": 15,
+				"second_wins": 25,
+				"total_fought": 114,
+				"stance": 1,
+				"barrack": {
+					"name": "The one they call Joe",
+					"description": ""
+				}
+			},
+			{
+				"token_id": 31651,
+				"first_wins": 12,
+				"second_wins": 10,
+				"total_fought": 66,
+				"stance": 1,
+				"barrack": {
+					"name": "🩸Blood Demons👿",
+					"description": "Blood Demons are a family of the Demon race in The Darklands, banished to Tartaros by the Blood Queen. \nBlood Demons are among the most intelligent and cunny creatures in The Darklands."
+				}
+			},
+			{
+				"token_id": 31654,
+				"first_wins": 2,
+				"second_wins": 0,
+				"total_fought": 9,
+				"stance": 4,
+				"barrack": {
+					"name": "The Blood Shed",
+					"description": "I drink your blood with cream and sugar."
+				}
+			}
+		],
+		"battles": [],
+		"info": {
+			"name": "The Tickler #281",
+			"type": 1,
+			"size": 32,
+			"payout": {
+				"currency": "USD",
+				"value": 0
+			},
+			"fee": {
+				"currency": "USD",
+				"value": 0.9207000000000001
+			},
+			"challenger_stake": {
+				"currency": "USD",
+				"value": 0
+			},
+			"opponent_stake": {
+				"currency": "USD",
+				"value": 0
+			},
+			"wagering": false,
+			"location": "Marshlands Day"
+		}
+	}
+}

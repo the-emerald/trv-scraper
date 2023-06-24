@@ -5,13 +5,17 @@ use sea_orm::entity::prelude::*;
 #[derive(Clone, Debug, PartialEq, DeriveEntityModel, Eq)]
 #[sea_orm(table_name = "tournament_detail_attack")]
 pub struct Model {
-    #[sea_orm(primary_key)]
-    pub id: i64,
+    #[sea_orm(primary_key, auto_increment = false)]
+    pub tournament_id: i64,
+    #[sea_orm(primary_key, auto_increment = false)]
+    pub tournament_service_id: i64,
     pub fighter_id: i64,
-    pub round_id: i32,
+    #[sea_orm(primary_key, auto_increment = false)]
+    pub round: i32,
     pub special_attack: bool,
     pub speical_defend: bool,
     pub damage: i32,
+    #[sea_orm(primary_key, auto_increment = false)]
     pub order: i32,
 }
 
@@ -26,13 +30,13 @@ pub enum Relation {
     )]
     Fighter,
     #[sea_orm(
-        belongs_to = "super::tournament_detail_round::Entity",
-        from = "Column::RoundId",
-        to = "super::tournament_detail_round::Column::Id",
+        belongs_to = "super::tournament::Entity",
+        from = "Column::TournamentId",
+        to = "super::tournament::Column::Id",
         on_update = "NoAction",
         on_delete = "NoAction"
     )]
-    TournamentDetailRound,
+    Tournament,
 }
 
 impl Related<super::fighter::Entity> for Entity {
@@ -41,9 +45,9 @@ impl Related<super::fighter::Entity> for Entity {
     }
 }
 
-impl Related<super::tournament_detail_round::Entity> for Entity {
+impl Related<super::tournament::Entity> for Entity {
     fn to() -> RelationDef {
-        Relation::TournamentDetailRound.def()
+        Relation::Tournament.def()
     }
 }
 

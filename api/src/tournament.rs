@@ -138,6 +138,18 @@ impl Tournament {
         }
     }
 
+    pub fn id(&self) -> i64 {
+        match self {
+            Tournament::OneVOne { tournament_id, .. } => *tournament_id,
+            Tournament::Blooding { tournament_id, .. } => *tournament_id,
+            Tournament::Bloodbath { tournament_id, .. } => *tournament_id,
+            Tournament::BloodElo { tournament_id, .. } => *tournament_id,
+            Tournament::DoubleUp { tournament_id, .. } => *tournament_id,
+            Tournament::DoubleUpReverse { tournament_id, .. } => *tournament_id,
+            Tournament::Traditional { tournament_id, .. } => *tournament_id,
+        }
+    }
+
     pub fn status(&self) -> Status {
         match self {
             Tournament::OneVOne { status, .. } => *status,

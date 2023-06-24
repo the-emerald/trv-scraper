@@ -10,6 +10,7 @@ use task::tournament::TournamentTask;
 pub mod task;
 
 const CONCURRENT_REQUESTS: usize = 128;
+
 /// 2 hours
 const SCRAPE_INTERVAL: u64 = 2 * 60 * 60 * 1000;
 
@@ -39,8 +40,5 @@ async fn main() -> Result<()> {
 
         // Fetch new tournaments
         let _ = tournament_task.scan().await;
-
-        break Ok(());
-        // TODO: Fetch hit-by-hit for each new tournament
     }
 }
