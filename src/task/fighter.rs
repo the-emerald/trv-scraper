@@ -69,7 +69,7 @@ impl ChampionTask {
                 defence_to: Set(fighter.statistic.wisdom.defence.to as i32),
                 omega_from: Set(fighter.statistic.wisdom.omega.from as i32),
                 omega_to: Set(fighter.statistic.wisdom.omega.to as i32),
-                last_updated: Set(dt.naive_utc()),
+                meta_last_updated: Set(dt.naive_utc()),
                 mum: Set(fighter.lineage_node.map(|l| l.original_mum as i64)),
             });
 
@@ -276,7 +276,7 @@ impl ChampionTask {
     }
 
     async fn scrape_champions(&self, up_to: u64) -> Vec<(FighterResponse, DateTime<Utc>)> {
-        stream::iter(0..up_to)
+        stream::iter(0..=up_to)
             .map(|i| async move {
                 let resp = self.get_champion(i).await?;
                 debug!(n = ?i, "completed");

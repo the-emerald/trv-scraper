@@ -3,12 +3,15 @@
 use sea_orm::entity::prelude::*;
 
 #[derive(Clone, Debug, PartialEq, DeriveEntityModel, Eq)]
-#[sea_orm(table_name = "fighter_parent")]
+#[sea_orm(table_name = "tournament_detail_champion")]
 pub struct Model {
     #[sea_orm(primary_key, auto_increment = false)]
-    pub fighter_id: i64,
+    pub tournament_id: i64,
     #[sea_orm(primary_key, auto_increment = false)]
-    pub parent_id: i64,
+    pub tournament_service_id: i64,
+    #[sea_orm(primary_key, auto_increment = false)]
+    pub fighter_id: i64,
+    pub stance: i32,
 }
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]
@@ -20,15 +23,27 @@ pub enum Relation {
         on_update = "NoAction",
         on_delete = "NoAction"
     )]
-    Fighter2,
+    Fighter,
     #[sea_orm(
-        belongs_to = "super::fighter::Entity",
-        from = "Column::ParentId",
-        to = "super::fighter::Column::Id",
+        belongs_to = "super::tournament::Entity",
+        from = "Column::TournamentId",
+        to = "super::tournament::Column::Id",
         on_update = "NoAction",
         on_delete = "NoAction"
     )]
-    Fighter1,
+    Tournament,
+}
+
+impl Related<super::fighter::Entity> for Entity {
+    fn to() -> RelationDef {
+        Relation::Fighter.def()
+    }
+}
+
+impl Related<super::tournament::Entity> for Entity {
+    fn to() -> RelationDef {
+        Relation::Tournament.def()
+    }
 }
 
 impl ActiveModelBehavior for ActiveModel {}

@@ -7,7 +7,7 @@ edition = "2021"
 
 [dependencies]
 reqwest = { version = "0.11.13", features = ["json"] }
-sea-orm = { version = "0.10.5", features = ["sqlx-postgres", "runtime-tokio-rustls", "macros"] }
+sea-orm = { version = "0.11.3", features = ["sqlx-postgres", "runtime-tokio-rustls", "macros"] }
 tokio = { version = "1.15.0", features = ["full"] }
 api = { path = "api" }
 futures = "0.3.25"

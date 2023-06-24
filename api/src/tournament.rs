@@ -1,9 +1,18 @@
 use chrono::{DateTime, NaiveDateTime, Utc};
+use entity::entities::sea_orm_active_enums::TournamentStatus;
 use ethers_core::types::{Address, U256};
 use serde::{de::Error, Deserialize, Serialize};
 use serde_json::Value;
 
 use crate::Pagination;
+
+#[derive(Clone, Deserialize)]
+pub struct RawTournamentResponse {
+    #[serde(flatten)]
+    pub pagination: Pagination,
+
+    pub items: Vec<serde_json::Value>,
+}
 
 #[derive(Clone, Deserialize)]
 pub struct TournamentResponse {
@@ -72,6 +81,48 @@ pub enum Tournament {
         tournament_type: String,
         warriors: Vec<Warrior>,
     },
+    DoubleUp {
+        tournament_id: i64,
+        class: Value,
+        configs: Configs,
+        key: String,
+        level: Level,
+        modified: DateTime<Utc>,
+        name: String,
+        restrictions: Value,
+        start_time: NaiveDateTime,
+        status: Status,
+        tournament_type: String,
+        warriors: Vec<Warrior>,
+    },
+    DoubleUpReverse {
+        tournament_id: i64,
+        class: Value,
+        configs: Configs,
+        key: String,
+        level: Level,
+        modified: DateTime<Utc>,
+        name: String,
+        restrictions: Value,
+        start_time: NaiveDateTime,
+        status: Status,
+        tournament_type: String,
+        warriors: Vec<Warrior>,
+    },
+    Traditional {
+        tournament_id: i64,
+        class: Value,
+        configs: Configs,
+        key: String,
+        level: Level,
+        modified: DateTime<Utc>,
+        name: String,
+        restrictions: Value,
+        start_time: NaiveDateTime,
+        status: Status,
+        tournament_type: String,
+        warriors: Vec<Warrior>,
+    },
 }
 
 impl Tournament {
@@ -81,6 +132,33 @@ impl Tournament {
             Tournament::Blooding { .. } => 1,
             Tournament::Bloodbath { .. } => 2,
             Tournament::BloodElo { .. } => 3,
+            Tournament::DoubleUp { .. } => 4,
+            Tournament::DoubleUpReverse { .. } => 5,
+            Tournament::Traditional { .. } => 6,
+        }
+    }
+
+    pub fn id(&self) -> i64 {
+        match self {
+            Tournament::OneVOne { tournament_id, .. } => *tournament_id,
+            Tournament::Blooding { tournament_id, .. } => *tournament_id,
+            Tournament::Bloodbath { tournament_id, .. } => *tournament_id,
+            Tournament::BloodElo { tournament_id, .. } => *tournament_id,
+            Tournament::DoubleUp { tournament_id, .. } => *tournament_id,
+            Tournament::DoubleUpReverse { tournament_id, .. } => *tournament_id,
+            Tournament::Traditional { tournament_id, .. } => *tournament_id,
+        }
+    }
+
+    pub fn status(&self) -> Status {
+        match self {
+            Tournament::OneVOne { status, .. } => *status,
+            Tournament::Blooding { status, .. } => *status,
+            Tournament::Bloodbath { status, .. } => *status,
+            Tournament::BloodElo { status, .. } => *status,
+            Tournament::DoubleUp { status, .. } => *status,
+            Tournament::DoubleUpReverse { status, .. } => *status,
+            Tournament::Traditional { status, .. } => *status,
         }
     }
 }
@@ -185,6 +263,42 @@ impl<'de> Deserialize<'de> for Tournament {
                     .tournament_type
                     .ok_or_else(|| D::Error::custom("expected tournament type"))?,
             }),
+            4 => Ok(Tournament::DoubleUp {
+                tournament_id: sink.tournament_id,
+                class: sink
+                    .class
+                    .ok_or_else(|| D::Error::custom("expected class"))?,
+                configs: sink.configs,
+                key: sink.key,
+                level: sink.level,
+                modified: sink.modified,
+                name: sink.name.ok_or_else(|| D::Error::custom("expected name"))?,
+                restrictions: sink.restrictions,
+                start_time: sink.start_time,
+                status: sink.status,
+                tournament_type: sink
+                    .tournament_type
+                    .ok_or_else(|| D::Error::custom("expected tournament type"))?,
+                warriors: sink.warriors,
+            }),
+            5 => Ok(Tournament::DoubleUp {
+                tournament_id: sink.tournament_id,
+                class: sink
+                    .class
+                    .ok_or_else(|| D::Error::custom("expected class"))?,
+                configs: sink.configs,
+                key: sink.key,
+                level: sink.level,
+                modified: sink.modified,
+                name: sink.name.ok_or_else(|| D::Error::custom("expected name"))?,
+                restrictions: sink.restrictions,
+                start_time: sink.start_time,
+                status: sink.status,
+                tournament_type: sink
+                    .tournament_type
+                    .ok_or_else(|| D::Error::custom("expected tournament type"))?,
+                warriors: sink.warriors,
+            }),
             _ => Err(D::Error::custom(format!(
                 "{} not a valid service id",
                 sink.service_id
@@ -218,21 +332,36 @@ pub mod start_time_dt_format {
 
 #[derive(Debug, Copy, Clone, Serialize, Deserialize)]
 pub struct Warrior {
-    account: Address,
-    id: u64,
+    pub account: Address,
+    pub id: u64,
 }
 
 #[derive(Debug, Copy, Clone, Serialize, Deserialize)]
 pub struct SoloWarrior {
-    id: u64,
+    pub id: u64,
 }
 
-#[derive(Debug, Copy, Clone, Serialize, Deserialize)]
+#[derive(Debug, Copy, Clone, Serialize, Deserialize, PartialEq, Eq)]
 pub enum Status {
     #[serde(rename = "COMPLETE_SUCCEED")]
     Completed,
     #[serde(rename = "CANCEL_SUCCEED")]
     Cancelled,
+    #[serde(rename = "CREATE_SUCCEED")]
+    Created,
+    #[serde(rename = "FOUGHT_SUCCEED")]
+    Fought,
+}
+
+impl From<Status> for TournamentStatus {
+    fn from(value: Status) -> Self {
+        match value {
+            Status::Completed => Self::Completed,
+            Status::Cancelled => Self::Cancelled,
+            Status::Created => Self::Created,
+            Status::Fought => Self::Fought,
+        }
+    }
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]

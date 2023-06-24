@@ -3,13 +3,20 @@
 use sea_orm::entity::prelude::*;
 
 #[derive(Clone, Debug, PartialEq, DeriveEntityModel, Eq)]
-#[sea_orm(table_name = "fighter_trait")]
+#[sea_orm(table_name = "tournament_detail_attack")]
 pub struct Model {
     #[sea_orm(primary_key, auto_increment = false)]
+    pub tournament_id: i64,
+    #[sea_orm(primary_key, auto_increment = false)]
+    pub tournament_service_id: i64,
     pub fighter_id: i64,
     #[sea_orm(primary_key, auto_increment = false)]
-    pub trait_type: String,
-    pub value: String,
+    pub round: i32,
+    pub special_attack: bool,
+    pub speical_defend: bool,
+    pub damage: i32,
+    #[sea_orm(primary_key, auto_increment = false)]
+    pub order: i32,
 }
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]
@@ -22,11 +29,25 @@ pub enum Relation {
         on_delete = "NoAction"
     )]
     Fighter,
+    #[sea_orm(
+        belongs_to = "super::tournament::Entity",
+        from = "Column::TournamentId",
+        to = "super::tournament::Column::Id",
+        on_update = "NoAction",
+        on_delete = "NoAction"
+    )]
+    Tournament,
 }
 
 impl Related<super::fighter::Entity> for Entity {
     fn to() -> RelationDef {
         Relation::Fighter.def()
+    }
+}
+
+impl Related<super::tournament::Entity> for Entity {
+    fn to() -> RelationDef {
+        Relation::Tournament.def()
     }
 }
 

@@ -27,7 +27,11 @@ impl MigrationTrait for Migration {
                     .col(ColumnDef::new(Fighter::OmegaFrom).integer().not_null())
                     .col(ColumnDef::new(Fighter::OmegaTo).integer().not_null())
                     .col(ColumnDef::new(Fighter::Mum).big_unsigned())
-                    .col(ColumnDef::new(Fighter::LastUpdated).date_time().not_null())
+                    .col(
+                        ColumnDef::new(Fighter::MetaLastUpdated)
+                            .date_time()
+                            .not_null(),
+                    )
                     .foreign_key(
                         ForeignKey::create()
                             .name("fk-mum-fighter")
@@ -123,7 +127,7 @@ impl MigrationTrait for Migration {
 
 /// Learn more at https://docs.rs/sea-query#iden
 #[derive(Iden)]
-enum Fighter {
+pub(crate) enum Fighter {
     Table,
     Id,
     WisdomPoint,
@@ -136,7 +140,7 @@ enum Fighter {
     OmegaFrom,
     OmegaTo,
     Mum,
-    LastUpdated,
+    MetaLastUpdated,
 }
 
 #[derive(Iden)]
