@@ -168,7 +168,7 @@ impl MigrationTrait for Migration {
 
 /// Learn more at https://docs.rs/sea-query#iden
 #[derive(Iden)]
-enum TournamentDetailChampion {
+pub enum TournamentDetailChampion {
     Table,
     TournamentId,
     TournamentServiceId,

@@ -10,5 +10,4 @@ pub mod meta_last_page;
 pub mod sea_orm_active_enums;
 pub mod tournament;
 pub mod tournament_detail_attack;
-pub mod tournament_detail_champion;
 pub mod tournament_fighter;
