@@ -24,6 +24,7 @@ dotenv = "0.15.0"
 itertools = "0.10.5"
 chrono = "0.4.23"
 erc-nft-metadata = { version = "0.1.1", features = ["serde"] }
+migration = { path = "migration" }
 
 [workspace]
 members = [".", "entity", "migration", "api"]

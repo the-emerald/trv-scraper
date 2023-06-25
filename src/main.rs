@@ -1,5 +1,6 @@
 use anyhow::Context;
 use anyhow::Result;
+use migration::MigratorTrait;
 use sea_orm::ConnectOptions;
 use sea_orm::Database;
 use std::env;
@@ -18,14 +19,17 @@ const TOURNAMENT_PAGE_SIZE: u64 = 128;
 
 #[tokio::main]
 async fn main() -> Result<()> {
-    tracing_subscriber::fmt::init();
     dotenv::dotenv().ok();
+    tracing_subscriber::fmt::init();
 
     let opt = ConnectOptions::new(env::var("DATABASE_URL").context("DATABASE_URL not set")?)
         .sqlx_logging(false)
         .to_owned();
     let alchemy_api_key = env::var("ALCHEMY_API_KEY").context("ALCHEMY_API_KEY not set")?;
     let database = Database::connect(opt).await?;
+
+    // Run migrations
+    migration::Migrator::up(&database, None).await?;
 
     let client = reqwest::Client::new();
 
