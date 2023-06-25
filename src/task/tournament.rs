@@ -53,12 +53,14 @@ impl TournamentTask {
         loop {
             let next_page = match self.page(self.page_size, next_page_index).await {
                 Ok(v) => v,
-                Err(_) => {
+                Err(e) => {
+                    warn!(size = self.page_size, page = next_page_index, e = ?e, "failed to fetch page");
+
                     if let Err(e) = self
                         .insert_failed_page(self.page_size, next_page_index)
                         .await
                     {
-                        warn!(size = self.page_size, page = next_page_index, e = ?e, "could not add failed page to retry");
+                        warn!(size = self.page_size, page = next_page_index, e = ?e, "failed to add page to retry queue");
                     }
 
                     true
@@ -72,7 +74,7 @@ impl TournamentTask {
                     .update_checkpoint(self.page_size, next_page_index)
                     .await
                 {
-                    warn!(size = self.page_size, page = next_page_index, e = ?e, "could not update checkpoint");
+                    warn!(size = self.page_size, page = next_page_index, e = ?e, "failed to update checkpoint");
                 }
 
                 next_page_index += 1;
@@ -94,7 +96,7 @@ impl TournamentTask {
             items: batch.items.into_iter().enumerate().filter_map(|(idx, item)| match serde_json::from_value::<Tournament>(item) {
                 Ok(v) => Some(v),
                 Err(e) => {
-                    warn!(size = size, page = page, index = idx, e = ?e, "could not deserialize, skipping");
+                    warn!(size = size, page = page, index = idx, e = ?e, "failed to deserialize, skipping");
                     None
                 }
             })
@@ -118,13 +120,11 @@ impl TournamentTask {
             .filter_map(|x| x.ok())
             .collect::<HashMap<_, _>>();
 
-        if let Err(e) = self.insert_tournaments(batch.items.clone(), &details).await {
-            warn!(page = ?batch.pagination, e = ?e, "page failed to insert");
-        }
+        self.insert_tournaments(batch.items.clone(), &details).await;
 
         for ((id, service_id), detail) in details {
             if let Err(e) = self.insert_attacks(id, service_id, detail).await {
-                warn!(e = ?e, id = id, service_id = service_id, "could not insert tournament attacks")
+                warn!(e = ?e, id = id, service_id = service_id, "failed to insert attacks")
             }
         }
 
@@ -183,7 +183,7 @@ impl TournamentTask {
         &self,
         tournaments: Vec<Tournament>,
         detail: &HashMap<(i64, u64), TournamentDetailResponse>,
-    ) -> Result<()> {
+    ) {
         let mut tournament_rows = vec![];
         let mut tournament_warrior_rows = vec![];
         let time = Utc::now();
@@ -536,9 +536,9 @@ impl TournamentTask {
                 .exec(&self.conn)
                 .await
                 .map_err(|e| {
-                    warn!(e = ?e);
+                    warn!(e = ?e, "failed to insert tournaments batch");
                     e
-                })?;
+                });
         }
 
         let tournament_warrior_rows = tournament_warrior_rows
@@ -558,7 +558,8 @@ impl TournamentTask {
                     )
                 })
                 .collect::<Vec<_>>();
-            self.conn
+            let _ = self
+                .conn
                 .transaction::<_, (), DbErr>(|txn| {
                     Box::pin(async move {
                         // Remove all rows associated with the IDs
@@ -600,12 +601,10 @@ impl TournamentTask {
                 })
                 .await
                 .map_err(|e| {
-                    warn!(e = ?e);
+                    warn!(e = ?e, "failed to insert tournament fighters batch");
                     e
-                })?;
+                });
         }
-
-        Ok(())
     }
 
     async fn get_tournaments(
@@ -636,12 +635,12 @@ impl TournamentTask {
                 .page(page.page_size as u64, page.page_index as u64)
                 .await
             {
-                warn!(size = page.page_size, page = page.page_index, e = ?e, "could not retry");
+                warn!(size = page.page_size, page = page.page_index, e = ?e, "failed to fetch page (retry)");
                 continue;
             }
 
             let _ = page.delete(&self.conn).await.map_err(|e| {
-                warn!(e = ?e);
+                warn!(e = ?e, "failed to clear queue");
                 e
             });
         }
@@ -662,7 +661,7 @@ impl TournamentTask {
                 .map(|resp| resp.json::<TournamentDetailResponse>())?
                 .await
                 .map_err(|e| {
-                    warn!(e = ?e, id = id, service_id = service_id, "could not get tournament detail");
+                    warn!(id = id, service_id = service_id, e = ?e, "failed to fetch detail");
                     Error::Permanent(e)
                 })
         })
@@ -712,7 +711,7 @@ impl TournamentTask {
                 .exec(&self.conn)
                 .await
                 .map_err(|e| {
-                    warn!(e = ?e, id = id, service_id = service_id, "tournament_detail_attack");
+                    info!(e = ?e, id = id, service_id = service_id, "duplicate tournament found");
                     e
                 });
         }
