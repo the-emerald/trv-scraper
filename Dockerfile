@@ -18,5 +18,6 @@ RUN USER=root apt-get update
 RUN USER=root apt-get install -y libssl-dev ca-certificates
 
 COPY --from=builder /app/target/release/trv-scraper .
+ENV RUST_LOG=info
 
 CMD ["./trv-scraper"]
