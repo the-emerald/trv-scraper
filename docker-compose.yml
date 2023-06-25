@@ -1,0 +1,28 @@
+version: "3"
+
+services:  
+  runner:
+    build: .
+    depends_on:
+      - database
+    environment:
+      - DATABASE_URL=${DATABASE_URL}
+      - ALCHEMY_API_KEY=${ALCHEMY_API_KEY}
+
+  database:
+    image: postgres
+    volumes:
+      - data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_PASSWORD=postgres
+
+  pgadmin:
+    image: dpage/pgadmin4
+    ports:
+      - 8000:80
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=test@example.com
+      - PGADMIN_DEFAULT_PASSWORD=example
+
+volumes:
+  data:
