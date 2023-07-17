@@ -7,19 +7,20 @@ use backoff::{Error, ExponentialBackoff};
 use chrono::Utc;
 use entity::entities::{
     meta_failed_tournament_request, meta_last_page, tournament, tournament_detail_attack,
-    tournament_detail_champion, tournament_fighter,
+    tournament_fighter,
 };
 use ethers_core::abi::AbiEncode;
-use futures::{future, stream, StreamExt};
+use futures::{stream, StreamExt};
 use itertools::Itertools;
 use sea_orm::{
     sea_query::OnConflict, ActiveModelTrait, ColumnTrait, Condition, ConnectionTrait,
     DatabaseBackend, DatabaseConnection, DbErr, EntityTrait, ModelTrait, QueryFilter, Set,
     Statement, TransactionTrait,
 };
-use tracing::{debug, info, instrument, warn};
+use std::collections::HashMap;
+use tracing::{info, instrument, warn};
 
-use crate::CONCURRENT_REQUESTS;
+use crate::{CONCURRENT_REQUESTS, TOURNAMENT_LOOKBACK_PAGES};
 
 #[derive(Debug)]
 pub struct TournamentTask {
@@ -43,85 +44,94 @@ impl TournamentTask {
 
         let _ = self.retry_failed().await;
 
-        let mut next_page_index = self.get_starting_page().await?;
+        let mut next_page_index = self
+            .get_starting_page()
+            .await
+            .unwrap_or_default()
+            .saturating_sub(TOURNAMENT_LOOKBACK_PAGES);
 
         loop {
-            info!(size = ?self.page_size, page = ?next_page_index, "scanning");
-
-            let batch = match self
-                .get_tournament_batch(self.page_size, next_page_index)
-                .await
-            {
+            let next_page = match self.page(self.page_size, next_page_index).await {
                 Ok(v) => v,
                 Err(e) => {
-                    warn!(e = ?e);
+                    warn!(size = self.page_size, page = next_page_index, e = ?e, "failed to fetch page");
 
                     if let Err(e) = self
                         .insert_failed_page(self.page_size, next_page_index)
                         .await
                     {
-                        warn!(size = ?self.page_size, index = ?next_page_index, e = ?e, "could not register failed page. this page will not be tried again!");
+                        warn!(size = self.page_size, page = next_page_index, e = ?e, "failed to add page to retry queue");
                     }
 
-                    next_page_index += 1;
-                    continue;
+                    true
                 }
             };
 
-            let batch = TournamentResponse {
-                pagination: batch.pagination,
-                items: batch.items.into_iter().enumerate().filter_map(|(idx, item)| match serde_json::from_value(item) {
-                    Ok(v) => Some(v),
-                    Err(e) => {
-                        warn!(size = ?self.page_size, page = ?next_page_index, index = ?idx, e = ?e, "could not deserialize, skipping. this tournament will not be tried again!");
-                        None
-                    }
-                })
-                .collect()
-            };
-
-            if let Err(e) = self.insert_tournament_batch(batch.items.clone()).await {
-                warn!(page = ?batch.pagination, e = ?e, "page failed to insert");
-
-                // If the page insert fails we will try again sometime later
-                if let Err(e) = self
-                    .insert_failed_page(self.page_size, next_page_index)
-                    .await
-                {
-                    warn!(size = ?self.page_size, index = ?next_page_index, e = ?e, "could not register failed page. this page will not be tried again!");
-                }
-            }
-
-            let details = stream::iter(batch.items)
-                .filter(|b| future::ready(b.status() != Status::Cancelled))
-                .map(|b| async move {
-                    let id = b.id();
-                    let service_id = b.service_id();
-
-                    self.get_tournament_detail(id, service_id)
-                        .await
-                        .map(|res| (id, service_id, res))
-                })
-                .buffer_unordered(CONCURRENT_REQUESTS)
-                .collect::<Vec<Result<_, _>>>()
-                .await
-                .into_iter()
-                .filter_map(|x| x.ok())
-                .collect::<Vec<_>>();
-
-            for (id, service_id, detail) in details {
-                if let Err(e) = self.insert_tournament_detail(id, service_id, detail).await {
-                    warn!(e = ?e, id = id, service_id = service_id, "could not insert tournament detail")
-                }
-            }
-
-            if !batch.pagination.has_next_page {
+            if !next_page {
                 break;
             } else {
+                if let Err(e) = self
+                    .update_checkpoint(self.page_size, next_page_index)
+                    .await
+                {
+                    warn!(size = self.page_size, page = next_page_index, e = ?e, "failed to update checkpoint");
+                }
+
                 next_page_index += 1;
+                continue;
             }
         }
 
+        info!("tournament scan complete");
+        Ok(())
+    }
+
+    async fn page(&self, size: u64, page: u64) -> Result<bool> {
+        info!(size = size, page = ?page, "scanning");
+
+        let batch = self.get_tournaments(size, page).await?;
+
+        let batch = TournamentResponse {
+            pagination: batch.pagination,
+            items: batch.items.into_iter().enumerate().filter_map(|(idx, item)| match serde_json::from_value::<Tournament>(item) {
+                Ok(v) => Some(v),
+                Err(e) => {
+                    warn!(size = size, page = page, index = idx, e = ?e, "failed to deserialize, skipping");
+                    None
+                }
+            })
+            .filter(|item| item.status() != Status::Cancelled)
+            .collect()
+        };
+
+        let details = stream::iter(&batch.items)
+            .map(|b| async move {
+                let id = b.id();
+                let service_id = b.service_id();
+
+                self.get_detail(id, service_id)
+                    .await
+                    .map(|res| ((id, service_id), res))
+            })
+            .buffer_unordered(CONCURRENT_REQUESTS)
+            .collect::<Vec<Result<_, _>>>()
+            .await
+            .into_iter()
+            .filter_map(|x| x.ok())
+            .collect::<HashMap<_, _>>();
+
+        self.insert_tournaments(batch.items.clone(), &details).await;
+
+        for ((id, service_id), detail) in details {
+            if let Err(e) = self.insert_attacks(id, service_id, detail).await {
+                warn!(e = ?e, id = id, service_id = service_id, "failed to insert attacks")
+            }
+        }
+
+        Ok(batch.pagination.has_next_page)
+    }
+
+    async fn update_checkpoint(&self, size: u64, page: u64) -> Result<()> {
         self.conn
             .execute(Statement::from_string(
                 DatabaseBackend::Postgres,
@@ -130,8 +140,8 @@ impl TournamentTask {
             .await?;
 
         meta_last_page::ActiveModel {
-            page_size: Set(self.page_size as i64),
-            page_index: Set(next_page_index as i64),
+            page_size: Set(size as i64),
+            page_index: Set(page as i64),
         }
         .insert(&self.conn)
         .await?;
@@ -150,12 +160,12 @@ impl TournamentTask {
     }
 
     /// Insert a failed page into the database to be tried later.
-    async fn insert_failed_page(&self, page_size: u64, page_index: u64) -> Result<(), DbErr> {
+    async fn insert_failed_page(&self, size: u64, page: u64) -> Result<(), DbErr> {
         use meta_failed_tournament_request::*;
 
         Entity::insert(meta_failed_tournament_request::ActiveModel {
-            page_size: Set(page_size as i64),
-            page_index: Set(page_index as i64),
+            page_size: Set(size as i64),
+            page_index: Set(page as i64),
         })
         .on_conflict(
             OnConflict::columns([Column::PageSize, Column::PageIndex])
@@ -169,18 +179,29 @@ impl TournamentTask {
     }
 
     /// Insert a response batch into the database.
-    async fn insert_tournament_batch(&self, tournaments: Vec<Tournament>) -> Result<()> {
+    async fn insert_tournaments(
+        &self,
+        tournaments: Vec<Tournament>,
+        detail: &HashMap<(i64, u64), TournamentDetailResponse>,
+    ) {
         let mut tournament_rows = vec![];
         let mut tournament_warrior_rows = vec![];
         let time = Utc::now();
-        // let mut tournament_solo_warrior_rows = vec![];
 
         for tournament in tournaments {
-            if tournament.status() == Status::Cancelled {
-                continue;
-            }
-
             let service_id = tournament.service_id();
+            let id = tournament.id();
+            let stances = detail
+                .get(&(id, service_id))
+                .cloned()
+                .map(|t| {
+                    t.champions
+                        .into_iter()
+                        .map(|c| (c.token_id, c.stance as i32))
+                        .collect::<HashMap<_, _>>()
+                })
+                .unwrap_or_default();
+
             match tournament {
                 Tournament::OneVOne {
                     tournament_id,
@@ -200,6 +221,7 @@ impl TournamentTask {
                             tournament_service_id: Set(service_id as i32),
                             fighter_id: Set(sw.id as i64),
                             account: Set(None),
+                            stance: Set(stances.get(&sw.id).cloned().unwrap_or_default()),
                         }
                     }));
 
@@ -224,7 +246,6 @@ impl TournamentTask {
                 }
                 Tournament::Blooding {
                     tournament_id,
-                    class: _,
                     configs,
                     key,
                     legacy,
@@ -234,8 +255,8 @@ impl TournamentTask {
                     restrictions,
                     start_time,
                     status,
-                    tournament_type: _,
                     warriors,
+                    ..
                 } => {
                     tournament_warrior_rows.extend(warriors.into_iter().map(|sw| {
                         tournament_fighter::ActiveModel {
@@ -243,6 +264,7 @@ impl TournamentTask {
                             tournament_service_id: Set(service_id as i32),
                             fighter_id: Set(sw.id as i64),
                             account: Set(Some(sw.account.as_bytes().to_vec())),
+                            stance: Set(stances.get(&sw.id).cloned().unwrap_or_default()),
                         }
                     }));
 
@@ -267,7 +289,6 @@ impl TournamentTask {
                 }
                 Tournament::Bloodbath {
                     tournament_id,
-                    class: _,
                     configs,
                     key,
                     legacy,
@@ -277,8 +298,8 @@ impl TournamentTask {
                     restrictions,
                     start_time,
                     status,
-                    tournament_type: _,
                     warriors,
+                    ..
                 } => {
                     tournament_warrior_rows.extend(warriors.into_iter().map(|sw| {
                         tournament_fighter::ActiveModel {
@@ -286,6 +307,7 @@ impl TournamentTask {
                             tournament_service_id: Set(service_id as i32),
                             fighter_id: Set(sw.id as i64),
                             account: Set(Some(sw.account.as_bytes().to_vec())),
+                            stance: Set(stances.get(&sw.id).cloned().unwrap_or_default()),
                         }
                     }));
 
@@ -310,7 +332,6 @@ impl TournamentTask {
                 }
                 Tournament::BloodElo {
                     tournament_id,
-                    class: _,
                     configs,
                     key,
                     legacy,
@@ -320,8 +341,8 @@ impl TournamentTask {
                     restrictions,
                     start_time,
                     status,
-                    tournament_type: _,
                     warriors,
+                    ..
                 } => {
                     tournament_warrior_rows.extend(warriors.into_iter().map(|sw| {
                         tournament_fighter::ActiveModel {
@@ -329,6 +350,7 @@ impl TournamentTask {
                             tournament_service_id: Set(service_id as i32),
                             fighter_id: Set(sw.id as i64),
                             account: Set(Some(sw.account.as_bytes().to_vec())),
+                            stance: Set(stances.get(&sw.id).cloned().unwrap_or_default()),
                         }
                     }));
 
@@ -353,7 +375,6 @@ impl TournamentTask {
                 }
                 Tournament::DoubleUp {
                     tournament_id,
-                    class: _,
                     configs,
                     key,
                     level,
@@ -362,9 +383,19 @@ impl TournamentTask {
                     restrictions,
                     start_time,
                     status,
-                    tournament_type: _,
-                    warriors: _,
+                    warriors,
+                    ..
                 } => {
+                    tournament_warrior_rows.extend(warriors.into_iter().map(|sw| {
+                        tournament_fighter::ActiveModel {
+                            tournament_id: Set(tournament_id),
+                            tournament_service_id: Set(service_id as i32),
+                            fighter_id: Set(sw.id as i64),
+                            account: Set(Some(sw.account.as_bytes().to_vec())),
+                            stance: Set(stances.get(&sw.id).cloned().unwrap_or_default()),
+                        }
+                    }));
+
                     tournament_rows.push(tournament::ActiveModel {
                         id: Set(tournament_id),
                         service_id: Set(service_id as i32),
@@ -386,7 +417,6 @@ impl TournamentTask {
                 }
                 Tournament::DoubleUpReverse {
                     tournament_id,
-                    class: _,
                     configs,
                     key,
                     level,
@@ -395,9 +425,19 @@ impl TournamentTask {
                     restrictions,
                     start_time,
                     status,
-                    tournament_type: _,
-                    warriors: _,
+                    warriors,
+                    ..
                 } => {
+                    tournament_warrior_rows.extend(warriors.into_iter().map(|sw| {
+                        tournament_fighter::ActiveModel {
+                            tournament_id: Set(tournament_id),
+                            tournament_service_id: Set(service_id as i32),
+                            fighter_id: Set(sw.id as i64),
+                            account: Set(Some(sw.account.as_bytes().to_vec())),
+                            stance: Set(stances.get(&sw.id).cloned().unwrap_or_default()),
+                        }
+                    }));
+
                     tournament_rows.push(tournament::ActiveModel {
                         id: Set(tournament_id),
                         service_id: Set(service_id as i32),
@@ -419,7 +459,6 @@ impl TournamentTask {
                 }
                 Tournament::Traditional {
                     tournament_id,
-                    class: _,
                     configs,
                     key,
                     level,
@@ -428,9 +467,19 @@ impl TournamentTask {
                     restrictions,
                     start_time,
                     status,
-                    tournament_type: _,
-                    warriors: _,
+                    warriors,
+                    ..
                 } => {
+                    tournament_warrior_rows.extend(warriors.into_iter().map(|sw| {
+                        tournament_fighter::ActiveModel {
+                            tournament_id: Set(tournament_id),
+                            tournament_service_id: Set(service_id as i32),
+                            fighter_id: Set(sw.id as i64),
+                            account: Set(Some(sw.account.as_bytes().to_vec())),
+                            stance: Set(stances.get(&sw.id).cloned().unwrap_or_default()),
+                        }
+                    }));
+
                     tournament_rows.push(tournament::ActiveModel {
                         id: Set(tournament_id),
                         service_id: Set(service_id as i32),
@@ -487,9 +536,9 @@ impl TournamentTask {
                 .exec(&self.conn)
                 .await
                 .map_err(|e| {
-                    warn!(e = ?e);
+                    warn!(e = ?e, "failed to insert tournaments batch");
                     e
-                })?;
+                });
         }
 
         let tournament_warrior_rows = tournament_warrior_rows
@@ -509,7 +558,8 @@ impl TournamentTask {
                     )
                 })
                 .collect::<Vec<_>>();
-            self.conn
+            let _ = self
+                .conn
                 .transaction::<_, (), DbErr>(|txn| {
                     Box::pin(async move {
                         // Remove all rows associated with the IDs
@@ -539,6 +589,7 @@ impl TournamentTask {
                                     tournament_fighter::Column::TournamentServiceId,
                                     tournament_fighter::Column::FighterId,
                                     tournament_fighter::Column::Account,
+                                    tournament_fighter::Column::Stance,
                                 ])
                                 .to_owned(),
                             )
@@ -550,23 +601,21 @@ impl TournamentTask {
                 })
                 .await
                 .map_err(|e| {
-                    warn!(e = ?e);
+                    warn!(e = ?e, "failed to insert tournament fighters batch");
                     e
-                })?;
+                });
         }
-
-        Ok(())
     }
 
-    async fn get_tournament_batch(
+    async fn get_tournaments(
         &self,
-        page_size: u64,
-        page_index: u64,
+        size: u64,
+        page: u64,
     ) -> Result<RawTournamentResponse, reqwest::Error> {
         backoff::future::retry(ExponentialBackoff::default(), || async {
             self.client
                 .get("https://federation22.theredvillage.com/api/v2/tournaments".to_string())
-                .query(&[("page_size", page_size), ("page_index", page_index)])
+                .query(&[("page_size", size), ("page_index", page)])
                 .send()
                 .await
                 .and_then(|resp| resp.error_for_status())
@@ -582,44 +631,23 @@ impl TournamentTask {
             .all(&self.conn)
             .await?
         {
-            let batch = match self
-                .get_tournament_batch(page.page_size as u64, page.page_index as u64)
+            if let Err(e) = self
+                .page(page.page_size as u64, page.page_index as u64)
                 .await
             {
-                Ok(v) => v,
-                Err(e) => {
-                    warn!(e = ?e);
-                    continue;
-                }
-            };
-
-            let batch = TournamentResponse {
-                pagination: batch.pagination,
-                items: batch.items.into_iter().enumerate().filter_map(|(idx, item)| match serde_json::from_value(item) {
-                    Ok(v) => Some(v),
-                    Err(e) => {
-                        warn!(size = ?page.page_size, page = ?page.page_index, index = ?idx, e = ?e, "could not deserialize, skipping. this tournament will not be tried again!");
-                        None
-                    }
-                })
-                .collect()
-            };
-
-            if let Err(e) = self.insert_tournament_batch(batch.items).await {
-                warn!(e = ?e);
+                warn!(size = page.page_size, page = page.page_index, e = ?e, "failed to fetch page (retry)");
                 continue;
             }
 
-            // If it's ok we delete the page.
             let _ = page.delete(&self.conn).await.map_err(|e| {
-                warn!(e = ?e);
+                warn!(e = ?e, "failed to clear queue");
                 e
             });
         }
         Ok(())
     }
 
-    async fn get_tournament_detail(
+    async fn get_detail(
         &self,
         id: i64,
         service_id: u64,
@@ -633,55 +661,19 @@ impl TournamentTask {
                 .map(|resp| resp.json::<TournamentDetailResponse>())?
                 .await
                 .map_err(|e| {
-                    warn!(e = ?e, id = id, service_id = service_id, "could not get tournament detail");
+                    warn!(id = id, service_id = service_id, e = ?e, "failed to fetch detail");
                     Error::Permanent(e)
                 })
         })
         .await
     }
 
-    async fn insert_tournament_detail(
+    async fn insert_attacks(
         &self,
         id: i64,
         service_id: u64,
         detail: TournamentDetailResponse,
     ) -> Result<(), DbErr> {
-        debug!(id = id, service_id = service_id);
-
-        // Champions
-        let champions = detail
-            .champions
-            .iter()
-            .map(|x| tournament_detail_champion::ActiveModel {
-                tournament_id: Set(id),
-                tournament_service_id: Set(service_id as i64),
-                fighter_id: Set(x.token_id as i64),
-                stance: Set(x.stance as i32),
-            })
-            .collect::<Vec<_>>();
-
-        let _ = tournament_detail_champion::Entity::insert_many(champions)
-            .on_conflict(
-                OnConflict::columns([
-                    tournament_detail_champion::Column::TournamentId,
-                    tournament_detail_champion::Column::TournamentServiceId,
-                    tournament_detail_champion::Column::FighterId,
-                ])
-                .update_columns([
-                    tournament_detail_champion::Column::TournamentId,
-                    tournament_detail_champion::Column::TournamentServiceId,
-                    tournament_detail_champion::Column::FighterId,
-                    tournament_detail_champion::Column::Stance,
-                ])
-                .to_owned(),
-            )
-            .exec(&self.conn)
-            .await
-            .map_err(|e| {
-                warn!(e = ?e, id = id, service_id = service_id, "tournament_detail_champion");
-                e
-            });
-
         // Attack
         let attacks = detail
             .battles
@@ -719,7 +711,7 @@ impl TournamentTask {
                 .exec(&self.conn)
                 .await
                 .map_err(|e| {
-                    warn!(e = ?e, id = id, service_id = service_id, "tournament_detail_attack");
+                    info!(e = ?e, id = id, service_id = service_id, "duplicate tournament found");
                     e
                 });
         }

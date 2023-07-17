@@ -221,7 +221,7 @@ pub(crate) enum Tournament {
 }
 
 #[derive(Iden)]
-enum TournamentFighter {
+pub enum TournamentFighter {
     Table,
     TournamentId,
     TournamentServiceId,

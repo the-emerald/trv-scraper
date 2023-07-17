@@ -15,6 +15,9 @@ const CONCURRENT_REQUESTS: usize = 128;
 /// 2 hours
 const SCRAPE_INTERVAL: u64 = 2 * 60 * 60 * 1000;
 
+/// How many pages to look back for missing details.
+const TOURNAMENT_LOOKBACK_PAGES: u64 = 5;
+
 const TOURNAMENT_PAGE_SIZE: u64 = 128;
 
 #[tokio::main]
